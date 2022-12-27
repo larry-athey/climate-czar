@@ -11,7 +11,7 @@ Output switches really don't even have to physically exist. Since their operatio
 
 The custom Wordpress plugin is only necessary for adding, configuring, and deleting input devices and output switches. The system will continue to run in the background without the web server even running. The plugin also provides dashboards and histograms to give you a visual representation of all devices and charts that you can use to fine tune your settings.
 
-This system will run effectively on a Raspberry PI with a LAMP stack and anything else up to a high performance virtual private server. Any web server that supports PHP, MySQL, and bash scripts will work. The Climate Czar server itself could actually monitor and control greenhouses and grow operations in different locations if network enabled sensors and switches are utilized throughout.
+This system will run effectively on a Raspberry PI with a LAMP stack, or any web server that supports PHP, MySQL, and bash scripts. The Climate Czar server itself could actually monitor and control multiple greenhouses and grow operations in different locations if network enabled sensors and switches are utilized throughout.
 
 # Input Device Types
 1.	Variable Value Sensor (Temperature, Humidity, pH, EC, AD Convertor, Etc)
