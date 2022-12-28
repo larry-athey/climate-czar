@@ -7,7 +7,7 @@ Virtual input sensors/switches can be created that return the average of multipl
 
 Enabling of output switches may be over-ridden by the status of another output switch. For example, an output switch that controls exhaust fans can be disabled if another switch running a heater is turned on.
 
-Output switches really don't even have to physically exist. Since their operation is controlled with on/off bash scripts, these scripts can also be used to send email/SMS notifications or even make a curl URL call. Input sensors/switches can be assigned to multiple output switches, so you can easily receive a notification any time that a physical output switch is toggled on and off.
+Output switches really don't even have to physically exist. Since their operation is controlled with on/off bash scripts, these scripts can also be used to send email/SMS notifications or even make a curl URL call. Input sensors/switches can be assigned to multiple output switches, so you can easily receive a notification at the same time that a physical output switch is toggled on or off.
 
 The custom Wordpress plugin is only necessary for adding, configuring, and deleting input devices and output switches. The system will continue to run in the background without the web server even running. The plugin also provides dashboards and histograms to give you a visual representation of all devices and charts that you can use to fine tune your settings.
 
