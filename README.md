@@ -24,7 +24,7 @@ This system will run effectively on a Raspberry PI with a LAMP stack, or any web
 8.	Web Console Switch (Only Controllable Via Web UI)
 9.	Raw Text Device (only for displaying text, cannot be used as a controller)
 
-The virtual switch controllers is where the Climate Czar really shines because they allow you to consider multiple sample points before taking action. For example, having temperature sensors on the east and west and of a greenhouse. Each one of those could be reporting significantly different temperatures at the same time. It makes more sense to turn on heating or cooling based on the average temperature.
+The virtual input devices are where the Climate Czar really shines because they allow you to consider multiple sample points before taking action. For example, having temperature sensors on the east and west and of a greenhouse. Each one of those could be reporting significantly different temperatures at the same time. It makes more sense to turn on heating or cooling based on the average temperature.
 
 Climate Czar is not region specific. If you have temperature sensors that only return values in Celsius and you want to work in Fahrenheit, you just convert the return value in your read script (command line utilities like bc allow you to do floating point math in bash). Climate Czar merely looks at numbers and performs actions based on math, no matter what unit of measurement is used.
 
