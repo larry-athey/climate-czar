@@ -25,3 +25,5 @@ This system will run effectively on a Raspberry PI with a LAMP stack, or any web
 9.	Raw Text Device (only for displaying text, cannot be used as a controller)
 
 Climate Czar is not region specific. If you have temperature sensors that only return values in Celsius and you want to work in Fahrenheit, you just convert the return value in your read script (command line utilities like bc allow you to do floating point math in bash). Climate Czar merely looks at numbers and performs actions based on math, no matter what unit of measurement is used.
+
+Some WiFi controlled AC outlets such as TpLink/Kasa devices have a manual on/off button on them that could allow a person to turn them on when the Climate Czar says they should be off. Output switches have a One Shot option that tells the system whether to only execute the on/off script one time, or to execute the script once every minute in order to maintain the intended on/off state.
