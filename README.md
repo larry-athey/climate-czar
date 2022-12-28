@@ -10,7 +10,7 @@ Enabling of output switches may be over-ridden by the status of another output s
 
 Output switches really don't even have to physically exist. Since their operation is controlled with on/off bash scripts, these scripts can also be used to send email/SMS notifications or even make a curl URL call. Input sensors/switches can be assigned to multiple output switches, so you can easily receive a notification at the same time that a physical output switch is toggled on or off.
 
-The Climate Czar Wordpress plugin is only necessary for adding, configuring, and deleting input devices and output switches. The undercarriage will continue to run in the background even without the web server even running. The plugin also provides dashboards and histograms to give you a visual representation of all devices and charts that you can use to fine tune your settings.
+The Climate Czar Wordpress plugin is only necessary for adding, configuring, and deleting input sensors and output switches. The undercarriage will continue to run in the background even without the web server even running. The plugin also provides dashboards and histograms to give you a visual representation of all devices and charts that you can use to fine tune your settings.
 
 This system will run effectively on a Raspberry PI with a LAMP stack, or any web server that supports PHP, MySQL, and bash scripts. The Climate Czar server itself could actually monitor and control multiple greenhouses and grow operations in different locations if network enabled sensors and switches are utilized throughout (you'd be surprised by what you can accomplish with a public facing Nginx server running as a reverse web proxy).
 
