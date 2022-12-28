@@ -14,7 +14,7 @@ The Climate Czar Wordpress plugin is only necessary for adding, configuring, and
 
 This system will run effectively on a Raspberry PI with a LAMP stack, or any web server that supports PHP, MySQL, and bash scripts. The Climate Czar server itself could actually monitor and control multiple greenhouses and grow operations in different locations if network enabled sensors and switches are utilized throughout (you'd be surprised by what you can accomplish with a public facing Nginx server running as a reverse web proxy).
 
-# Input Device Types
+### Input Device Types
 1.	Variable Value Sensor (Temperature, Humidity, pH, EC, AD Convertor, Etc)
 2.	Average From a Group of Variable Value Sensors
 3.	Remote Switch (Float Switch, Door/Window Switch, Photocell Switch, Etc)
