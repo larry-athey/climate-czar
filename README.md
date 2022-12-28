@@ -23,3 +23,5 @@ This system will run effectively on a Raspberry PI with a LAMP stack, or any web
 7.	Timer (up to 24 on/off schedules per day or a repeating cycle of on/off intervals)
 8.	Web Console Switch (Only Controllable Via Web UI)
 9.	Raw Text Device (only for displaying text, cannot be used as a controller)
+
+Climate Czar is not region specific. If you have temperature sensors that only return values in Celsius and you want to work in Fahrenheit, you just convert the return value in your read script (command line utilities like bc allow you to do floating point math in bash). Climate Czar merely looks at numbers and performs actions based on simple math, no matter what unit of measurement is used.
