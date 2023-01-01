@@ -33,6 +33,8 @@ WiFi controlled AC outlets such as TpLink/Kasa devices have a manual on/off butt
 
 With the user interface being based on Wordpress, creating custom dashboards is as simple as creating your own pages or posts and inserting shortcodes with ID number of the input sensor or output switch passed to it. You can even similarly embed these live device views in an external website if you wish by making calls to specific PHP files in the plugin folder the same way.
 
+Anybody who has Wordpress experience can 100% customize the look and feel of your system in order to tailor it to your operation. Everything is built on a Bootstrap based Wordpress theme, so it's real easy to over-ride colors and styles. The pages of the default system are built and rendered using the WP Bakery Page Builder plugin, but you could easily replace that with your own favorite editor instead.
+
 Even though bash scripts are the most common in Linux, any other kind of script or even a compiled binary may be used. All that matters is that the proper command shell or interpreter is installed on the system and the script is owned by the user that the web server runs as and has the executable bit set. Device read scripts simply need to output a single integer or floating point numeric value to stdout.
 
 While this system was designed and tested in a 51x18 foot greenhouse, there are probably many other uses for it besides greenhouses and indoor grow operations. If you need to read numeric values from sensors or switches and turn other devices on and off based on those values, then it's likely that this system will work for what you're needing to do. It was intentionally left completely open ended for this very reason.
