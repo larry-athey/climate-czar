@@ -39,7 +39,7 @@ Even though bash scripts are the most common in Linux, any other kind of script 
 
 While this system was designed and tested in a 51x18 foot greenhouse, there are probably many other uses for it besides greenhouses and indoor grow operations. If you need to read numeric values from sensors or switches and turn other devices on and off based on those values, then it's likely that this system will work for what you're needing to do. It was intentionally left completely open ended for this very reason.
 
-![Desktop](https://user-images.githubusercontent.com/121518798/210269717-4b8df27b-24e7-45d5-9152-4909cd9a7930.png)
+![Desktop](https://user-images.githubusercontent.com/121518798/210276543-ae316777-78e2-42ae-92b5-ada8b3ec9221.png)
 
 ![Mobile1](https://user-images.githubusercontent.com/121518798/210269740-3f4c95c3-b6b9-4ade-9e24-fcdcf765d9fe.png)
 
