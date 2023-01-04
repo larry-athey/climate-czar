@@ -23,7 +23,7 @@ This system will run effectively on a Raspberry PI with a LAMP stack, or any web
 4.	AND Gate of a Group of Remote Switches
 5.	OR Gate of a Group of Remote Switches
 6.	NOT Gate of a Group of Remote Switches
-7.	Timer (unlimited on/off schedules per day)
+7.	Scheduler (unlimited on/off schedules per day)
 8.	Web Console Switch (Only Controllable Via Web UI)
 9.	Raw Text Device (only for displaying text, cannot be used as a controller)
 
