@@ -16,7 +16,7 @@ Output switches really don't even have to physically exist. Since their operatio
 
 The Climate Czar Wordpress plugin is only necessary for adding, configuring, and deleting input sensors and output switches. The undercarriage will continue to run in the background even without the web server running. The Wordpress plugin also provides dashboards and histograms to give you a visual representation of all devices and charts that you can use to fine tune your settings.
 
-All connected devices can be assigned to separate groups which allows you to have separate dashboards for multiple greenhouses or grow operations. There's no limit to the number of attached devices and groups. This system running on a small i5 based server with 8GB of RAM was tested with 1000 virtual devices and still completed all read and write operations within the 15 second processing trigger loop.
+All connected devices can be assigned to separate groups which allows you to have separate dashboards for multiple greenhouses or grow operations. There's no limit to the number of attached devices and groups. This system running on a small i5 based server with 8GB of RAM was tested with 1000 virtual devices and still completed all read and write operations within the every-15-seconds processing loop.
 
 This system will run effectively on a Raspberry PI with a LAMP stack, or any web server that supports PHP, MySQL, and bash scripts. The Climate Czar server itself could actually monitor and control multiple greenhouses and grow operations in different locations if network enabled sensors and switches are utilized throughout (you'd be surprised by what you can accomplish with a public facing Nginx server running as a reverse web proxy).
 
