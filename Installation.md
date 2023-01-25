@@ -6,7 +6,7 @@ This guide doesn't cover the installation and configuration of your web server a
 
 There is no need to dedicate the entire web server to Climate Czar, it installs itself into **/climateczar/** by default so that it is kept separate from everything else on your server. Unless you have set up your web server in a nonstandard way, this will ultimately be **/var/www/html/climateczar/**.
 
-If you already have Wordpress installed on your web server and it uses the default database name of "Wordpress", you will need to change that or edit **Wordpress.sql** and the variables in **install.sh** files so they point to a different database name. If you fail to do that, your existing Wordpress website content will be overwritten.
+If you already have Wordpress installed on your web server and it uses the default database name of "Wordpress", you will need to change that or edit **Wordpress.sql** so it points to a different database name. If you fail to do that, your existing Wordpress website content will be overwritten.
 
 Below are the only two variables in **install.sh** that you will need to edit before installation.
 
@@ -28,11 +28,11 @@ After the installation completes, you will be presented with a root CRON job on 
 
 You will also be presented with the URL to log in to the Wordpress admin console. The default login credentials are as follows. You will definitely want to go to the **Users section** and change the password if it's possible that anybody else can access your system.
 
-Username and Password: czwpadmin *(no, this won't get you into my system)*
+Username and Password: czwpadmin ***(no, this won't get you into my system)***
 
 There are two steps that you need to complete that I frankly can't figure out how to retain the settings in a Wordpress backup. I've even tested this with Updraft Backup and it has the same problem, so I guess this is just a Wordpress oddity that is even a mystery to backup specialists.
 
-Go to **Settings-Permalinks** and click the Save button, even though you're not making any changes.
+Go to **Settings->Permalinks** and click the Save button, even though you're not making any changes.
 
 Then go to **Appearance->Customize->Other Customizations** and click on Select Color under Background Color. Paste this color code **#7fca90** in the field next to that button and then click on the Publish button at the top of the screen.
 
