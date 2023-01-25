@@ -44,10 +44,9 @@ Even though bash scripts are the most common in Linux, any other kind of script 
 
 While this system was designed and tested in a 51x18 foot greenhouse, there are probably many other uses for it besides greenhouses and indoor grow operations. If you need to read numeric values from sensors or switches and turn other devices on and off based on those values, then it's likely that this system will work for what you're needing to do. It was intentionally left completely open ended for this very reason.
 
-![Desktop](https://user-images.githubusercontent.com/121518798/211460364-98773746-0257-4d00-9399-9718c64dca4d.png)
-
-![Desktop2](https://user-images.githubusercontent.com/121518798/211727841-5d6d980c-542a-45fb-81ce-d7441548bb44.png)
-
-![Mobile1](https://user-images.githubusercontent.com/121518798/211460387-feddc0f0-3766-49bd-bb07-2294813507d6.jpg)
-
-![Mobile2](https://user-images.githubusercontent.com/121518798/211460408-0655ef8c-7f11-4040-8762-b6dea114e55f.jpg)
+![CZ1](https://user-images.githubusercontent.com/121518798/214509995-22f0a567-b927-4ec4-a061-c097acbb9366.png)
+![CZ2](https://user-images.githubusercontent.com/121518798/214509996-b0c7db6d-8707-4546-aba5-0d0977ae30f6.png)
+![CZ3](https://user-images.githubusercontent.com/121518798/214509998-49c52385-33d1-4e0b-bd5d-21f7252e0ac0.png)
+![CZ4](https://user-images.githubusercontent.com/121518798/214510002-5ea0cbb7-f254-4674-a16c-913e79add1c7.png)
+![CZ5](https://user-images.githubusercontent.com/121518798/214510005-05b1e945-b3d6-44c2-aa6c-2df3dcc4ed1c.png)
+![CZ6](https://user-images.githubusercontent.com/121518798/214510006-e0c5b1fd-0a17-4c4a-9841-76b6e4b12442.png)
