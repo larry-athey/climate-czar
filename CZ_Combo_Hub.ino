@@ -123,9 +123,9 @@ void loop() {
             } else if (Header.indexOf("GET /temperature/f") >= 0) { // Read DHT-22 temperature in F
               Client.println(String(DHT.temperature * 9 / 5 + 32,1));
             } else if (Header.indexOf("GET /onewire/c") >= 0) { // Read all OneWire sensors in C
-                Client.println(ReadOneWireBus(0));
+              Client.println(ReadOneWireBus(0));
             } else if (Header.indexOf("GET /onewire/f") >= 0) { // Read all OneWire sensors in F
-                Client.println(ReadOneWireBus(1));
+              Client.println(ReadOneWireBus(1));
             } else if (Header.indexOf("GET /sensor1") >= 0) { // Read all sensor 1..8 GPIO ports
               Client.println(String(analogRead(SENSOR1),0));
             } else if (Header.indexOf("GET /sensor2") >= 0) { // " "
