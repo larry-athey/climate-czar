@@ -204,9 +204,6 @@ void loop() {
     Header = "";
     Client.stop();
   }
-//  Serial.println("Temp: " + String(DHT.temperature,1) + "°C");
-//  Serial.println("Humidity: " + String(DHT.humidity,1) + "%");
-//  Serial.println("---");
   delay(10);
 }
 //------------------------------------------------------------------------------------------------
