@@ -77,6 +77,23 @@ void setup() {
   dhtSensor.setup(DHT_PIN,DHTesp::DHT22);
   DT.begin();
 
+  pinMode(SWITCH1,OUTPUT);
+  digitalWrite(SWITCH1,0);
+  pinMode(SWITCH2,OUTPUT);
+  digitalWrite(SWITCH2,0);
+  pinMode(SWITCH3,OUTPUT);
+  digitalWrite(SWITCH3,0);
+  pinMode(SWITCH4,OUTPUT);
+  digitalWrite(SWITCH4,0);
+  pinMode(SWITCH5,OUTPUT);
+  digitalWrite(SWITCH5,0);
+  pinMode(SWITCH6,OUTPUT);
+  digitalWrite(SWITCH6,0);
+  pinMode(SWITCH7,OUTPUT);
+  digitalWrite(SWITCH7,0);
+  pinMode(SWITCH8,OUTPUT);
+  digitalWrite(SWITCH8,0);
+
   // Connect to Wi-Fi network with SSID and password
   Serial.print("Connecting to ");
   Serial.println(ssid);
