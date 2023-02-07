@@ -2,7 +2,7 @@
 
 Q: Why create this when there are already so many other home automation systems that could run a greenhouse?
 
-A: They're all overly complicated and they just continue to get even more complicated with every release. I would rather have something where the actual software is simplified. If anything complicated needs to be done, let the commands/scripts handle it so all that overhead isn't bloating the rest of the software. "Keep it stupid simple" has always been the way I write software.
+A: They're all overly complicated and they just continue to get even more complicated with every release. I would rather have something where the actual software is simplified. If anything complicated needs to be done, let the commands/scripts handle it so all that overhead isn't complicating the rest of the software. "Keep it stupid simple" has always been the way I write software.
 
 Q: Can you recommend any specific brands of network sensors or switches/outlets to use?
 
