@@ -9,6 +9,12 @@
 // sensor, and a OneWire bus for connecting as many DS18B20 temperature sensors as you want (just
 // keep in mind that the 3.3 volt output on the ESP32 developer board is only 600ma).
 //
+// Since the same ports are used for both variable value and binary value sensors, a script will
+// need to be used in binary value use cases. Your script returns zero when zero and returns one
+// if the value is greateer than zero. This value can be anything from 1 to 4095 depending on the
+// voltage that you send to the input sensor ports of the hub up to 3.3 volts. Depending on your
+// implementation, a pull-down (bias) resistor may be needed to obtain a solid zero.
+//
 // Temperatures are output in both Celcius and Farrenheit depending on the URL that is requested.
 // http://device-ip/temperature/c or http://device-ip/temperature/f reads from the DHT22.
 // The same method also applies to any OneWire temperature sensors attached to the combo hub.
