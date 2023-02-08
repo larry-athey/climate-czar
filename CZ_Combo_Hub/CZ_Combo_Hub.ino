@@ -165,52 +165,52 @@ void loop() {
               Client.println(String(analogRead(SENSOR7),0));
             } else if (Header.indexOf("GET /sensor8") > 0) { // " "
               Client.println(String(analogRead(SENSOR8),0));
-            } else if (Header.indexOf("GET /switch1/0) > 0")) { // Toggle output switch 1..8 GPIO ports
+            } else if (Header.indexOf("GET /switch1/0)" > 0)) { // Toggle output switch 1..8 GPIO ports
               digitalWrite(SWITCH1,0);
               Client.println("Switch1=0");
-            } else if (Header.indexOf("GET /switch1/1) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch1/1)" > 0)) { // " "
               digitalWrite(SWITCH1,1);
               Client.println("Switch1=1");
-            } else if (Header.indexOf("GET /switch2/0) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch2/0)" > 0)) { // " "
               digitalWrite(SWITCH2,0);
               Client.println("Switch2=0");
-            } else if (Header.indexOf("GET /switch2/1) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch2/1)" > 0)) { // " "
               digitalWrite(SWITCH2,1);
               Client.println("Switch2=1");
-            } else if (Header.indexOf("GET /switch3/0) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch3/0)" > 0)) { // " "
               digitalWrite(SWITCH3,0);
               Client.println("Switch3=0");
-            } else if (Header.indexOf("GET /switch3/1) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch3/1)" > 0)) { // " "
               digitalWrite(SWITCH3,1);
               Client.println("Switch3=1");
-            } else if (Header.indexOf("GET /switch4/0) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch4/0)" > 0)) { // " "
               digitalWrite(SWITCH4,0);
               Client.println("Switch4=0");
-            } else if (Header.indexOf("GET /switch4/1) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch4/1)" > 0)) { // " "
               digitalWrite(SWITCH4,1);
               Client.println("Switch4=1");
-            } else if (Header.indexOf("GET /switch5/0) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch5/0)" > 0)) { // " "
               digitalWrite(SWITCH5,0);
               Client.println("Switch5=0");
-            } else if (Header.indexOf("GET /switch5/1) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch5/1)" > 0)) { // " "
               digitalWrite(SWITCH5,1);
               Client.println("Switch5=1");
-            } else if (Header.indexOf("GET /switch6/0) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch6/0)" > 0)) { // " "
               digitalWrite(SWITCH6,0);
               Client.println("Switch6=0");
-            } else if (Header.indexOf("GET /switch6/1) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch6/1)" > 0)) { // " "
               digitalWrite(SWITCH6,1);
               Client.println("Switch6=1");
-            } else if (Header.indexOf("GET /switch7/0) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch7/0)" > 0)) { // " "
               digitalWrite(SWITCH7,0);
               Client.println("Switch7=0");
-            } else if (Header.indexOf("GET /switch7/1) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch7/1)" > 0)) { // " "
               digitalWrite(SWITCH7,1);
               Client.println("Switch7=1");
-            } else if (Header.indexOf("GET /switch8/0) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch8/0)" > 0)) { // " "
               digitalWrite(SWITCH8,0);
               Client.println("Switch8=0");
-            } else if (Header.indexOf("GET /switch8/1) > 0")) { // " "
+            } else if (Header.indexOf("GET /switch8/1)" > 0)) { // " "
               digitalWrite(SWITCH8,1);
               Client.println("Switch8=1");
             }
