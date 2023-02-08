@@ -28,7 +28,7 @@
 // Reading the OneWire bus returns all of the temperatures in a space-delimited list, for example
 // 66.8 65.2 59.6 69.7 71.4 58.8 67.3 70.6
 // If you want to get the third sensor's F reading in a Climate Czar read command, you would use
-// curl -s http://device-ip/onewire/f | awk '{print $3}'
+// curl --http0.9 http://device-ip/onewire/f | awk '{print $3}'
 // No need to create a script for this, just a simple Linux/MacOS command line will do the job.
 //------------------------------------------------------------------------------------------------
 #include "WiFi.h"
