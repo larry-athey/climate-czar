@@ -14,7 +14,7 @@ A: In my original static built version, everything was done in one long loop. Th
 
 Q: Can't this 15 second delay between each read and write process cause problems?
 
-A: This system is only intended to be used in greenhouses, indoor grow operations, basic home automation, etc. This is not intended to be used in any setting where timing has to be precise down to the second or less. If your greenhouse temperature finally hits the point where exhaust fans need to be turned on, a 15 second delay between detection time and action certainly isn't going to kill your plants.
+A: This system is only intended to be used in greenhouses, indoor grow operations, basic home automation, etc. This is not intended to be used in any setting where timing has to be precise down to the second or less. If your greenhouse temperature finally hits the point where exhaust fans need to be turned on, a 15 second delay between detection time and action certainly isn't going to kill your plants. All home automation systems have delays between detection and action.
 
 Q: Can Climate Czar monitor things like pH and EC in a hydroponics system?
 
