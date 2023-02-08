@@ -16,6 +16,10 @@ Q: What's the deal with all of this 3.3 volt stuff in your Combo Hub instruction
 
 A: 3.3 volts DC is what most all micro controllers run on. This low voltage and low current is actually much safer than running 120 volt AC wires all over the place because shock and fire hazards are completely eliminated. You could actually get a high current 5 volt power brick to run an entire greenhouse and insert small 3.3 volt regulators (such as https://www.amazon.com/gp/product/B074FDLCLB/) where needed to bring the signal level down to a safe level for the inputs of the Combo Hub. So, while it may sound like a foreign concept to you, it's actually very common and no more complicated to work with.
 
+Q: I'm building a new system with my own custom dashboards, is it safe to have two installations connected to the same greenhouse?
+
+A: Only the input sensors, never have two installations running the same output switches. This would be like running two spam filters or antivirus programs at the same time, there's no way to know which one is causing the problem that you're trying to fix, even if they're both using the exact same settings.
+
 Q: Can your Raspberry PI Pellet Stove Controller be used to replace a defective pellet grill/smoker controller?
 
 A: After getting this question enough times, I have expanded things in order to work for this purpose and the database has slots for up to 10 meat probes. Granted, the room air blower relay doesn't have any use in a grill/smoker, but you can easily use that to run a peristaltic dosing pump on a cycle timer to squirt water on your heat spreader in order to have a steam smoker. The **read.php** API script already supports these probes, so it's just a matter of adding thermistors to an AD convertor and adding code to the **cz-main-loop** script to read them and stuff their readings in the database.
