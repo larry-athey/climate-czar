@@ -12,6 +12,10 @@ Q: Why do the device read/write loops run on 15 second intervals?
 
 A: In my original static built version, everything was done in one long loop. The more routines I crammed into it, the longer it took to get through the loop. Splitting things into two separate loops shortens the time to get through everything and prevents pegging the CPU at 100%. The 15 second delay between cycles relieves even more CPU stress.
 
+Q: Can't this 15 second delay between each read and write process cause problems?
+
+A: This system is only intended to be used in greenhouses, indoor grow operations, basic home automation, etc. This is not intended to be used in any setting where timing has to be precise down to the second or less. If your greenhouse temperature finally hits the point where exhaust fans need to be turned on, a 15 second delay between detection time and action certainly isn't going to kill your plants.
+
 Q: Can Climate Czar monitor things like pH and EC in a hydroponics system?
 
 A: Climate Czar can monitor anything so long as you have a sensor that can output a variable value or a binary value. There are Arduino projects/kits for both pH and EC all over the web, it's just a matter of connecting the output of them to one of the 8 inputs of the Combo Hub and pulling those values into Climate Czar with a read command.
