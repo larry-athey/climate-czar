@@ -19,3 +19,7 @@ A: 3.3 volts DC is what most all micro controllers run on. This low voltage and 
 Q: Can your Raspberry PI Pellet Stove Controller be used to replace a defective pellet grill/smoker controller?
 
 A: After getting this question enough times, I have expanded things in order to work for this purpose and the database has slots for up to 10 meat probes. Granted, the room air blower relay doesn't have any use in a grill/smoker, but you can easily use that to run a peristaltic dosing pump on a cycle timer to squirt water on your heat spreader in order to have a steam smoker. The **read.php** API script already supports these probes, so it's just a matter of adding thermistors to an AD convertor and adding code to the **cz-main-loop** script to read them and stuff their readings in the database.
+
+Q: Is it possible to use your Raspberry PI Pellet Stove Controller without the need for Climate Czar?
+
+A: Certainly! The **cz-main-loop** script has two commented out code blocks that you can uncomment if you want to use toggle switches to turn it on and switch it back and forth between idle and high burn mode. You could also use the relay and switch in a traditional home thermostat for this. If you want to tweak the settings for the controller, you can do this with curl commands to the **write.php** API script in on a Mac, Linux PC, or a Powershell in Windows. No need for Climate Czar at all.
