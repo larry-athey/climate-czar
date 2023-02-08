@@ -1,4 +1,4 @@
-## Climate Czar Installation
+# Climate Czar Installation
 
 This guide expects you to have a fully functioning PHP enabled web server and MySQL database server running on a Linux, Unix, or Mac OS machine. This system absolutely is not compatible with Windows and never will be. If you absolutely have to use Windows, you will need to install a Linux or Unix virtual machine and then install Climate Czar inside of it.
 
