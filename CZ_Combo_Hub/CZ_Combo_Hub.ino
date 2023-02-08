@@ -69,6 +69,8 @@ unsigned long currentTime = millis();
 unsigned long previousTime = 0; 
 // Define timeout time in milliseconds (example: 2000ms = 2s)
 const long timeoutTime = 2000;
+// Used for keeping the OneWire bus awake
+int LoopCounter = 0;
 // Variable to store the HTTP request
 String Header;
 //------------------------------------------------------------------------------------------------
@@ -128,6 +130,7 @@ String ReadOneWireBus(byte WhichOne) {
 void loop() {
   TempAndHumidity DHT = dhtSensor.getTempAndHumidity();
   WiFiClient Client = Server.available();
+  LoopCounter ++;
   if (Client) {
     currentTime = millis();
     previousTime = currentTime;
@@ -229,5 +232,9 @@ void loop() {
     Client.stop();
   }
   delay(10);
+  if (LoopCounter == 200) {
+    ReadOneWireBus(1);
+    LoopCounter = 0;
+  }
 }
 //------------------------------------------------------------------------------------------------
