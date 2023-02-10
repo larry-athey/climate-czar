@@ -39,6 +39,12 @@
 const char* ssid = "Wokwi-GUEST"; // Your WiFi network name
 const char* password = "";        // Your WiFi password
 
+// Comment out the following 4 lines if you want to use DHCP
+IPAddress staticIP(10,20,30,219);
+IPAddress gateway(10,20,30,254);
+IPAddress subnet(255,255,255,0);
+IPAddress dns(10,20,30,254);
+
 #define OW_PIN 4   // OneWire (or 1-Wire) data bus for DS18B20 temperature sensors
 #define DHT_PIN 15 // DHT-22 data pin
 #define SENSOR1 36 // Climate Czar variable value or binary value sensors 1..8
