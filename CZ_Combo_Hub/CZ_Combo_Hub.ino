@@ -65,6 +65,7 @@ DallasTemperature DT(&oneWire);
 //------------------------------------------------------------------------------------------------
 // Current time
 unsigned long currentTime = millis();
+unsigned long currentMillis = millis();
 // Previous time
 unsigned long previousTime = 0; 
 // Define timeout time in milliseconds (2 seconds)
@@ -130,7 +131,6 @@ String ReadOneWireBus(byte WhichOne) {
 }
 //------------------------------------------------------------------------------------------------
 void loop() {
-  unsigned long currentMillis = millis();
   TempAndHumidity DHT = dhtSensor.getTempAndHumidity();
   WiFiClient Client = Server.available();
   if (Client) {
@@ -233,6 +233,7 @@ void loop() {
     Header = "";
     Client.stop();
   }
+  currentMillis = millis();
   if ((WiFi.status() != WL_CONNECTED) && (currentMillis - previousMillis >= wifiInterval)) {
     Serial.println("Reconnecting to WiFi...");
     WiFi.disconnect();
