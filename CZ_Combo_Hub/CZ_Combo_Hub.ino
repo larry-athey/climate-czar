@@ -106,7 +106,7 @@ void setup() {
 
   // Comment out the following 3 lines if you want to use DHCP
   if (WiFi.config(staticIP,gateway,subnet,dns,dns) == false) {
-    Serial.println("Configuration failed.");
+    Serial.println("WiFi static IP configuration failed.");
   }
 
   // Connect to Wi-Fi network with SSID and password
