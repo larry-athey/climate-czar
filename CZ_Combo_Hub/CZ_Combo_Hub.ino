@@ -112,6 +112,7 @@ void setup() {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   Server.begin();
+  previousMillis = millis();
 }
 //------------------------------------------------------------------------------------------------
 String ReadOneWireBus(byte WhichOne) {
@@ -232,10 +233,12 @@ void loop() {
     Header = "";
     Client.stop();
   }
-  if ((WiFi.status() != WL_CONNECTED) && (currentTime - previousMillis >= wifiInterval)) {
-    Serial.println("Reconnecting to WiFi...");
-    WiFi.disconnect();
-    WiFi.reconnect();
+  if (currentTime - previousMillis >= wifiInterval) {
+    if (WiFi.status() != WL_CONNECTED) {
+      Serial.println("Reconnecting to WiFi...");
+      WiFi.disconnect();
+      WiFi.reconnect();
+    }
     previousMillis = currentTime;
   }
   delay(10);
