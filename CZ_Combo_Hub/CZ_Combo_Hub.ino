@@ -67,8 +67,12 @@ DallasTemperature DT(&oneWire);
 unsigned long currentTime = millis();
 // Previous time
 unsigned long previousTime = 0; 
-// Define timeout time in milliseconds (example: 2000ms = 2s)
+// Define timeout time in milliseconds (2 seconds)
 const long timeoutTime = 2000;
+// Used for WiFi reconnect check time keeping
+unsigned long previousMillis = 0;
+// Check WiFi connection every 30 seconds
+const long wifiInterval = 30000;
 // Variable to store the HTTP request
 String Header;
 //------------------------------------------------------------------------------------------------
@@ -126,6 +130,7 @@ String ReadOneWireBus(byte WhichOne) {
 }
 //------------------------------------------------------------------------------------------------
 void loop() {
+  unsigned long currentMillis = millis();
   TempAndHumidity DHT = dhtSensor.getTempAndHumidity();
   WiFiClient Client = Server.available();
   if (Client) {
@@ -227,6 +232,12 @@ void loop() {
     }
     Header = "";
     Client.stop();
+  }
+  if ((WiFi.status() != WL_CONNECTED) && (currentMillis - previousMillis >= wifiInterval)) {
+    Serial.println("Reconnecting to WiFi...");
+    WiFi.disconnect();
+    WiFi.reconnect();
+    previousMillis = currentMillis;
   }
   delay(10);
 }
