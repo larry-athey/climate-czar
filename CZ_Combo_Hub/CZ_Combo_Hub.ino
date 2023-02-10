@@ -39,7 +39,7 @@
 const char* ssid = "Wokwi-GUEST"; // Your WiFi network name
 const char* password = "";        // Your WiFi password
 
-// Comment out the following 4 lines if you want to use DHCP
+// Comment out the following 4 lines if you want to use DHCP (see setup section as well)
 IPAddress staticIP(10,20,30,219);
 IPAddress gateway(10,20,30,254);
 IPAddress subnet(255,255,255,0);
@@ -103,6 +103,11 @@ void setup() {
   digitalWrite(SWITCH7,0);
   pinMode(SWITCH8,OUTPUT);
   digitalWrite(SWITCH8,0);
+
+  // Comment out the following 3 lines if you want to use DHCP
+  if (WiFi.config(staticIP,gateway,subnet,dns,dns) == false) {
+    Serial.println("Configuration failed.");
+  }
 
   // Connect to Wi-Fi network with SSID and password
   Serial.print("Connecting to ");
