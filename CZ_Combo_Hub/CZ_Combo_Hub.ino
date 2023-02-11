@@ -245,9 +245,8 @@ void loop() {
   }
   if (LoopCounter >= wifiCheck) {
     if (WiFi.status() != WL_CONNECTED) {
-      Serial.println("Reconnecting to WiFi network...");
-      WiFi.disconnect();
-      WiFi.reconnect();
+      ESP.restart();
+    } else {
       LoopCounter = 0;
     }
   }
