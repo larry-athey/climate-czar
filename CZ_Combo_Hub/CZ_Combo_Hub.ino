@@ -76,9 +76,9 @@ unsigned long previousTime = 0;
 // Define timeout time in milliseconds (2 seconds)
 const long timeoutTime = 2000;
 // Used for WiFi reconnect check time keeping
-unsigned long previousMillis = 0;
-// Check WiFi connection every 30 seconds
-const long wifiInterval = 30000;
+unsigned long LoopCounter = 0;
+// Check WiFi connection every 30000 loops (reading millis messes with the WiFi for some reason)
+const long wifiCheck = 30000;
 // Variable to store the HTTP request
 String Header;
 //------------------------------------------------------------------------------------------------
@@ -123,7 +123,6 @@ void setup() {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   Server.begin();
-  previousMillis = millis();
 }
 //------------------------------------------------------------------------------------------------
 String ReadOneWireBus(byte WhichOne) {
@@ -144,8 +143,8 @@ String ReadOneWireBus(byte WhichOne) {
 void loop() {
   TempAndHumidity DHT = dhtSensor.getTempAndHumidity();
   WiFiClient Client = Server.available();
-  currentTime = millis();
   if (Client) {
+    currentTime = millis();
     previousTime = currentTime;
     String currentLine = "";
     while (Client.connected() && currentTime - previousTime <= timeoutTime) { 
@@ -244,14 +243,15 @@ void loop() {
     Header = "";
     Client.stop();
   }
-  if (currentTime - previousMillis >= wifiInterval) {
+  if (LoopCounter >= wifiCheck) {
     if (WiFi.status() != WL_CONNECTED) {
-      Serial.println("Reconnecting to WiFi...");
+      Serial.println("Reconnecting to WiFi network...");
       WiFi.disconnect();
       WiFi.reconnect();
+      LoopCounter = 0;
     }
-    previousMillis = currentTime;
   }
   delay(10);
+  LoopCounter ++;
 }
 //------------------------------------------------------------------------------------------------
