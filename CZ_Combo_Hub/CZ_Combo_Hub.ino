@@ -228,6 +228,8 @@ void loop() {
             } else if (Header.indexOf("GET /switch8/1") >= 0) { // " "
               digitalWrite(SWITCH8,1);
               Client.println("Switch8=1");
+            } else if (Header.indexOf("GET /restart") >= 0) { // Reboot the hub
+              ESP.restart();
             } else {
               Client.println("Unrecognized Request");
             }
