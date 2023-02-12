@@ -40,7 +40,7 @@ const char* ssid = "Wokwi-GUEST"; // Your WiFi network name
 const char* password = "";        // Your WiFi password
 
 // Comment out the following 4 lines if you want to use DHCP (see setup section as well)
-IPAddress staticIP(10,20,30,219);
+IPAddress staticIP(10,20,30,160);
 IPAddress gateway(10,20,30,254);
 IPAddress subnet(255,255,255,0);
 IPAddress dns(10,20,30,254);
