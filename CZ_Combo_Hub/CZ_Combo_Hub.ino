@@ -230,6 +230,7 @@ void loop() {
               Client.println("Switch8=1");
             } else if (Header.indexOf("GET /restart") >= 0) { // Reboot the hub
               Client.println("Restarting in 1 second");
+              Client.stop();
               delay(1000);
               ESP.restart();
             } else {
