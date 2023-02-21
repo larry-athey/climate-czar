@@ -1,6 +1,6 @@
 // Written by Larry Athey (Panhandle Ponics - https://3dgtower.com) v1.0.1 released Feb 6, 2023
 //
-// Climate Czar Combo Hub is based on the Teyleten Robot ESP32S developer board with 38 GPIO pins
+// Climate Czar Combo Hub is based on the Teyleten Robot ESP32S developer board which has 38 pins
 // https://www.amazon.com/dp/B09J95SMG7 but will work with any ESP32 developer board with at least
 // 18 physical GPIO pins. This board was chosen just in case future expansion is ever necessary.
 //
