@@ -30,6 +30,11 @@
 // If you want to get the third sensor's F reading in a Climate Czar read command, you would use
 // curl --http0.9 http://device-ip/onewire/f | awk '{print $3}'
 // No need to create a script for this, just a simple Linux/MacOS command line will do the job.
+//
+// Since we don't want to create any authority conflicts, NVRAM in the ESP32 isn't used to save
+// and restore your output switch states. Therefore, you should disable One-Shot in all of your
+// output switch device configurations that point to your Combo Hub. That way it won't matter if
+// your Combo Hub loses power, Climate Czar will make sure the output switch state is in sync.
 //------------------------------------------------------------------------------------------------
 #include "WiFi.h"
 #include "DHTesp.h"
@@ -37,7 +42,7 @@
 #include "DallasTemperature.h"
 //------------------------------------------------------------------------------------------------
 const char* ssid = "your-ssid"; // Your WiFi network name
-const char* password = "your-password";        // Your WiFi password
+const char* password = "your-password"; // Your WiFi password
 
 // Comment out the following 4 lines if you want to use DHCP (see setup section as well)
 IPAddress staticIP(10,20,30,160);
