@@ -7,7 +7,7 @@
 // The combo hub provides 8 analog to digial input pins for variable value or binary value input
 // sensors, 8 digital outputs for driving solid state relays, an on-board DHT22 temp and humidity
 // sensor, and a OneWire bus for connecting as many DS18B20 temperature sensors as you want (just
-// keep in mind that the 3.3 volt output on the ESP32 developer board is only 600ma).
+// keep in mind that this is dependent upon the current output of your 5 volt power supply).
 //
 // Since the same ports are used for both variable value and binary value sensors, a script will
 // need to be used in binary value use cases. Your script returns zero when zero and returns one
