@@ -34,7 +34,7 @@
 // Since we don't want to create any authority conflicts, NVRAM in the ESP32 isn't used to save
 // and restore your output switch states. Therefore, you should disable One-Shot in all of your
 // output switch device configurations that point to your Combo Hub. That way it won't matter if
-// your Combo Hub loses power, Climate Czar will make sure the output switch state is in sync.
+// your Combo Hub loses power, Climate Czar will make sure the output switch states are in sync.
 //------------------------------------------------------------------------------------------------
 #include "WiFi.h"
 #include "DHTesp.h"
