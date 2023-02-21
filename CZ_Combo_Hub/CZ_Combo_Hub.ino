@@ -36,8 +36,8 @@
 #include "OneWire.h"
 #include "DallasTemperature.h"
 //------------------------------------------------------------------------------------------------
-const char* ssid = "Wokwi-GUEST"; // Your WiFi network name
-const char* password = "";        // Your WiFi password
+const char* ssid = "your-ssid"; // Your WiFi network name
+const char* password = "your-password";        // Your WiFi password
 
 // Comment out the following 4 lines if you want to use DHCP (see setup section as well)
 IPAddress staticIP(10,20,30,160);
@@ -128,6 +128,7 @@ void setup() {
 String ReadOneWireBus(byte WhichOne) {
   String Readings = "";
   byte Addr[8];
+  DT.requestTemperatures(); 
   oneWire.reset_search();
   delay(250);
   while (oneWire.search(Addr)) {
