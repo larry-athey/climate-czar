@@ -37,12 +37,13 @@
 // your Combo Hub loses power, Climate Czar will make sure the output switch states are in sync.
 //------------------------------------------------------------------------------------------------
 #include "WiFi.h"
+#include "ESP32Ping.h"
 #include "DHTesp.h"
 #include "OneWire.h"
 #include "DallasTemperature.h"
 //------------------------------------------------------------------------------------------------
-const char* ssid = "Wokwi-GUEST"; // Your WiFi network name
-const char* password = "Wokwi-GUEST"; // Your WiFi password
+const char* ssid = "Wokwi-GUEST"; // Your WiFi network name (replace Wokwi-GUEST)
+const char* password = ""; // Your WiFi password
 
 // Comment out the following 4 lines if you want to use DHCP (see setup section as well)
 IPAddress staticIP(10,20,30,160);
@@ -112,7 +113,7 @@ void setup() {
   pinMode(LED,OUTPUT);
 
   // Comment out the following 3 lines if you want to use DHCP
-  if (WiFi.config(staticIP,gateway,subnet,dns,dns) == false) {
+  if (! WiFi.config(staticIP,gateway,subnet,dns,dns)) {
     Serial.println("WiFi static IP configuration failed.");
   }
 
@@ -126,6 +127,8 @@ void setup() {
     digitalWrite(LED,0);
     delay(250);
     Serial.print(".");
+    LoopCounter ++;
+    if (LoopCounter == 60) ESP.restart();
   }
   digitalWrite(LED,1);
 
@@ -262,7 +265,8 @@ void loop() {
     Client.stop();
   }
   if (LoopCounter >= wifiCheck) {
-    if (WiFi.status() != WL_CONNECTED) {
+    bool Test = Ping.ping("8.8.8.8",3);
+    if (! Test) {
       ESP.restart();
     } else {
       LoopCounter = 0;
