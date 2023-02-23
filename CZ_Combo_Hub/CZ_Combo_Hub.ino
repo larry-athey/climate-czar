@@ -41,8 +41,8 @@
 #include "OneWire.h"
 #include "DallasTemperature.h"
 //------------------------------------------------------------------------------------------------
-const char* ssid = "your-ssid"; // Your WiFi network name
-const char* password = "your-password"; // Your WiFi password
+const char* ssid = "Wokwi-GUEST"; // Your WiFi network name
+const char* password = "Wokwi-GUEST"; // Your WiFi password
 
 // Comment out the following 4 lines if you want to use DHCP (see setup section as well)
 IPAddress staticIP(10,20,30,160);
@@ -68,6 +68,7 @@ IPAddress dns(10,20,30,254);
 #define SWITCH6 5  // " "
 #define SWITCH7 17 // " "
 #define SWITCH8 16 // " "
+#define LED 2      // Onboard blue LED for WiFi connection status
 //------------------------------------------------------------------------------------------------
 WiFiServer Server(80);
 DHTesp dhtSensor;
@@ -108,6 +109,7 @@ void setup() {
   digitalWrite(SWITCH7,0);
   pinMode(SWITCH8,OUTPUT);
   digitalWrite(SWITCH8,0);
+  pinMode(LED,OUTPUT);
 
   // Comment out the following 3 lines if you want to use DHCP
   if (WiFi.config(staticIP,gateway,subnet,dns,dns) == false) {
@@ -119,9 +121,14 @@ void setup() {
   Serial.println(ssid);
   WiFi.begin(ssid,password);
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+    digitalWrite(LED,1);
+    delay(250);
+    digitalWrite(LED,0);
+    delay(250);
     Serial.print(".");
   }
+  digitalWrite(LED,1);
+
   // Print local IP address and start web server
   Serial.println("");
   Serial.println("WiFi connected.");
