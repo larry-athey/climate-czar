@@ -18,7 +18,7 @@ A: This system is only intended to be used in greenhouses, indoor grow operation
 
 Q: My power went out for a few seconds and when it came back, my Combo Hub won't respond.
 
-A: I only created the ESP32/Arduino software, I can't control the hardware. It's pretty tough to destroy the ESP32 with a power outage, so I'd really suggest restarting your router or access point, even if other devices are connected just fine. I've been able to reliably reproduce this with both a Netgear and Asus router. The cure is to unplug the router or access point and give it time for all capacitors to discharge, a minute should work. Then plug it back in and power cycle your Combo Hub after that.
+A: It's pretty tough to destroy the ESP32 with a power outage, it takes a pretty serious surge to do it since I include a switching power supply with them rather than a linear power supply. So, I'd really suggest restarting your router or access point, even if other devices are connected just fine. I've been able to reliably reproduce this with both a Netgear and Asus router, the best I can figure is that the router didn't completely discharge and the ARP table got botched. The cure is to unplug the router or access point and give it time for all capacitors to discharge, a minute should work. Then plug it back in and power cycle your Combo Hub after that.
 
 Q: Can Climate Czar monitor things like pH and EC in a hydroponics system?
 
