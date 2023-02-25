@@ -16,6 +16,10 @@ Q: Can't this 15 second delay between each read and write process cause problems
 
 A: This system is only intended to be used in greenhouses, indoor grow operations, basic home automation, etc. This is not intended to be used in any setting where timing has to be precise down to the second or less. If your greenhouse temperature finally hits the point where exhaust fans need to be turned on, a 15 second delay between detection time and action certainly isn't going to kill your plants. All home automation systems have delays between detection and action and some perform the action before displaying the reading in order to trick you.
 
+Q: My power went out for a few seconds and when it came back, my Combo Hub won't respond.
+
+A: I only created the ESP32/Arduino software, I can't control the hardware. It's pretty tough to destroy the ESP32 with a power outage, so I'd really suggest restarting your router or access point, even if other devices are connected just fine. I've been able to reliably reproduce this with both a Netgear and Asus router. The cure is to unplug the router or access point and give it time for all capacitors to discharge, a minute should work. Then plug it back in and power cycle your Combo Hub after that.
+
 Q: Can Climate Czar monitor things like pH and EC in a hydroponics system?
 
 A: Climate Czar can monitor anything so long as you have a sensor that can output a variable value or a binary value. There are Arduino projects/kits for both pH and EC all over the web, it's just a matter of connecting the output of them to one of the 8 inputs of the Combo Hub and pulling those values into Climate Czar with a read command.
