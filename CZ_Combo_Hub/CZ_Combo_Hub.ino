@@ -84,6 +84,8 @@ unsigned long previousTime = 0;
 const long timeoutTime = 2000;
 // Used for WiFi reconnect check time keeping
 unsigned long LoopCounter = 0;
+// Used to force a restart every 21,600,000 loops (roughly every 6 hours)
+unsigned long Uptime = 0;
 // Check WiFi connection every 30000 loops (reading millis messes with the WiFi for some reason)
 const long wifiCheck = 30000;
 // Variable to store the HTTP request
@@ -274,5 +276,7 @@ void loop() {
   }
   delay(10);
   LoopCounter ++;
+  Uptime ++;
+  if (Uptime >= 21600000) ESP.restart();
 }
 //------------------------------------------------------------------------------------------------
