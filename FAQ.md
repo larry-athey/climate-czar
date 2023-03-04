@@ -24,6 +24,10 @@ Q: Can Climate Czar monitor things like pH and EC in a hydroponics system?
 
 A: Climate Czar can monitor anything so long as you have a sensor that can output a variable value or a binary value. There are Arduino projects/kits for both pH and EC all over the web, it's just a matter of connecting the output of them to one of the 8 inputs of the Combo Hub and pulling those values into Climate Czar with a read command.
 
+Q: Why isn't the Wordpress plugin available from the Wordpress plugin store/repository?
+
+A: Because the Climate Czar undercarriage is actually not part of Wordpress, which is why it uses its own database separate from the Wordpress database. The plugin would do you no good without the undercarriage installed, so there's no point in going through all of the headaches of playing the Wordpress developer game. It's not possible to install the undercarriage with the plugin since that requires root access.
+
 Q: What's the deal with all of this 3.3 volt stuff in your Combo Hub instructions? I've never heard of this before.
 
 A: 3.3 volts DC is what most all micro controllers run on. This low voltage and low current is actually much safer than running 120 volt AC wires all over the place because shock and fire hazards are completely eliminated. You could actually get a high current 5 volt power brick to run an entire greenhouse and insert small 3.3 volt regulators (such as https://www.amazon.com/gp/product/B074FDLCLB/) where needed to bring the signal level down to a safe level for the inputs of the Combo Hub. So, while it may sound like a foreign concept to you, it's actually very common and no more complicated to work with.
