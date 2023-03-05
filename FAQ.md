@@ -30,7 +30,7 @@ A: Because the Climate Czar undercarriage is actually not part of Wordpress, whi
 
 Q: What's the deal with the random warnings in the WP-Admin, such as when you edit a page?
 
-A: This is a side effect of extra code in the theme's function.php to confuse version probes from somebody scanning your installation with WPScan. If you choose to install a Wordpress firewall (such as Wordfence) you can safely remove all of those lines of code. Just go to Appearance->Theme File Editor->functions.php and delete lines 10 through 51.
+A: This is a side effect of extra code in the theme's function.php to confuse version probes from somebody scanning your installation with WPScan. If you choose to install a Wordpress firewall (such as Wordfence) you can safely remove all of those lines of code. Just go to Appearance->Theme File Editor->functions.php and delete lines 10 through 51. These scans always result in a denial of service attack on your server, screw those people.
 
 Q: What's the deal with all of this 3.3 volt stuff in your Combo Hub instructions? I've never heard of this before.
 
