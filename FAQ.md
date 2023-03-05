@@ -26,7 +26,7 @@ A: Climate Czar can monitor anything so long as you have a sensor that can outpu
 
 Q: Why isn't the Wordpress plugin available from the Wordpress plugin store/repository?
 
-A: Because the Climate Czar undercarriage is actually not part of Wordpress, which is why it uses its own database separate from the Wordpress database. The plugin would do you no good without the undercarriage installed, so there's no point in going through all of the headaches of playing the Wordpress developer game. It's not possible to install the undercarriage with the plugin since that requires root access.
+A: Because the Climate Czar undercarriage is actually not part of Wordpress, which is why it uses its own database separate from the Wordpress database. The plugin would do you no good without the undercarriage installed, so there's no point in going through all of the headaches of playing the formal Wordpress third-party developer game. It's not possible to install the undercarriage with the plugin since that procedure requires root access.
 
 Q: What's the deal with the random warnings in the WP-Admin, such as when you edit a page?
 
