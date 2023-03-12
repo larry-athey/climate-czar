@@ -42,7 +42,7 @@ A: Only the input sensors, never have two installations running the same output 
 
 Q: Can your Raspberry PI Pellet Stove Controller be used to replace a defective pellet grill/smoker controller?
 
-A: After getting this question enough times, I have expanded things in order to work for this purpose and the database has slots for up to 10 meat probes. Granted, the room air blower relay doesn't have any use in a grill/smoker, but you can easily use that to run a peristaltic dosing pump on a cycle timer to squirt water on your heat spreader in order to have a steam smoker. The **read.php** API script already supports these probes, so it's just a matter of adding thermistors to an AD convertor and adding code to the **cz-main-loop** script to read them and stuff their readings in the database.
+A: After getting this question enough times, I have expanded things in order to work for this purpose and the database has slots for up to 8 meat probes. Granted, the room air blower relay doesn't have any use in a grill/smoker, but you can easily use that to run a peristaltic dosing pump on a cycle timer to squirt water on your heat spreader in order to have a steam smoker. The **read.php** API script already supports these probes, so it's just a matter of adding thermistors to an AD convertor and adding code to the **cz-main-loop** script to read them and stuff their readings in the database.
 
 Q: Is it possible to use your Raspberry PI Pellet Stove Controller without the need for Climate Czar?
 
