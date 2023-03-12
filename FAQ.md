@@ -24,6 +24,14 @@ Q: Can Climate Czar monitor things like pH and EC in a hydroponics system?
 
 A: Climate Czar can monitor anything so long as you have a sensor that can output a variable value or a binary value. There are Arduino projects/kits for both pH and EC all over the web, it's just a matter of connecting the output of them to one of the 8 inputs of the Combo Hub and pulling those values into Climate Czar with a read command.
 
+Q: Why isn't the Wordpress plugin available from the Wordpress plugin store/repository?
+
+A: Because the Climate Czar undercarriage is actually not part of Wordpress, which is why it uses its own database separate from the Wordpress database. The plugin would do you no good without the undercarriage installed, so there's no point in going through all of the headaches of playing the formal Wordpress third-party developer game. It's not possible to install the undercarriage with the plugin since that procedure requires root access.
+
+Q: What's the deal with the random warnings in the WP-Admin, such as when you edit a page?
+
+A: This is a side effect of extra code in the theme's function.php to confuse version probes from somebody scanning your installation with WPScan. If you choose to install a Wordpress firewall (such as Wordfence) you can safely remove all of those lines of code. Just go to Appearance->Theme File Editor->functions.php and delete lines 10 through 51. These scans always result in a denial of service attack on your server, screw those people.
+
 Q: What's the deal with all of this 3.3 volt stuff in your Combo Hub instructions? I've never heard of this before.
 
 A: 3.3 volts DC is what most all micro controllers run on. This low voltage and low current is actually much safer than running 120 volt AC wires all over the place because shock and fire hazards are completely eliminated. You could actually get a high current 5 volt power brick to run an entire greenhouse and insert small 3.3 volt regulators (such as https://www.amazon.com/gp/product/B074FDLCLB/) where needed to bring the signal level down to a safe level for the inputs of the Combo Hub. So, while it may sound like a foreign concept to you, it's actually very common and no more complicated to work with.
@@ -34,7 +42,7 @@ A: Only the input sensors, never have two installations running the same output 
 
 Q: Can your Raspberry PI Pellet Stove Controller be used to replace a defective pellet grill/smoker controller?
 
-A: After getting this question enough times, I have expanded things in order to work for this purpose and the database has slots for up to 10 meat probes. Granted, the room air blower relay doesn't have any use in a grill/smoker, but you can easily use that to run a peristaltic dosing pump on a cycle timer to squirt water on your heat spreader in order to have a steam smoker. The **read.php** API script already supports these probes, so it's just a matter of adding thermistors to an AD convertor and adding code to the **cz-main-loop** script to read them and stuff their readings in the database.
+A: After getting this question enough times, I have expanded things in order to work for this purpose and the database has slots for up to 8 meat probes. Granted, the room air blower relay doesn't have any use in a grill/smoker, but you can easily use that to run a peristaltic dosing pump on a cycle timer to squirt water on your heat spreader in order to have a steam smoker. The **read.php** API script already supports these probes, so it's just a matter of adding thermistors to an AD convertor and adding code to the **cz-main-loop** script to read them and stuff their readings in the database.
 
 Q: Is it possible to use your Raspberry PI Pellet Stove Controller without the need for Climate Czar?
 
