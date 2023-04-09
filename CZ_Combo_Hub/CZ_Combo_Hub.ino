@@ -36,7 +36,7 @@
 // output switch device configurations that point to your Combo Hub. That way it won't matter if
 // your Combo Hub loses power, Climate Czar will make sure the output switch states are in sync.
 //------------------------------------------------------------------------------------------------
-#include "WiFi.h"
+#include "WiFi.h" // ESP32-WROOM-DA will allow the blue on-board LED to react to WiFi traffic.
 #include "ESP32Ping.h"
 #include "DHTesp.h"
 #include "OneWire.h"
@@ -50,6 +50,9 @@ IPAddress staticIP(10,20,30,160);
 IPAddress gateway(10,20,30,254);
 IPAddress subnet(255,255,255,0);
 IPAddress dns(10,20,30,254);
+
+// IP to ping every 30 seconds to verify network connectivity and reboot the hub if no response.
+const char* PingerIP = "10.20.30.254";
 
 #define OW_PIN 4   // OneWire (or 1-Wire) data bus for DS18B20 temperature sensors
 #define DHT_PIN 15 // DHT-22 data pin
@@ -267,7 +270,7 @@ void loop() {
     Client.stop();
   }
   if (LoopCounter >= wifiCheck) {
-    bool Test = Ping.ping("8.8.8.8",3);
+    bool Test = Ping.ping(PingerIP,3);
     if (! Test) {
       ESP.restart();
     } else {
