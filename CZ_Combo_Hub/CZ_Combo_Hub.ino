@@ -29,7 +29,10 @@
 // 66.8 65.2 59.6 69.7 71.4 58.8 67.3 70.6
 // If you want to get the third sensor's F reading in a Climate Czar read command, you would use
 // curl --http0.9 http://device-ip/onewire/f | awk '{print $3}'
-// No need to create a script for this, just a simple Linux/MacOS command line will do the job.
+//
+// Since long distance sensors tend to be randomly undependable, you may want to read sensors by
+// their address instead. Make a call to http://device-ip/onewire/list to list all sensors along
+// with their address. Then call http://device-ip/onewire/f?<address> to read sensors individually.
 //
 // Since we don't want to create any authority conflicts, NVRAM in the ESP32 isn't used to save
 // and restore your output switch states. Therefore, you should disable One-Shot in all of your
@@ -148,17 +151,77 @@ void setup() {
 String ReadOneWireBus(byte WhichOne) {
   String Readings = "";
   byte Addr[8];
-  DT.requestTemperatures(); 
-  oneWire.reset_search();
-  delay(250);
-  while (oneWire.search(Addr)) {
-    if (WhichOne == 0) {
-      Readings += String(DT.getTempC(Addr),1) + " ";
-    } else {
-      Readings += String(DT.getTempF(Addr),1) + " ";
+  if (DT.getDeviceCount() > 0) {
+    DT.requestTemperatures(); 
+    oneWire.reset_search();
+    delay(250);
+    while (oneWire.search(Addr)) {
+      if (WhichOne == 0) {
+        Readings += String(DT.getTempC(Addr),1) + " ";
+      } else {
+        Readings += String(DT.getTempF(Addr),1) + " ";
+      }
     }
+    return Readings;
+  } else {
+    return "No Sensors Found";
   }
-  return Readings;
+}
+//------------------------------------------------------------------------------------------------
+String ReadOneWireSensor(String Header,byte WhichOne) {
+  String HexStr = "0x";
+  char Buffer[5];
+  byte x,y;
+  byte Addr[8];
+  if (DT.getDeviceCount() > 0) {
+    Header.remove(0,15);
+    Header.remove(23,(Header.length() - 23));
+    y = 0;
+    for (x = 0; x <= 22; x ++) {
+      if (Header.charAt(x) != ':') HexStr += Header.charAt(x);
+      if ((Header.charAt(x) == ':') || (x == 22)) {
+        Serial.println(HexStr);
+        HexStr.toCharArray(Buffer,5);
+        Addr[y] = strtol(Buffer,NULL,0);
+        HexStr = "0x";
+        y ++;
+      }
+    }
+    DT.requestTemperatures();
+    oneWire.reset_search();
+    delay(250);
+    if (WhichOne == 0) {
+      return String(DT.getTempC(Addr),1);
+    } else {
+      return String(DT.getTempF(Addr),1);
+    } 
+  } else {
+    return "No Sensors Found";
+  }
+}
+//------------------------------------------------------------------------------------------------
+String ListOneWireDevices() {
+  String Devices = "";
+  byte x;
+  byte Addr[8];
+  if (DT.getDeviceCount() > 0) {
+    DT.requestTemperatures(); 
+    oneWire.reset_search();
+    delay(250);
+    while (oneWire.search(Addr)) {
+      for (x = 0; x < 8; x ++) {
+        if (x < 7) {
+          Devices += String(Addr[x],HEX) + ":";
+        } else {
+          Devices += String(Addr[x],HEX);
+        }
+      }
+      Devices += " " + String(DT.getTempC(Addr),1) + " " + String(DT.getTempF(Addr),1) + "\n";
+    }
+    return Devices;
+  } else {
+    return "No Sensors Found";
+  }
 }
 //------------------------------------------------------------------------------------------------
 void loop() {
@@ -175,16 +238,23 @@ void loop() {
         Header += c;
         if (c == '\n') {
           if (currentLine.length() == 0) {
+            Serial.println("\n" + Header);
             if (Header.indexOf("GET /humidity") >= 0) { // Read DHT-22 humidity
               Client.println(String(DHT.humidity,1));
             } else if (Header.indexOf("GET /temperature/c") >= 0) { // Read DHT-22 temperature in C
               Client.println(String(DHT.temperature,1));
             } else if (Header.indexOf("GET /temperature/f") >= 0) { // Read DHT-22 temperature in F
               Client.println(String(DHT.temperature * 9 / 5 + 32,1));
+            } else if (Header.indexOf("GET /onewire/c?") >= 0) { // Read a specific OneWire sensor by address in C
+              Client.println(ReadOneWireSensor(Header,0));
             } else if (Header.indexOf("GET /onewire/c") >= 0) { // Read all OneWire sensors in C
               Client.println(ReadOneWireBus(0));
+            } else if (Header.indexOf("GET /onewire/f?") >= 0) { // Read a specific OneWire sensor by address in F
+              Client.println(ReadOneWireSensor(Header,1));
             } else if (Header.indexOf("GET /onewire/f") >= 0) { // Read all OneWire sensors in F
               Client.println(ReadOneWireBus(1));
+            } else if (Header.indexOf("GET /onewire/list") >= 0) { // List all OneWire sensors as "Address C F"
+              Client.println(ListOneWireDevices());
             } else if (Header.indexOf("GET /sensor1") >= 0) { // Read all sensor 1..8 GPIO ports
               Client.println(String(analogRead(SENSOR1),0));
             } else if (Header.indexOf("GET /sensor2") >= 0) { // " "
