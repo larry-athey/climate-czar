@@ -225,6 +225,15 @@ String ListOneWireDevices() {
   }
 }
 //------------------------------------------------------------------------------------------------
+String GetStats() {
+  String Stats = "";
+  Stats += "System Uptime: " + String(millis() / 1000) + " seconds\n";
+  Stats += "WiFi Network: " + String(WiFi.SSID()) + "\n";
+  Stats += "WiFi Channel: " + String(WiFi.channel()) + "\n";
+  Stats += "WiFi Signal: " + String(WiFi.RSSI());
+  return Stats;
+}
+//------------------------------------------------------------------------------------------------
 void loop() {
   TempAndHumidity DHT = dhtSensor.getTempAndHumidity();
   WiFiClient Client = Server.available();
@@ -325,6 +334,8 @@ void loop() {
               Client.stop();
               delay(1000);
               ESP.restart();
+            } else if (Header.indexOf("GET /stats") >= 0) { // Get system stats
+              Client.println(GetStats());
             } else {
               Client.println("Unrecognized Request");
             }
