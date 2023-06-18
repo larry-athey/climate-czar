@@ -54,7 +54,7 @@ IPAddress gateway(10,20,30,254);
 IPAddress subnet(255,255,255,0);
 IPAddress dns(10,20,30,254);
 
-// IP to ping every 30 seconds to verify network connectivity and reboot the hub if no response.
+// IP to ping every 5000 loops to verify network connectivity and reboot the hub if no response.
 const char* PingerIP = "10.20.30.254";
 
 #define OW_PIN 4   // OneWire (or 1-Wire) data bus for DS18B20 temperature sensors
