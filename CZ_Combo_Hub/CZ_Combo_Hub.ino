@@ -225,11 +225,11 @@ String ListOneWireDevices() {
   }
 }
 //------------------------------------------------------------------------------------------------
-String GetStats() {
+String GetStats(String LineEnd) {
   String Stats = "";
-  Stats += "System Uptime: " + String(millis() / 1000) + " seconds\n";
-  Stats += "WiFi Network: " + String(WiFi.SSID()) + "\n";
-  Stats += "WiFi Channel: " + String(WiFi.channel()) + "\n";
+  Stats += "System Uptime: " + String(millis() / 1000) + " seconds" + LineEnd;
+  Stats += "WiFi Network: " + String(WiFi.SSID()) + LineEnd;
+  Stats += "WiFi Channel: " + String(WiFi.channel()) + LineEnd;
   Stats += "WiFi Signal: " + String(WiFi.RSSI());
   return Stats;
 }
@@ -334,8 +334,10 @@ void loop() {
               Client.stop();
               delay(1000);
               ESP.restart();
-            } else if (Header.indexOf("GET /stats") >= 0) { // Get system stats
-              Client.println(GetStats());
+            } else if (Header.indexOf("GET /statshtml") >= 0) { // Get system stats with HTML line breaks
+              Client.println(GetStats("<br>\n"));
+            } else if (Header.indexOf("GET /stats") >= 0) { // Get system stats as raw text
+              Client.println(GetStats("\n"));
             } else {
               Client.println("Unrecognized Request");
             }
