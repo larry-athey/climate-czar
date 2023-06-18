@@ -86,14 +86,14 @@ DallasTemperature DT(&oneWire);
 unsigned long currentTime = millis();
 // Previous time
 unsigned long previousTime = 0; 
-// Define timeout time in milliseconds (2 seconds)
+// Define web server timeout time in milliseconds (2 seconds)
 const long timeoutTime = 2000;
-// Used for WiFi reconnect check time keeping
+// Used for WiFi connection check time keeping
 unsigned long LoopCounter = 0;
 // Used to force a restart every 21,600,000 loops (roughly every 6 hours)
 unsigned long Uptime = 0;
-// Check WiFi connection every 30000 loops (reading millis messes with the WiFi for some reason)
-const long wifiCheck = 30000;
+// Ping failure counter, reboot the device after 30 failures
+byte PingFail = 0;
 // Variable to store the HTTP request
 String Header;
 //------------------------------------------------------------------------------------------------
@@ -139,6 +139,7 @@ void setup() {
     if (LoopCounter == 60) ESP.restart();
   }
   digitalWrite(LED,1);
+  LoopCounter = 0;
 
   // Print local IP address and start web server
   Serial.println("");
@@ -339,17 +340,19 @@ void loop() {
     Header = "";
     Client.stop();
   }
-  if (LoopCounter >= wifiCheck) {
+  if (LoopCounter > 5000) {
     bool Test = Ping.ping(PingerIP,3);
     if (! Test) {
-      ESP.restart();
+      PingFail ++;
+      if (PingFail == 30) ESP.restart();
     } else {
-      LoopCounter = 0;
+      PingFail = 0;
     }
+    LoopCounter = 0;
   }
   delay(10);
   LoopCounter ++;
   Uptime ++;
-  if (Uptime >= 21600000) ESP.restart();
+  if (Uptime > 21600000) ESP.restart();
 }
 //------------------------------------------------------------------------------------------------
