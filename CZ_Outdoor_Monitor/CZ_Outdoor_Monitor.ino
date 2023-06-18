@@ -110,7 +110,7 @@ void setup() {
   ScreenWidth  = gfx->width();
   ScreenCenter = round(ScreenWidth / 2);
 
-  // Comment out the following cinditional code block if you want to use DHCP
+  // Comment out the following conditional code block if you want to use DHCP
   if (! WiFi.config(staticIP,gateway,subnet,dns,dns)) {
     gfx->setFont(&FreeSans10pt7b);
     gfx->setCursor(0,25);
