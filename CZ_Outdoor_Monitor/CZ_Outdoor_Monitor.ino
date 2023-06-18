@@ -63,7 +63,7 @@ IPAddress dns(10,20,30,254);
 //------------------------------------------------------------------------------------------------
 const char* SSID = "Wokwi-GUEST"; // Your WiFi network name (replace Wokwi-GUEST)
 const char* Password = ""; // Your WiFi password
-// IP to ping every 30 seconds to verify network connectivity and reboot the hub if no response.
+// IP to ping every screen update to verify network connectivity and reboot the unit if no response.
 const char* PingerIP = "10.20.30.254";
 
 // Used for centering the large font readings on the screen
