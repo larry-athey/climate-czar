@@ -156,9 +156,9 @@ void SetFG(float Temp) {
     gfx->setTextColor(CYAN);
   } else if ((Temp > 58) && (Temp <= 78)) {
     gfx->setTextColor(GREEN);
-  } else if ((Temp > 78) && (Temp <= 88)) {
+  } else if ((Temp > 78) && (Temp <= 85)) {
     gfx->setTextColor(YELLOW);
-  } else if ((Temp > 88) && (Temp <= 98)) {
+  } else if ((Temp > 88) && (Temp <= 95)) {
     gfx->setTextColor(MAGENTA);
   } else {
     gfx->setTextColor(RED);
