@@ -16,7 +16,8 @@
 // to work with any other ESP32 board without a display.
 //
 // While there may be some concern about the DHT-22 being exposed, This really isn't a problem if
-// you mount it to the bottom of the enclosure away from the edges. A person could also put some
+// you mount it to the bottom of the enclosure away from the edges, brushing on a coat of rubber
+// cement on all exposed parts of the circuit board is also helpful. A person could also put some
 // form of open bottom shell around it to help protect it even more. If you have a 3D printer you
 // can find plenty of shells on Thingiverse that you can print up for this purpose. Since I live
 // in Nebraska, storms always come from the west. In my situation, I just mounted the unit to the
