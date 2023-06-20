@@ -25,9 +25,9 @@
 //
 // The ambient light sensor is a BH1750 which uses I2C communications, so everything used in this
 // project works without any external components. The output to the screen and the web API are a
-// 0 to 100 value as well as an actual Lux value which can be 0 to 65535. The first one is more
-// useful to Climate Czar. No need for any scripts, just simple curl commands to pull any of the
-// sensor readings.
+// 0 to 100 value. However, the web API also provides an actual Lux value which can be 0 to 65535.
+// The first value is more useful to Climate Czar as a variable value sensor. Otherwise, no need
+// for any read scripts here, just simple curl commands to pull any of the sensor readings.
 //
 // The web API for this unit uses the same call structure as the Climate Czar Combo Hub, but is
 // very much reduced in size due to the limited number of sensors.
