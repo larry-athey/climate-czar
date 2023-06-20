@@ -24,11 +24,10 @@
 // east wall of the greenhouse and it's perfectly safe from rain and snow blowing into it.
 //
 // The ambient light sensor is a BH1750 which uses I2C communications, so everything used in this
-// project works without any external components. The sensor just needs to be pointed downward so
-// it's less affected by direct sunlight. The output to the screen and the web API is a 0 to 100
-// value so it can be connected to Climate Czar without the need for a script. Just a simple curl
-// command to pull any of the sensor readings. This value can be used to control supplemental
-// grow lights in a greenhouse so you can maintain summertime light every day all year long.
+// project works without any external components. The output to the screen and the web API are a
+// 0 to 100 value as well as an actual Lux value which can be 0 to 65535. The first one is more
+// useful to Climate Czar. No need for any scripts, just simple curl commands to pull any of the
+// sensor readings.
 //
 // The web API for this unit uses the same call structure as the Climate Czar Combo Hub, but is
 // very much reduced in size due to the limited number of sensors.
@@ -43,7 +42,8 @@
 #include "BH1750.h"
 //------------------------------------------------------------------------------------------------
 #define OW_PIN 1 // This is only here because I have a pull-up resistor on GPIO 1 "just in case"
-#define BH_PIN 2
+#define I2C_SCL 17
+#define I2C_SDA 18
 #define DHT_PIN 3
 #define PIN_LCD_BL 38
 #define PIN_POWER_ON 15
@@ -95,7 +95,7 @@ String Header;
 void setup() {
   byte LoopCounter = 0;
   dhtSensor.setup(DHT_PIN,DHTesp::DHT22);
-  Wire.begin(BH_PIN,43);
+  Wire.begin(I2C_SDA,I2C_SCL);
   lightMeter.begin();
 
   pinMode(PIN_POWER_ON,OUTPUT);
@@ -230,8 +230,9 @@ void loop() {
   Humidity = DHT.humidity;
   TempC = DHT.temperature;
   TempF = TempC * 9 / 5 + 32;
-  float Lux = lightMeter.readLightLevel();
-  Light = (100 / 65536) * Lux;
+  float Lux = lightMeter.readLightLevel(); // Value range is 0 (darkness)..65535 (direct sunlightr)
+  Light = .01 * Lux; // Adjust multiplier as needed depending on the location of the outdoor unit
+  if (Light > 100) Light = 100;
 
   if (ScreenTimer == 1000) {
     ScreenUpdate();
@@ -256,8 +257,10 @@ void loop() {
               Client.println(String(TempC,1));
             } else if (Header.indexOf("GET /temperature/f") >= 0) { // DHT-22 temperature in F
               Client.println(String(TempF,1));
-            } else if (Header.indexOf("GET /light") >= 0) { // Ambient light level
+            } else if (Header.indexOf("GET /light") >= 0) { // Ambient light level 0%..100%
               Client.println(String(Light,1));
+            } else if (Header.indexOf("GET /lux") >= 0) { // Ambient light level raw lux value
+              Client.println(String(Lux,1));
             } else if (Header.indexOf("GET /restart") >= 0) { // Reboot the device
               Client.println("Restarting in 1 second");
               Client.stop();
