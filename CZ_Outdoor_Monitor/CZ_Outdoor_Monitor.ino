@@ -20,8 +20,8 @@
 // cement on all exposed parts of the circuit board is also helpful. A person could also put some
 // form of open bottom shell around it to help protect it even more. If you have a 3D printer you
 // can find plenty of shells on Thingiverse that you can print up for this purpose. Since I live
-// in Nebraska, storms always come from the west. In my situation, I just mounted the unit to the
-// east wall of the greenhouse and it's perfectly safe from rain and snow blowing into it.
+// in Nebraska, storms always come from the northwest. In my situation, I just mounted the unit to
+// the east wall of the greenhouse and it's perfectly safe from rain and snow blowing into it.
 //
 // The ambient light sensor is a BH1750 which uses I2C communications, so everything used in this
 // project works without any external components. The output to the screen and the web API are a
@@ -230,8 +230,8 @@ void loop() {
   Humidity = DHT.humidity;
   TempC = DHT.temperature;
   TempF = TempC * 9 / 5 + 32;
-  float Lux = lightMeter.readLightLevel(); // Value range is 0 (darkness)..65535 (direct sunlightr)
-  Light = .01 * Lux; // Adjust multiplier as needed depending on the location of the outdoor unit
+  float Lux = lightMeter.readLightLevel(); // Value range is 0 (darkness)..65535 (direct sunlight)
+  Light = .01 * Lux; // Adjust multiplier as needed, depending on the location of the outdoor unit
   if (Light > 100) Light = 100;
 
   if (ScreenTimer == 1000) {
