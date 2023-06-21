@@ -232,7 +232,7 @@ void loop() {
   TempF = TempC * 9 / 5 + 32;
   float Lux = lightMeter.readLightLevel(); // Value range is 0 (darkness)..65535 (direct sunlight)
   Light = .1 * Lux; // Adjust multiplier as needed, depending on the location of the outdoor unit
-  if (Light > 100) Light = 100;
+  if (Light > 100) Light = 100; // For daylight sensing, all you need to worry about is 0..1000 Lux
 
   if (ScreenTimer == 1000) {
     ScreenUpdate();
