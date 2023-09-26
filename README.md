@@ -1,7 +1,7 @@
 # Climate Czar
 Universal remote climate monitoring and management system for greenhouses and indoor grow operations.
 
-Live demo at https://panhandleponics.ddns.net:1967/climateczar/
+Live demo at http://panhandleponics.ddns.net:1966/climateczar/
 
 See also https://3dgtower.com
 
