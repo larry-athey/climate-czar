@@ -47,7 +47,7 @@ rm -f climateczar.tar.gz
 rm -f /var/www/html/climateczar/wp-content/plugins/climate-czar/CZ_TZ.php
 chown -R www-data:www-data /var/www/html/climateczar
 chmod g+w -R /var/www/html/climateczar
-chmod +x /var/www/html/climateczar/*
+chmod +x /var/www/html/climateczar/commands/*
 
 dpkg-reconfigure locales
 
