@@ -8,7 +8,7 @@ There is no need to dedicate the entire web server to Climate Czar, it installs 
 
 If you already have Wordpress installed on your web server and it uses the default database name of "Wordpress", you will need to change that or edit **Wordpress.sql** so it points to a different database name. If you fail to do that, your existing Wordpress website content will be overwritten.
 
-Below are the only two variables in **install.sh** that you will need to edit before installation.
+Below are the only two variables in **Server-Files/install.sh** that you will need to edit before installation.
 
 **Protocol** - If you have not enabled HTTPS in your web server, it's best to leave this as-is. You need to have a valid domain name pointing to your web server before you can install an SSL certificate from a certificate authority. If you are just going to access this system by IP address and want SSL, you will only be able to use a self-signed certificate which will trigger a warning in all web browsers.
 
@@ -18,7 +18,7 @@ Before running the installation, you will want to confirm that your server is co
 
 <https://linuxize.com/post/how-to-set-or-change-timezone-in-linux/>
 
-After you have confirmed that your server is now set to the correct time zone, execute the following command while in the same directory that you extracted the climate-czar-\*.zip archive to.
+After you have confirmed that your server is now set to the correct time zone, execute the following command while in the **Server-Files** directory.
 
 ```
 sudo ./install.sh
