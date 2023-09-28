@@ -4,7 +4,7 @@ This guide expects you to have a fully functioning PHP enabled web server and My
 
 This guide doesn't cover the installation and configuration of your web server and database server since there are already so many guides for this online that go into great detail. This system has been tested with Apache, Nginx, and Lighttpd on both Intel and Raspberry PI hardware. There are umpteen guides on installing the LAMP/LEMP stack in Linux, any one of those should be all you need to be installation-ready.
 
-Below is a great guide for setting up Nginx, PHP, and MariaDB ***(same as MySQL)*** on Ubuntu 22.04 Server. This websote also has guides for older versions of Ubuntu Server, but Climate Czar is currently under development using 22.04 with PHP 8.1 and the latest version of Wordpress.
+Below is a great guide for setting up Nginx, PHP, and MariaDB ***(same as MySQL)*** on Ubuntu 22.04 Server. This website also has guides for older versions of Ubuntu Server, but Climate Czar is currently under development using 22.04 with PHP 8.1 and the latest version of Wordpress.
 
 https://www.linuxbabe.com/ubuntu/install-lemp-stack-ubuntu-22-04-server-desktop
 
