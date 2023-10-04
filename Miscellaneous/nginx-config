@@ -56,8 +56,6 @@ server {
 	#}
 
 	location / {
-		# First attempt to serve request as file, then
-		# as directory, then fall back to displaying a 404.
 		limit_req zone=zone1;
 		try_files $uri $uri/ /climateczar/index.php?$args;
 		index index.html index.htm index.nginx-debian.html index.php;
@@ -71,6 +69,7 @@ server {
 	}
 
 	location ^~ /phpmyadmin {
+		# Use your preferred Apache .htpasswd generator since Apache isn't installed
 		auth_basic "Climate Czar Admins Only";
 		auth_basic_user_file /var/www/.htpasswd;
 		try_files $uri $uri/ /phpmyadmin/index.php?$args;
@@ -79,6 +78,8 @@ server {
 			fastcgi_pass unix:/run/php/php8.1-fpm.sock;
 		}
 	}
+
+	# Additional configuration blocks to help block WPscan exploits
 
 	location ~* ^/climateczar/wp-content/plugins/.+\.(txt|log|md)$ {
 		deny all;
