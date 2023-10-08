@@ -1,4 +1,4 @@
-// Written by Larry Athey (Panhandle Ponics - https://3dgtower.com) v1.0.1 released June 18, 2023
+// Written by Larry Athey (Panhandle Ponics - https://3dgtower.com) v1.1.0 released June 18, 2023
 //
 // This is an external outdoor monitor to provide easy comparison of temperature and humidity to
 // the environment in the greenhouse and provide an ambient light meter which can be used to turn
