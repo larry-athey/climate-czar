@@ -1,4 +1,4 @@
-// Written by Larry Athey (Panhandle Ponics - https://3dgtower.com) v1.0.1 released Feb 6, 2023
+// Written by Larry Athey (Panhandle Ponics - https://3dgtower.com) v1.1.0 released Feb 6, 2023
 //
 // Climate Czar Combo Hub is based on the Teyleten Robot ESP32S developer board which has 38 pins
 // https://www.amazon.com/dp/B09J95SMG7 but will work with any ESP32 developer board with at least
@@ -57,7 +57,7 @@ IPAddress dns(10,20,30,254);
 // IP to ping every 5000 loops to verify network connectivity and reboot the hub if no response.
 const char* PingerIP = "10.20.30.254";
 
-#define OW_PIN 4   // OneWire (or 1-Wire) data bus for DS18B20 temperature sensors
+#define OW_PIN 0   // OneWire (or 1-Wire) data bus for DS18B20 temperature sensors
 #define DHT_PIN 15 // DHT-22 data pin
 #define SENSOR1 36 // Climate Czar variable value or binary value sensors 1..8
 #define SENSOR2 39 // " "
@@ -151,18 +151,19 @@ void setup() {
 //------------------------------------------------------------------------------------------------
 String ReadOneWireBus(byte WhichOne) {
   String Readings = "";
-  byte Addr[8];
-  if (DT.getDeviceCount() > 0) {
-    DT.requestTemperatures(); 
-    oneWire.reset_search();
-    delay(250);
-    while (oneWire.search(Addr)) {
-      if (WhichOne == 0) {
-        Readings += String(DT.getTempC(Addr),1) + " ";
-      } else {
-        Readings += String(DT.getTempF(Addr),1) + " ";
-      }
+  byte Addr[8],Count = 0;
+  DT.requestTemperatures(); 
+  oneWire.reset_search();
+  //delay(250);
+  while (oneWire.search(Addr)) {
+    Count ++;
+    if (WhichOne == 0) {
+      Readings += String(DT.getTempC(Addr),1) + " ";
+    } else {
+      Readings += String(DT.getTempF(Addr),1) + " ";
     }
+  }
+  if (Count > 0) { // DT.getDeviceCount() is unreliable
     return Readings;
   } else {
     return "No Sensors Found";
@@ -174,51 +175,48 @@ String ReadOneWireSensor(String Header,byte WhichOne) {
   char Buffer[5];
   byte x,y;
   byte Addr[8];
-  if (DT.getDeviceCount() > 0) {
-    Header.remove(0,15);
-    Header.remove(23,(Header.length() - 23));
-    y = 0;
-    for (x = 0; x <= 22; x ++) {
-      if (Header.charAt(x) != ':') HexStr += Header.charAt(x);
-      if ((Header.charAt(x) == ':') || (x == 22)) {
-        Serial.println(HexStr);
-        HexStr.toCharArray(Buffer,5);
-        Addr[y] = strtol(Buffer,NULL,0);
-        HexStr = "0x";
-        y ++;
-      }
+  Header.remove(0,15);
+  Header.remove(23,(Header.length() - 23));
+  y = 0;
+  for (x = 0; x <= 22; x ++) {
+    if (Header.charAt(x) != ':') HexStr += Header.charAt(x);
+    if ((Header.charAt(x) == ':') || (x == 22)) {
+      Serial.println(HexStr);
+      HexStr.toCharArray(Buffer,5);
+      Addr[y] = strtol(Buffer,NULL,0);
+      HexStr = "0x";
+      y ++;
     }
-    DT.requestTemperatures();
-    oneWire.reset_search();
-    delay(250);
-    if (WhichOne == 0) {
-      return String(DT.getTempC(Addr),1);
-    } else {
-      return String(DT.getTempF(Addr),1);
-    } 
+  }
+  DT.requestTemperatures();
+  oneWire.reset_search();
+  //delay(250);
+  if (WhichOne == 0) {
+    return String(DT.getTempC(Addr),1);
   } else {
-    return "No Sensors Found";
+    return String(DT.getTempF(Addr),1);
   }
 }
 //------------------------------------------------------------------------------------------------
 String ListOneWireDevices() {
   String Devices = "";
-  byte x;
+  byte x,Count = 0;
   byte Addr[8];
-  if (DT.getDeviceCount() > 0) {
-    DT.requestTemperatures(); 
-    oneWire.reset_search();
-    delay(250);
-    while (oneWire.search(Addr)) {
-      for (x = 0; x < 8; x ++) {
-        if (x < 7) {
-          Devices += String(Addr[x],HEX) + ":";
-        } else {
-          Devices += String(Addr[x],HEX);
-        }
+  DT.requestTemperatures(); 
+  oneWire.reset_search();
+  //delay(250);
+  while (oneWire.search(Addr)) {
+    Count ++;
+    for (x = 0; x < 8; x ++) {
+      if (x < 7) {
+        Devices += String(Addr[x],HEX) + ":";
+      } else {
+        Devices += String(Addr[x],HEX);
       }
-      Devices += " " + String(DT.getTempC(Addr),1) + " " + String(DT.getTempF(Addr),1) + "\n";
     }
+    Devices += " " + String(DT.getTempC(Addr),1) + " " + String(DT.getTempF(Addr),1) + "\n";
+  }
+  if (Count > 0) { // DT.getDeviceCount() is unreliable
     return Devices;
   } else {
     return "No Sensors Found";
