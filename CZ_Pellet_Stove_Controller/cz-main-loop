@@ -1,0 +1,93 @@
+#!/bin/bash
+
+cd /var/www/html
+
+LastTemp=0
+LastSwitch1=$(sqlite3 stove.db "SELECT StoveOn FROM Stats WHERE ID=1")
+LastSwitch2=$(sqlite3 stove.db "SELECT HighBurn FROM Stats WHERE ID=1")
+
+while true; do
+  clear
+  date
+
+
+  # Check stove.db->Stats->StoveOn for a value of 1 to start up the stove
+  Test=$(sqlite3 stove.db "SELECT StoveOn FROM Stats WHERE ID=1")
+  if [ "$Test" == "1" ]; then
+    ps cax | grep [r]un-stove
+    if [ $? -ne 0 ]; then
+      echo "Starting up the pellet stove"
+      ./run-stove &
+    fi
+  fi
+
+
+  # Check stove.db->Stats->Restart for a value of 1 to restart ./run-stove
+  Test=$(sqlite3 stove.db "SELECT Restart FROM Stats WHERE ID=1")
+  if [ "$Test" == "1" ]; then
+    echo "Restarting the pellet stove"
+    pkill -f run-stove
+    sqlite3 stove.db "UPDATE Stats SET Restart=0 WHERE ID=1"
+  fi
+
+
+  # The following two commented out code blocks can be uncommented if
+  # you want to manually operate this controller with a regular home
+  # thermostat or toggle switches. Configuration of idle and high burn
+  # feed rates still needs to be performed with the API, but these are
+  # settings that you generally only have to mess with one time.
+
+
+  # Read GPIO port 22 to see if physical stove run switch is on or off,
+  # a 3.3 volt signal applied to GPIO port 22 will return a reading of 1
+  #
+  # Only uncomment the code below if a switch and pull down resistor have
+  # been connected or the floating port could return erroneous readings
+  #
+  #/usr/bin/gpio -g mode 22 input
+  #Test=$(/usr/bin/gpio -g read 22)
+  #if [ "$Test" != "$LastSwitch1" ]; then
+  #  echo "Stove Run switch value is now: $Test"
+  #  sqlite3 stove.db "UPDATE Stats SET StoveOn=$Test WHERE ID=1"
+  #  LastSwitch1="$Test"
+  #fi
+
+
+  # Read GPIO port 23 to see if physical high burn mode switch is on or off,
+  # a 3.3 volt signal applied to GPIO port 23 will return a reading of 1
+  #
+  # Only uncomment the code below if a switch and pull down resistor have
+  # been connected or the floating port could return erroneous readings
+  #
+  #/usr/bin/gpio -g mode 23 input
+  #Test=$(/usr/bin/gpio -g read 23)
+  #if [ "$Test" != "$LastSwitch2" ]; then
+  #  echo "High Burn switch value is now: $Test"
+  #  sqlite3 stove.db "UPDATE Stats SET HighBurn=$Test WHERE ID=1"
+  #  LastSwitch2="$Test"
+  #fi
+
+
+  # Read the stove body temperature and update the database
+  # Best to do it here so the run-stove loop doesn't bog down
+  Test=$(sudo su pi -c "./mlx-read.py | tail -n 1")
+  Temp=$(echo "scale=1; $Test * 9 / 5 + 32" | bc)
+  if [ "$Temp" != "$LastTemp" ]; then
+    # Update the temperature in the database if there's a change in temperature
+    sqlite3 stove.db "UPDATE Stats SET Temperature=$Temp WHERE ID=1"
+    LastTemp="$Temp"
+  fi
+  echo "Stove Body Temperature: $Temp (F)"
+
+
+  # If you are using this to run a pellet grill/smoker, you'll need to call the
+  # ./smoke-grill script here to monitor stove.db->Settings->CookTemp to toggle
+  # between idle and high burn mode as needed. Unless configured otherwise, the
+  # stove.db->Stats->Probe10 field is used for the cooking chamber thermometer.
+  # Refer to the file Instructions.pdf for more information.
+  #
+  #./smoke-grill
+
+
+  sleep 5
+done
