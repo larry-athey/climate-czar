@@ -1,0 +1,13 @@
+#!/bin/bash
+
+DB="stove.db"
+
+rm -f $DB
+
+sqlite3 $DB "CREATE TABLE Stats (ID INTEGER PRIMARY KEY,Temperature FLOAT,Probe1 FLOAT,Probe2 FLOAT,Probe3 FLOAT,Probe4 FLOAT,Probe5 FLOAT,Probe6 FLOAT,Probe7 FLOAT,Probe8 FLOAT,Combustion INT,RoomBlower INT,Ignitor INT,OpMode INT,StoveOn INT,HighBurn INT,CountDown INT,Restart INT,LowTempFail TEXT,ShutDownTime TEXT)"
+
+sqlite3 $DB "INSERT INTO Stats (Temperature,Probe1,Probe2,Probe3,Probe4,Probe5,Probe6,Probe7,Probe8,Combustion,RoomBlower,Ignitor,OpMode,StoveOn,HighBurn,CountDown,Restart,LowTempFail,ShutDownTime) VALUES (32.5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'','')"
+
+sqlite3 $DB "CREATE TABLE Settings (ID INTEGER PRIMARY KEY,Deadline INT,OpTemp INT,MaxTemp INT,HighFeed FLOAT,LowFeed FLOAT,CookTemp INT)"
+
+sqlite3 $DB "INSERT INTO Settings (Deadline,OpTemp,MaxTemp,HighFeed,LowFeed,CookTemp) VALUES (1200,90,400,4.75,1.6,225)"
