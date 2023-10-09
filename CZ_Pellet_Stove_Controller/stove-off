@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Use this script as an emergency shut-down if necessary
+
+Combustion=24
+TopAuger=25
+RoomBlower=26
+Ignitor=27
+
+Off=0
+On=1
+
+/usr/bin/gpio -g mode $Combustion output
+/usr/bin/gpio -g write $Combustion $Off
+/usr/bin/gpio -g mode $TopAuger output
+/usr/bin/gpio -g write $TopAuger $Off
+/usr/bin/gpio -g mode $RoomBlower output
+/usr/bin/gpio -g write $RoomBlower $Off
+/usr/bin/gpio -g mode $Ignitor output
+/usr/bin/gpio -g write $Ignitor $Off
+
+sudo pkill -f run-stove
+sqlite3 stove.db "UPDATE Stats SET Combustion=0,RoomBlower=0,Ignitor=0,OpMode=0,StoveOn=0,HighBurn=0,CountDown=0 WHERE ID=1"
