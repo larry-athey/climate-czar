@@ -13,10 +13,13 @@ sudo lighttpd-enable-mod fastcgi-php
 
 sudo cp -f ./15-fastcgi-php.conf /etc/lighttpd/conf-available/15-fastcgi-php.conf
 
-sudo cp -f ./code.tar.gz /var/www/html
+sudo cp -f ./cz* /var/www/html
+sudo cp -f ./db-reset /var/www/html
+sudo cp -f ./run-stove /var/www/html
+sudo cp -f ./stove-off /var/www/html
+sudo cp -f ./*.py /var/www/html
+sudo cp -f ./*.php /var/www/html
 cd /var/www/html
-sudo tar -xzvf code.tar.gz
-sudo rm -f code.tar.gz
 ./db-reset
 cd -
 
