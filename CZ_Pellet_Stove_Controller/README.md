@@ -12,3 +12,5 @@ The system uses a solid state relay board for all switching since mechanical rel
 The system is so simple to build that a person can do it without any soldering necessary, just plain old breadboard jumper wires is all that's needed. It's controlled by its own Web API so that it is easy to connect to **Climate Czar Server** or run from the command line of any Windows, Mac, or Linux PC.
 
 When used with **Climate Czar Server**, it's possible to implement pseudo output devices to automatically shut down the stove once your greenhouse is up to a given temperature and prevent exhaust fans from turning on while the stove is running, which would cause a "back burn" due to negative air pressure.
+
+In my case, my stove is fitted with a Therma-Coil so that it doubles as a low-grade boiler to heat my fish tanks. Once the fish tank temperature drops to a specific temperature, the pellet stove is switched into high burn mode and then back at another temperature. This can also be done with a mechanical thermostat attached to a spare GPIO pin on the Raspberry Pi.
