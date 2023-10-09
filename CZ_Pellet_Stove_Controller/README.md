@@ -9,4 +9,4 @@ The thermistor is replaced by a digital I2C interfaced MLX90614B non-contact inf
 
 The system uses a solid state relay board for all switching since mechanical relay contacts wear out, which actually happened to me during the initial development. An 8-channel SSR board is used so that if one does happen to die, you can just move its wires to one of the 4 spares to get right back up and running.
 
-The system is so simple to build that a person can do it without any soldering necessary, just plain old breadboard jumper wires is all that's needed. It's controlled by its own Web API so that it is easy to connect to Climate Czar Server or run from the command line of any Windows, Mac, or Linux PC.
+The system is so simple to build that a person can do it without any soldering necessary, just plain old breadboard jumper wires is all that's needed. It's controlled by its own Web API so that it is easy to connect to **Climate Czar Server** or run from the command line of any Windows, Mac, or Linux PC.
