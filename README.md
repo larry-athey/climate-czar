@@ -3,7 +3,7 @@ Universal remote climate monitoring and management system for greenhouses and in
 
 Live demo at http://panhandleponics.ddns.net:1966/climateczar/
 
-Developer website: https://3dgtower.com<br>
+Developer website https://3dgtower.com<br>
 You may also contact me at https://panhandleponics.com<br>
 Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandlePonics<br>
 
