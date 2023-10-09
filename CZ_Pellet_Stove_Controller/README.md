@@ -8,3 +8,5 @@ It's actually cheaper to build this unit that it is to buy a new main board for 
 The thermistor is replaced by a digital I2C interfaced MLX90614B non-contact infrared temperature sensor **_(the device that's used in laser thermometers)_**. These are just more accurate than a thermistor and have a higher temperature range than a DS18B20 OneWire temperature sensor.
 
 The system uses a solid state relay board for all switching since mechanical relay contacts wear out, which actually happened to me during the initial development. An 8-channel SSR board is used so that if one does happen to die, you can just move its wires to one of the 4 spares to get right back up and running.
+
+The system is so simple to build that a person can do it without any soldering necessary, just plain old breadboard jumper wires is all that's needed.
