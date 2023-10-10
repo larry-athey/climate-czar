@@ -19,6 +19,8 @@ sudo cp -f ./run-stove /var/www/html
 sudo cp -f ./stove-off /var/www/html
 sudo cp -f ./*.py /var/www/html
 sudo cp -f ./*.php /var/www/html
+sudo chmod +x /var/www/html/*
+sudo chmod -x /var/www/html/*.php
 cd /var/www/html
 ./db-reset
 cd -
