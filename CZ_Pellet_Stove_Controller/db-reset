@@ -10,4 +10,4 @@ sqlite3 $DB "INSERT INTO Stats (Temperature,Probe1,Probe2,Probe3,Probe4,Probe5,P
 
 sqlite3 $DB "CREATE TABLE Settings (ID INTEGER PRIMARY KEY,Deadline INT,OpTemp INT,MaxTemp INT,HighFeed FLOAT,LowFeed FLOAT,CookTemp INT)"
 
-sqlite3 $DB "INSERT INTO Settings (Deadline,OpTemp,MaxTemp,HighFeed,LowFeed,CookTemp) VALUES (1200,90,400,4.75,1.6,225)"
+sqlite3 $DB "INSERT INTO Settings (Deadline,OpTemp,MaxTemp,HighFeed,LowFeed,CookTemp) VALUES (1200,90,400,4.5,1.6,225)"
