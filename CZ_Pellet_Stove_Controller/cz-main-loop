@@ -70,12 +70,18 @@ while true; do
 
   # Read the stove body temperature and update the database
   # Best to do it here so the run-stove loop doesn't bog down
-  Test=$(sudo su pi -c "./mlx-read.py | tail -n 1")
-  Temp=$(echo "scale=1; $Test * 9 / 5 + 32" | bc)
-  if [ "$Temp" != "$LastTemp" ]; then
-    # Update the temperature in the database if there's a change in temperature
-    sqlite3 stove.db "UPDATE Stats SET Temperature=$Temp WHERE ID=1"
-    LastTemp="$Temp"
+  MLX=$(sudo su pi -c "./mlx-read.py | tail -n 1")
+  Temp=$(echo "scale=1; $MLX * 9 / 5 + 32" | bc)
+  if [ ! -z "$Temp" ] && [ "$Temp" != "$LastTemp" ]; then
+    Test=$(echo "if ($Temp != 0) 1 else 0" | bc)
+    if [ "$Test" == "1" ]; then
+      # Update the body temperature in the database if there's a valid change
+      sqlite3 stove.db "UPDATE Stats SET Temperature=$Temp WHERE ID=1"
+      LastTemp="$Temp"
+    else
+      echo "$MLX" >> /tmp/mlx.out
+      Temp="MLX read failure"
+    fi
   fi
   echo "Stove Body Temperature: $Temp (F)"
 
