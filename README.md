@@ -7,7 +7,7 @@ Ordering and purchasing website https://3dgtower.com<br>
 You may also contact me directly at https://panhandleponics.com<br>
 Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandlePonics<br>
 
-_**NOTE:** Climate Czar is currently being ported to a stand-alone PHP web app in order to reduce its system resource footprint. While it is already possible to use a Raspberry Pi (or clone) as the server, this will make it run smoother on small low-powered single board computers._
+_**NOTE:** Climate Czar is currently being ported to a stand-alone PHP web app in order to reduce its system resource footprint. While it is already possible to use a Raspberry Pi (or clone) as the server, this will make it run smoother on small low-powered single board computers by eliminating the Wordpress dependency._
 
 ---
 
