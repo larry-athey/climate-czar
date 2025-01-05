@@ -7,6 +7,8 @@ Ordering and purchasing website https://3dgtower.com<br>
 You may also contact me directly at https://panhandleponics.com<br>
 Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandlePonics<br>
 
+_**NOTE:** Climate Czar is currently being ported to a stand-alone PHP web app in order to reduce its system resource footprint. While it is already possible to use a Raspberry Pi (or clone) as the server, this will make it run smoother on small low-powered single board computers by eliminating the Wordpress dependency._
+
 ---
 
 Climate Czar is a Linux and Wordpress based system that gathers readings from any type of sensor or switch that can be read from the command line, whether it is a local device connected to a GPIO bus or a network device. By the same token, the system will control output switches that can also be toggled from the command line. There are no brand/model hardware dependencies, you can even use it with your own custom IoT devices.
