@@ -20,10 +20,6 @@ Q: My power went out for a few seconds and when it came back, my Combo Hub won't
 
 A: It's pretty tough to destroy the ESP32 with a power outage, it takes a pretty serious surge to do it since I include a switching power supply with them rather than a linear power supply. So, I'd really suggest restarting your router or access point, even if other devices are connected just fine. I've been able to reliably reproduce this with both a Netgear and Asus router, the best I can figure is that the router didn't completely discharge and the ARP table got botched. The cure is to unplug the router or access point and give it time for all capacitors to discharge, a minute should work. Then plug it back in and power cycle your Combo Hub after that.
 ___
-Q: Can Climate Czar monitor things like pH and EC in a hydroponics system?
+Q: Can Climate Czar monitor things like pH, EC, and DO in a hydroponics system?
 
 A: Climate Czar can monitor anything so long as you have a sensor that can output a variable value or a binary value. There are Arduino projects/kits for both pH and EC all over the web, it's just a matter of connecting the output of them to one of the 8 inputs of the Combo Hub and pulling those values into Climate Czar with a read command.
-___
-Q: What's the deal with all of this 3.3 volt stuff in your Combo Hub instructions? I've never heard of this before.
-
-A: 3.3 volts DC is what most all micro controllers run on. This low voltage and low current is actually much safer than running 120 volt AC wires all over the place because shock and fire hazards are completely eliminated. You could actually get a high current 5 volt power brick to run an entire greenhouse and insert small 3.3 volt regulators (such as https://www.amazon.com/gp/product/B074FDLCLB/) where needed to bring the signal level down to a safe level for the inputs of the Combo Hub. So, while it may sound like a foreign concept to you, it's actually very common and no more complicated to work with.
