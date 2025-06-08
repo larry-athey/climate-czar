@@ -24,10 +24,6 @@ Q: Can Climate Czar monitor things like pH and EC in a hydroponics system?
 
 A: Climate Czar can monitor anything so long as you have a sensor that can output a variable value or a binary value. There are Arduino projects/kits for both pH and EC all over the web, it's just a matter of connecting the output of them to one of the 8 inputs of the Combo Hub and pulling those values into Climate Czar with a read command.
 ___
-Q: Why isn't the Wordpress plugin available from the Wordpress plugin store/repository?
-
-A: Because the Climate Czar undercarriage is actually not part of Wordpress, which is why it uses its own database separate from the Wordpress database. The plugin would do you no good without the undercarriage installed, so there's no point in going through all of the headaches of playing the formal Wordpress third-party developer game. It's not possible to install the undercarriage with the plugin since that procedure requires root access.
-___
 Q: What's the deal with the random warnings in the WP-Admin, such as when you edit a page?
 
 A: This is a side effect of extra code in the theme's function.php to confuse version probes from somebody scanning your installation with WPScan. If you choose to install a Wordpress firewall (such as Wordfence) you can safely remove all of those lines of code. Just go to Appearance->Theme File Editor->functions.php and delete lines 10 through 51. These scans always result in a denial of service attack on your server, screw those people.
