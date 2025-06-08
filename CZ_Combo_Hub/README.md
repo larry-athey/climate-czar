@@ -8,7 +8,7 @@ http://combo-hub-ip/0/humidity reads the humidity from the master unit<br>
 http://combo-hub-ip/1/humidity reads the humidity from the first slave<br>
 http://combo-hub-ip/2/humidity reads the humidity from the second slave<br>
 
-Each Combo Hub will feature an attached DHT22 for local temperature and humidity, a Dallas Semiconductor 1-Wire bus for unlimited remote temperature sensors, a BH1750 for local ambient light level detection, 8 digital inputs for binary switches, 8 digital outputs for controlling solid state relays, an SSD1306 128x32 OLED status display, and a Reyax RYLR998 radio.
+Each Combo Hub will feature an attached DHT22 for local temperature and humidity, a Dallas Semiconductor 1-Wire bus for unlimited remote temperature sensors, a BH1750 for local ambient light level detection, 8 digital inputs for binary switches, 8 digital outputs for controlling solid state relays, an SSD1306 128x32 OLED status display, and a Reyax RYLR998 radio module.
 
 3D models will be provided for a case which will be strictly for the Combo Hub brains and connection terminals. Solid state relays will no longer be housed in the same enclosure.
 
