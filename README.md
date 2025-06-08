@@ -40,8 +40,6 @@ Climate Czar is not region specific. If you have temperature sensors that only r
 
 WiFi controlled AC outlets such as TpLink/Kasa devices have a manual on/off button on them that could allow a person to turn them on when Climate Czar says they should be off. Output switches have a One Shot option that tells the system whether to only execute the on/off script one time, or to execute the script once every minute in order to maintain the intended on/off state.
 
-With the user interface being based on Wordpress, creating custom dashboards is as simple as creating your own pages or posts and inserting shortcodes with ID number of the input sensor or output switch passed to it. You can even similarly embed these live device views in an external website if you wish by making calls to specific PHP files in the plugin folder the same way.
-
 While this system was designed and tested in a 51x18 foot greenhouse, there are probably many other uses for it besides greenhouses and indoor grow operations. If you need to read numeric values from sensors or switches and turn other devices on and off based on those values, then it's likely that this system will work for what you're needing to do. It was intentionally left completely open ended for this very reason.
 
 ![image](https://github.com/user-attachments/assets/323fe2f3-3c89-47ce-b2d9-7267f0555d43)
