@@ -110,7 +110,7 @@ CREATE TABLE `Users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `Users` (`ID`, `UN`, `PW`, `SecLevel`, `Phone`, `LockedOut`, `LastLogin`, `LastActivity`) VALUES
-(1, 'czadmin', 'cb13c33aa3e6cb5ea3062b1e4985588f', 'administrator', '8005551212', 0, '2025-06-07 22:00:04', '2025-06-08 02:31:22');
+(1, 'czadmin', 'c04103c08843db1d392bfd06366e07fd', 'administrator', '8005551212', 0, '2025-06-07 22:00:04', '2025-06-08 02:31:22');
 
 ALTER TABLE `Users` ADD PRIMARY KEY (`ID`);
 
