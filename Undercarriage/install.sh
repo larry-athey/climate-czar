@@ -84,6 +84,8 @@ sudo apt install -y phpmyadmin
 sudo apt purge -y apache2
 sudo service lighttpd force-reload
 sudo apt clean
+sudo chown -R www-data:www-data /var/www/html
+sudo chmod g+w -R /var/www/html
 
 clear
 echo "  ____ _ _                 _          ____               "
