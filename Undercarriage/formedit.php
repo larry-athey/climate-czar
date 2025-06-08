@@ -197,10 +197,10 @@ require_once("colors.php");
     </div>
     <div class="mb-3" style="padding-bottom: 0.5em;">
 <?php if ($Group["ID"] != 1) { ?>
-      <label for="SwitchSec" class="form-label">User Security Level</label>
+      <label for="SwitchSec" class="form-label">Group Security Level</label>
       <?= SwitchSecSelector($Group["SecLevel"]) ?>
 <?php } else { ?>
-      <label for="SwitchSec" class="form-label">User Security Level</label>
+      <label for="SwitchSec" class="form-label">Group Security Level</label>
       <input type="text" class="form-control" id="SwitchSec" name="SwitchSec" maxlength="20" value="anonymous" disabled>
 <?php } ?>
     </div>

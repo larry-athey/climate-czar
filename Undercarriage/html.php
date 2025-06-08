@@ -41,6 +41,9 @@ function cz_home_page($DBcnx,$Mode) {
 }
 //---------------------------------------------------------------------------------------------------
 function cz_list_devices($DBcnx) {
+  if (UserSec($DBcnx) < author) {
+    return "Security Error";
+  }
   $LOGGED_IN_KEY = urlencode(LOGGED_IN_KEY);
   $RETURN_PAGE   = urlencode("index.php?page=list-devices");
   $DevType = 0;
@@ -52,7 +55,6 @@ function cz_list_devices($DBcnx) {
     $FormID = 3;
     $BtnLbl  = "Output Switch";
   }
-
   $Content  = "<div class=\"card\" style=\"width: 98.75%; padding-left: .25em; padding-right: .25em; margin-left: .75em; margin-bottom: 1em;\">";
   $Content .=   "<div class=\"card-body\">";
   $Content .=     "<table class=\"table table-borderless\">";
@@ -89,6 +91,9 @@ function cz_list_devices($DBcnx) {
 }
 //---------------------------------------------------------------------------------------------------
 function cz_list_groups($DBcnx) {
+  if (UserSec($DBcnx) < author) {
+    return "Security Error";
+  }
   $LOGGED_IN_KEY = urlencode(LOGGED_IN_KEY);
   $RETURN_PAGE   = urlencode("index.php?page=list-groups");
   $Content  = "<div class=\"card\" style=\"width: 98.75%; padding-left: .25em; padding-right: .25em; margin-left: .75em; margin-bottom: 1em;\">";
@@ -121,7 +126,10 @@ function cz_list_groups($DBcnx) {
   return $Content;
 }
 //---------------------------------------------------------------------------------------------------
-function cz_list_scripts() {
+function cz_list_scripts($DBcnx) {
+  if (UserSec($DBcnx) < editor) {
+    return "Security Error";
+  }
   $LOGGED_IN_KEY = urlencode(LOGGED_IN_KEY);
   $RETURN_PAGE   = urlencode("index.php?page=list-scripts");
   $Files = array_diff(scandir(APP_ROOT . "commands/"),array('.','..'));
@@ -157,11 +165,13 @@ function cz_list_scripts() {
 }
 //---------------------------------------------------------------------------------------------------
 function cz_list_users($DBcnx) {
+  if (UserSec($DBcnx) < administrator) {
+    return "Security Error";
+  }
   $LOGGED_IN_KEY = urlencode(LOGGED_IN_KEY);
   $RETURN_PAGE   = urlencode("index.php?page=list-users");
   $Content  = "<div class=\"card\" style=\"width: 98.75%; padding-left: .25em; padding-right: .25em; margin-left: .75em; margin-bottom: 1em;\">";
   $Content .=   "<div class=\"card-body\">";
-
   $Content .=     "<table class=\"table table-borderless\">";
   $Content .=       "<tr>";
   $Content .=         "<td width=\"30%\">";
@@ -185,7 +195,6 @@ function cz_list_users($DBcnx) {
   $Content .=         "</td>";
   $Content .=       "</tr>";
   $Content .=     "</table>";
-
   $Content .=   "</div>";
   $Content .= "</div>";
   return $Content;
@@ -202,7 +211,6 @@ function cz_login() {
   } else {
     $ButtonBG = "btn-secondary";
   }
-
   $Content  = "<div class=\"d-flex justify-content-center align-items-center min-vh-100\">";
   $Content .=   "<div class=\"card\" style=\"width: 28rem; margin-bottom: 1em; margin-left: -1em; margin-right: 0.5em;\">";
   $Content .=     "<div class=\"card-body\">";
@@ -242,7 +250,6 @@ function cz_logs_graphs($DBcnx) {
   } else {
     $ButtonBG = "btn-secondary";
   }
-
   $Content  = "<div class=\"card\" style=\"width: 98.75%; padding-left: .25em; padding-right: .25em; margin-left: .75em; margin-bottom: 1em;\">";
   $Content .=   "<div class=\"card-body\">";
   $Content .=     "<form method=\"post\" action=\"charts.php\" target=\"charts\">";

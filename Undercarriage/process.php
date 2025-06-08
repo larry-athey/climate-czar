@@ -54,12 +54,17 @@ if (isset($_GET["cz_delete_device"])) {
 } elseif (isset($_GET["cz_delete_script"])) {
   unlink(APP_ROOT . "commands/" . $_GET["cz_delete_script"]);
 /***************************************************************************************************/
+} elseif (isset($_GET["cz_delete_user"])) {
+  if ($_GET["cz_delete_user"] > 1) {
+    $Result = mysqli_query($DBcnx,"DELETE FROM Users WHERE ID=" . $_GET["cz_delete_users"]);
+  }
+/***************************************************************************************************/
 } elseif (isset($_POST["cz_group_save"])) {
   $_POST["GroupName"] = mysqli_escape_string($DBcnx,$_POST["GroupName"]);
   if ($_POST["ID"] == 0) { // Create new group
-    $Result = mysqli_query($DBcnx,"INSERT INTO DeviceGroups (Name) VALUES ('" . $_POST["GroupName"] . "')");
+    $Result = mysqli_query($DBcnx,"INSERT INTO DeviceGroups (Name,SecLevel) VALUES ('" . $_POST["GroupName"] . "','" . $_POST["SwitchSec"] . "')");
   } else { // Update existing group
-    $Result = mysqli_query($DBcnx,"UPDATE DeviceGroups SET Name='" . $_POST["GroupName"] . "' WHERE ID=" . $_POST["ID"]);
+    $Result = mysqli_query($DBcnx,"UPDATE DeviceGroups SET Name='" . $_POST["GroupName"] . "',SecLevel='" . $_POST["SwitchSec"] . "' WHERE ID=" . $_POST["ID"]);
   }
 /***************************************************************************************************/
 } elseif (isset($_POST["cz_input_sensor_save"])) {
@@ -177,6 +182,26 @@ if (isset($_GET["cz_delete_device"])) {
   shell_exec("chmod +x " . APP_ROOT . "commands/$ScriptName");
   $_POST["RETURN_PAGE"] = "index.php?page=list-scripts&ScriptName=$ScriptName";
 /***************************************************************************************************/
+} elseif (isset($_POST["cz_user_save"])) {
+  if ($_POST["ID"] == 1) {
+    $_POST["SwitchSec"] = "administrator";;
+    $_POST["LockedOut"] = 0;
+  }
+  $UN        = trim($_POST["UN"]);
+  $PW        = md5(trim($_POST["PW"]));
+  $SecLevel  = $_POST["SwitchSec"];
+  $Phone     = trim($_POST["Phone"]);
+  $LockedOut = $_POST["LockedOut"];
+  if ($_POST["ID"] == 0) { // Create new user
+    $Result = mysqli_query($DBcnx,"INSERT INTO Users (UN,PW,SecLevel,Phone,LockedOut) VALUES ('$UN','$PW','$SecLevel','$Phone','$LockedOut')");
+  } else { // Update existing user
+    if ($_POST["PW"] == "") {
+      $Result = mysqli_query($DBcnx,"SELECT * FROM Users WHERE ID=" . $_POST["ID"]);
+      $User = mysqli_fetch_assoc($Result);
+      $PW   = $User["PW"];
+    }
+    $Result = mysqli_query($DBcnx,"UPDATE Users SET UN='$UN',PW='$PW',SecLevel='$SecLevel',Phone='$Phone',LockedOut=$LockedOut WHERE ID=" . $_POST["ID"]);
+  }
 }
 //---------------------------------------------------------------------------------------------------
 mysqli_close($DBcnx);
