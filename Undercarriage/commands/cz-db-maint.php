@@ -2,7 +2,7 @@
 <?php
 require_once("../subs.php");
 //---------------------------------------------------------------------------------------------
-$DBcnx = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
+$DBcnx = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
 //---------------------------------------------------------------------------------------------
 $Result = mysqli_query($DBcnx,"DELETE FROM InputHistory WHERE TimeStamp < (NOW() - INTERVAL 14 DAY)");
 $Result = mysqli_query($DBcnx,"DELETE FROM OutputHistory WHERE TimeStamp < (NOW() - INTERVAL 14 DAY)");
