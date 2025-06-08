@@ -48,3 +48,6 @@ While this system was designed and tested in a 51x18 foot greenhouse, there are 
 
 ![image](https://github.com/user-attachments/assets/fd390f94-8900-4b51-87f2-3d0caf7e173d)
 
+![image](https://github.com/user-attachments/assets/1b728bad-f35d-4a7d-b292-7a1e50fda736)
+
+
