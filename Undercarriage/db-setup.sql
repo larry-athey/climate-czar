@@ -1,5 +1,5 @@
 DROP USER IF EXISTS 'czdbuser'@'localhost';
-DROP DATABASE ClimateCzar;
+DROP DATABASE IF EXISTS ClimateCzar;
 CREATE DATABASE ClimateCzar;
 CREATE USER 'czdbuser'@'localhost' IDENTIFIED BY 'Cl!m@t3cZ4r';
 USE ClimateCzar;
@@ -44,7 +44,7 @@ CREATE TABLE `InputDevices` (
 
 ALTER TABLE `InputDevices` ADD PRIMARY KEY (`ID`);
 
-ALTER TABLE `InputDevices` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+ALTER TABLE `InputDevices` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 CREATE TABLE `InputHistory` (
   `ID` int(11) NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE `InputHistory` (
 
 ALTER TABLE `InputHistory` ADD PRIMARY KEY (`ID`);
 
-ALTER TABLE `InputHistory` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+ALTER TABLE `InputHistory` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 CREATE TABLE `OutputSwitches` (
   `ID` int(11) NOT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE `OutputSwitches` (
 
 ALTER TABLE `OutputSwitches` ADD PRIMARY KEY (`ID`);
 
-ALTER TABLE `OutputSwitches` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+ALTER TABLE `OutputSwitches` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 CREATE TABLE `OutputHistory` (
   `ID` int(11) NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE `OutputHistory` (
 
 ALTER TABLE `OutputHistory` ADD PRIMARY KEY (`ID`);
 
-ALTER TABLE `OutputHistory` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+ALTER TABLE `OutputHistory` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 CREATE TABLE `Users` (
   `ID` int(11) NOT NULL,
