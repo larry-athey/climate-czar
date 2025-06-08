@@ -302,9 +302,11 @@ function cz_menu_bar($DBcnx) {
     $Content .=         "<ul class=\"dropdown-menu\" style=\"background-color: $MenuBG;\">";
     $Result = mysqli_query($DBcnx,"SELECT * FROM DeviceGroups ORDER BY Name");
     while ($Group = mysqli_fetch_assoc($Result)) {
-      if ($Group["ID"] == CZ_GROUP) $GroupName = $Group["Name"];
-      $Group["Name"] = str_replace(" ","&nbsp;",$Group["Name"]);
-      $Content .=         "<li><a class=\"dropdown-item\" href=\"index.php?CZ_GROUP=" . $Group["ID"] . "\">" . $Group["Name"] . "</a></li>";
+      if (UserSec($DBcnx) >= DeviceSec($Group["SecLevel"])) {
+        if ($Group["ID"] == CZ_GROUP) $GroupName = $Group["Name"];
+        $Group["Name"] = str_replace(" ","&nbsp;",$Group["Name"]);
+        $Content .=       "<li><a class=\"dropdown-item\" href=\"index.php?CZ_GROUP=" . $Group["ID"] . "\">" . $Group["Name"] . "</a></li>";
+      }
     }
     $Content .=         "</ul>";
     $Content .=       "</li>";
@@ -417,7 +419,7 @@ function cz_show_all_switches($DBcnx) {
       $Cards = 3 - $Remainder;
       for ($x = 1; $x <= $Cards; $x ++) {
         $Content .= "<div class=\"col\">";
-        $Content .=   "<div class=\"card\" style=\"width: 28rem; height: 215px; margin-bottom: 1em; margin-left: -1em; margin-right: 0.5em;\">";
+        $Content .=   "<div class=\"card\" style=\"width: 28rem; height: 212px; margin-bottom: 1em; margin-left: -1em; margin-right: 0.5em;\">";
         $Content .=     "<div class=\"card-body\" style=\"padding-bottom: 0.1rem;\">";
         $Content .=       "<p class=\"text-muted\" style=\"text-align: center; margin-top: 75px;\">Unassigned</p>";
         $Content .=     "</div>";

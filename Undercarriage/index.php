@@ -13,7 +13,13 @@ if (($_GET) && (! isset($_GET["page"]))){
   }
   if ((isset($_GET["CZ_GROUP"])) && (UserLoggedIn($DBcnx))) {
     // Check user security level before setting the cookie
-    setcookie("CZ_GROUP",$_GET["CZ_GROUP"],0,"/");
+    $Result = mysqli_query($DBcnx,"SELECT * FROM DeviceGroups WHERE ID=" . $_GET["CZ_GROUP"]);
+    if (mysqli_num_rows($Result) > 0) {
+      $Group = mysqli_fetch_assoc($Result);
+      if (UserSec($DBcnx) >= DeviceSec($Group["SecLevel"])) {
+        setcookie("CZ_GROUP",$_GET["CZ_GROUP"],0,"/");
+      }
+    }
   }
   if (isset($_GET["CZ_THEME"])) {
     setcookie("CZ_THEME",$_GET["CZ_THEME"],0,"/");

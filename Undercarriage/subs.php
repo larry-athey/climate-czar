@@ -83,8 +83,8 @@ function UserSec($DBcnx) {
 function UserLoggedIn($DBcnx) {
   if ((isset($_COOKIE["CZ_USER"])) && (isset($_COOKIE["CZ_TOKEN"]))) {
     $Result = mysqli_query($DBcnx,"SELECT * FROM Users WHERE ID=" . $_COOKIE["CZ_USER"]);
-    $User = mysqli_fetch_assoc($Result);
     if (mysqli_num_rows($Result) > 0) {
+      $User = mysqli_fetch_assoc($Result);
       if ($User["LockedOut"] == 1) {
         setcookie("CZ_USER","",time() - 3600,"/");
         setcookie("CZ_TOKEN","",time() - 3600,"/");
