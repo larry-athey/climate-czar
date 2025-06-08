@@ -20,11 +20,9 @@ Enabling of output switches may be over-ridden by the status of another output s
 
 Output switches really don't even have to physically exist. Since their operation is controlled with on/off bash scripts, these scripts can also be used to send email/SMS notifications or even make a curl URL call. Input sensors/switches can be assigned to multiple output switches, so you can easily receive a notification at the same time that a physical output switch is toggled on or off.
 
-The Climate Czar Wordpress plugin is only necessary for adding, configuring, and deleting input sensors and output switches. The undercarriage will continue to run in the background even without the web server running. The Wordpress plugin also provides dashboards and histograms to give you a visual representation of all devices and charts that you can use to fine tune your settings.
-
 All connected devices can be assigned to separate groups which allows you to have separate dashboards for multiple greenhouses or grow operations. There's no limit to the number of attached devices and groups. This system running on a small i5 based server with 8GB of RAM was tested with 500 virtual devices and still completed all read and write operations within the every-15-seconds processing loop.
 
-This system will run effectively on a Raspberry PI with a LAMP stack, or any web server that supports PHP, MySQL, and bash scripts. The Climate Czar server itself could actually monitor and control multiple greenhouses and grow operations in different locations if network enabled sensors and switches are utilized throughout (you'd be surprised by what you can accomplish with a public facing Nginx server running as a reverse web proxy).
+This system will run effectively on a Raspberry PI or clone, or any Linux powered web server that supports PHP and MySQL. The Climate Czar server itself could actually monitor and control multiple greenhouses and grow operations in different locations if network enabled sensors and switches are utilized throughout (you'd be surprised by what you can accomplish with a public facing Nginx server running as a reverse web proxy).
 
 ### Input Device Types
 1.	Variable Value Sensor (Temperature, Humidity, pH, EC, AD Convertor, Etc)
@@ -44,8 +42,6 @@ Climate Czar is not region specific. If you have temperature sensors that only r
 WiFi controlled AC outlets such as TpLink/Kasa devices have a manual on/off button on them that could allow a person to turn them on when Climate Czar says they should be off. Output switches have a One Shot option that tells the system whether to only execute the on/off script one time, or to execute the script once every minute in order to maintain the intended on/off state.
 
 With the user interface being based on Wordpress, creating custom dashboards is as simple as creating your own pages or posts and inserting shortcodes with ID number of the input sensor or output switch passed to it. You can even similarly embed these live device views in an external website if you wish by making calls to specific PHP files in the plugin folder the same way.
-
-Anybody who has Wordpress experience can 100% customize the look and feel of your system in order to tailor it to your operation. Everything is built on a Bootstrap based Wordpress theme, so it's real easy to over-ride colors and styles. The pages of the default system are built and rendered using the WP Bakery Page Builder plugin, but you could easily replace that with your own favorite editor instead.
 
 Even though bash scripts are the most common in Linux, any other kind of script or even a compiled binary may be used. All that matters is that the proper command shell or interpreter is installed on the system and the script is owned by the user that the web server runs as and has the executable bit set. Device read scripts simply need to output a single integer or floating point numeric value to stdout.
 
