@@ -102,6 +102,6 @@ echo
 echo "* * * * * /var/www/html/cz/commands/cz-cron"
 echo
 echo "The CRON job shown in the above fires off every minute to verify that both of"
-echo "the process scripts are running for input and output processing."
+echo "the process scripts are running for input and output device management."
 echo
 echo
