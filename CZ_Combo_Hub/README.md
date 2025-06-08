@@ -10,4 +10,6 @@ http://combo-hub-ip/2/humidity reads the humidity from the second slave<br>
 
 Each Combo Hub will feature an attached DHT22 for local temperature and humidity, a Dallas Semiconductor 1-Wire bus for unlimited remote temperature sensors, a BH1750 for local ambient light level detection, 8 digital inputs for binary switches, 8 digital outputs for controlling solid state relays, and an SSD1306 128x32 OLED status display.
 
+3D models will be provided for a case which will be strictly for the Combo Hub brains and connection terminals. Solid state relays will no longer be housed in the same enclosure.
+
 All configuration will be done using a serial terminal program rather than the current method that requires you to set global variables before flashing the ESP32.
