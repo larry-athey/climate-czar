@@ -1,0 +1,16 @@
+#!/bin/bash
+
+cd /var/www/html/cz/commands
+
+while [ true ]; do
+  ScriptStart=$(date +%s)
+  ./cz-write-outputs.php
+  ScriptEnd=$(date +%s)
+  Runtime=$(($ScriptEnd - $ScriptStart))
+  echo "Script Runtime: $Runtime seconds"
+  if [ $Runtime -lt 15 ]; then
+    Delay=$((15 - $Runtime))
+    echo "Sleeping $Delay seconds"
+    sleep $Delay
+  fi
+done

@@ -1,0 +1,42 @@
+#!/bin/bash
+
+if [ ! -f /var/www/html/cz/CZ_TZ.php ]; then
+  TZ=$(timedatectl | grep "zone:" | awk '{print $3}')
+  echo "<?php" > /var/www/html/cz/CZ_TZ.php
+  echo "\$TZ=\"$TZ\";" >> /var/www/html/cz/CZ_TZ.php
+  echo "?>" >> /var/www/html/cz/CZ_TZ.php
+fi
+
+chown -R www-data:www-data /var/www/html/cz
+chmod g+w -R /var/www/html/cz
+chmod +x /var/www/html/cz/commands/*
+
+Hour=$(date +%H)
+Min=$(date +%M)
+
+if [ "$Hour" == "00" ] && [ "$Min" == "15" ]; then
+  cd /var/www/html/cz/commands
+  pkill -f /var/www/html/cz/commands/cz-read-loop
+  pkill -f /var/www/html/cz/commands/cz-write-loop
+  ./cz-db-maint.php
+  sleep 15
+fi
+
+LoopFailure=0
+
+ps cax | grep [c]z-read-loop
+if [ $? -ne 0 ]; then
+  LoopFailure=1
+fi
+
+ps cax | grep [c]z-write-loop
+if [ $? -ne 0 ]; then
+  LoopFailure=1
+fi
+
+if [ $LoopFailure -eq 1 ]; then
+  pkill -f /var/www/html/cz/commands/cz-read-loop
+  pkill -f /var/www/html/cz/commands/cz-write-loop
+  /var/www/html/cz/commands/cz-read-loop &
+  /var/www/html/cz/commands/cz-write-loop &
+fi
