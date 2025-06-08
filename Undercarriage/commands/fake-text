@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# This script is an example showing how to deal with devices that only output
+# raw text that you may want to display in your dashboard. As you can see, it
+# is possible to style the text output with HTML/CSS tags. You could just as
+# easily use curl to pull content from another website here. There really is
+# no limit to what you can display in your dashboard.
+
+Opt=0
+
+# Pass a 0, 1, or 2 on the command line to change the output of this script.
+if [ -n "$1" ]; then
+  Opt=$1
+fi
+
+echo "<span class=\"text muted\" style=\"font-size: 0.85em;\">"
+
+if [ "$Opt" == "0" ]; then
+  # Display some generic system information
+  Temp=$(uptime | xargs)
+  echo "$Temp<br>"
+  Temp=$(cat /proc/cpuinfo | grep "model name" | tail -n1 | xargs | sed "s/model name /System CPU/g")
+  echo "$Temp<br>"
+  Temp=$(uname -a | awk '{print $3}')
+  echo "Linux Kernel: $Temp<br>"
+  Temp=$(uname -m)
+  echo "Architecture: $Temp<br>"
+  Temp=$(head -1 /etc/issue.net)
+  echo -e "OS: $Temp<br>"
+elif [ "$Opt" == "1" ]; then
+  # Display this server's public IP and meta data
+  Temp=$(date)
+  echo "$Temp<br>"
+  Temp=$(curl -s -m 5 ipinfo.io | tr -d "{" | tr -d "}" | sed "/^[[:blank:]]*$/ d" | sed "s/\"/\&quot;/g" | sed "s/\,/\<br\>/g")
+  echo $Temp
+elif [ "$Opt" == "2" ]; then
+  # Display response headers of this web server
+  Temp=$(curl -s -m 5 -I localhost | sed "/^[[:blank:]]*$/ d" | sed "s/\r/\<br\>/g" | sed "s/\"/\&quot;/g")
+  echo $Temp
+fi
+
+echo "</span>"

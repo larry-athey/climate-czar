@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# This script is used to fake the output of a binary sensor. If you pass the
+# word "random" to it, the script will return a random 1 or 0. Otherwise, it
+# returns a 0 if the current time is an even numbered minute, 1 for odd.
+
+Option=$1
+
+if [ "$Option" == "random" ]; then
+  echo $(shuf -i 0-1 -n 1)
+else
+  Minute=$(date +%M)
+
+  if [ $Minute -gt 10 ] && [ $Minute -le 20 ]; then
+    Minute=$(($Minute - 10))
+  elif [ $Minute -gt 20 ] && [ $Minute -le 30 ]; then
+    Minute=$(($Minute - 20))
+  elif [ $Minute -gt 30 ] && [ $Minute -le 40 ]; then
+    Minute=$(($Minute - 30))
+  elif [ $Minute -gt 40 ] && [ $Minute -le 50 ]; then
+    Minute=$(($Minute - 40))
+  elif [ $Minute -gt 50 ] && [ $Minute -le 60 ]; then
+    Minute=$(($Minute - 50))
+  fi
+
+  if [ $(($Minute % 2)) -eq 0 ]; then
+    echo 0
+  else
+    echo 1
+  fi
+fi

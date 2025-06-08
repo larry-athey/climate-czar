@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# This script simulates the output of a variable value sensor as a floating
+# point value (a number with a decimal). Passing no parameters will cause it
+# to count from 1 to 10 based on the minute on the clock, then start over at
+# one again. If you want it to start at a higher number, pass that number as
+# a "seed" to add that value to the sequence. If you want it to count down,
+# pass the word "subtract" as the second parameter.
+
+Math="add"
+Seed=0
+
+if [ -n "$1" ]; then
+  Seed=$1
+fi
+
+if [ -n "$2" ] && [ "$2" == "subtract" ]; then
+  Math="subtract"
+fi
+
+Minute=$(date +%M)
+
+if [ $Minute -gt 10 ] && [ $Minute -le 20 ]; then
+  Result=$(($Minute - 10))
+elif [ $Minute -gt 20 ] && [ $Minute -le 30 ]; then
+  Result=$(($Minute - 20))
+elif [ $Minute -gt 30 ] && [ $Minute -le 40 ]; then
+  Result=$(($Minute - 30))
+elif [ $Minute -gt 40 ] && [ $Minute -le 50 ]; then
+  Result=$(($Minute - 40))
+elif [ $Minute -gt 50 ] && [ $Minute -le 60 ]; then
+  Result=$(($Minute - 50))
+else
+  Result=$Minute
+fi
+
+Decimal=$(shuf -i 0-9 -n 1)
+
+if [ "$Math" == "add" ]; then
+  echo "$(($Seed + $Result)).$Decimal"
+else
+  echo "$(($Seed - $Result)).$Decimal"
+fi

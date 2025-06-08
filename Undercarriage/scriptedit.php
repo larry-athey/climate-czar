@@ -15,7 +15,10 @@ if (! $_GET) {
   if (! isset($_GET["LOGGED_IN_KEY"])) {
     exit;
   } else {
-    if ($_GET["LOGGED_IN_KEY"] != LOGGED_IN_KEY) exit;
+    if ($_GET["LOGGED_IN_KEY"] != LOGGED_IN_KEY) {
+      mysqli_close($DBcnx);
+      exit;
+    }
   }
   if (isset($_GET["ScriptName"])) {
     $ScriptName = $_GET["ScriptName"];

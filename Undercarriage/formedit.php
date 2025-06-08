@@ -17,7 +17,10 @@ if (! $_GET) {
     mysqli_close($DBcnx);
     exit;
   } else {
-    if ($_GET["LOGGED_IN_KEY"] != LOGGED_IN_KEY) exit;
+    if ($_GET["LOGGED_IN_KEY"] != LOGGED_IN_KEY) {
+      mysqli_close($DBcnx);
+      exit;
+    }
   }
   if (isset($_GET["FormID"])) {
     $FormID = $_GET["FormID"];

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Here's an example showing how you can add SMS text message notifications to
+# your scripts, or you can configure separate output switches so their on/off
+# commands send a text message.
+#
+# See https://textbelt.com for rates, really low price, best deal you'll find.
+
+curl -X POST https://textbelt.com/text \
+  --data-urlencode phone='5555555555' \
+  --data-urlencode message='Greenhouse kerosene blast heater activated' \
+  -d key=textbelt
+
+# Server result: {"success": true, "quotaRemaining": 40, "textId": 956929}
