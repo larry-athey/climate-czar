@@ -13,7 +13,7 @@ Climate Czar is a Linux based system that gathers readings from any type of sens
 
 Most smart home devices are controllable from the command line of your computer over your network. For example, you can download a utility for TP-Link/Kasa devices from https://github.com/python-kasa/python-kasa for this or you can write scripts for this that use standard command line tools in Linux and MacOS. There are many other brands with this capability as well.
 
-Virtual input sensors/switches can be created that return the average of multiple variable value sensors (temperature, humidity, etc) as well as AND/OR/NOT logic gates based on multiple binary switch type input sensors.
+Virtual input sensors/switches can be created that return the average of multiple variable value sensors _(temperature, humidity, etc)_ as well as AND/OR/NOT logic gates based on multiple binary switch type input sensors.
 
 Enabling of output switches may be over-ridden by the status of another output switch. For example, an output switch that controls exhaust fans can be disabled if another switch running a heater is turned on.
 
@@ -21,7 +21,7 @@ Output switches really don't even have to physically exist. Since their operatio
 
 All connected devices can be assigned to separate groups which allows you to have separate dashboards for multiple greenhouses or grow operations. There's no limit to the number of attached devices and groups. This system running on a small i5 based server with 8GB of RAM was tested with 500 virtual devices and still completed all read and write operations within the every-15-seconds processing loop.
 
-This system will run effectively on a Raspberry PI or clone, or any Linux powered web server that supports PHP and MySQL. The Climate Czar server itself could actually monitor and control multiple greenhouses and grow operations in different locations if network enabled sensors and switches are utilized throughout (you'd be surprised by what you can accomplish with a public facing Nginx server running as a reverse web proxy).
+This system will run effectively on a Raspberry PI or clone, or any Linux powered web server that supports PHP and MySQL. The Climate Czar server itself could actually monitor and control multiple greenhouses and grow operations in different locations if network enabled sensors and switches are utilized throughout _(you'd be surprised by what you can accomplish with a public facing Nginx server running as a reverse web proxy)_.
 
 ### Input Device Types
 1.	Variable Value Sensor (Temperature, Humidity, pH, EC, AD Convertor, Etc)
