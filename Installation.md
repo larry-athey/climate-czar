@@ -1,6 +1,6 @@
 # Installation
 
-**Climate Czar Server** requires a Debian derivative Linux operating system in order to run its installer script. If you use Centos/Fedora, Arch, Gentoo, I'm sorry. Feel free to modify the installer script to support your Linux distribution and submit your changes.
+**Climate Czar Server** requires a Debian derivative Linux operating system in order to run its installer script. If you use Centos/Fedora, Arch, Gentoo, I'm sorry. Feel free to modify the installer script to support your Linux distribution and submit your changes. Just create an issue and attach your updated script.
 
 This system has been tested on Raspberry Pi, Orange Pi, Banana Pi, as well as numerous x86_64 systems and works equally as well with all of them. The system has also been tested on a Raspberry Pi Zero W and still worked perfectly fine.
 
