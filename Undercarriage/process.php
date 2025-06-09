@@ -56,7 +56,7 @@ if (isset($_GET["cz_delete_device"])) {
 /***************************************************************************************************/
 } elseif (isset($_GET["cz_delete_user"])) {
   if ($_GET["cz_delete_user"] > 1) {
-    $Result = mysqli_query($DBcnx,"DELETE FROM Users WHERE ID=" . $_GET["cz_delete_users"]);
+    $Result = mysqli_query($DBcnx,"DELETE FROM Users WHERE ID=" . $_GET["cz_delete_user"]);
   }
 /***************************************************************************************************/
 } elseif (isset($_POST["cz_group_save"])) {
