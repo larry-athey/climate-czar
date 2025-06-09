@@ -31,7 +31,7 @@ This system will run effectively on a Raspberry PI or clone, or any Linux powere
 5.	OR Gate of a Group of Remote Switches
 6.	NOT Gate of a Group of Remote Switches
 7.	Scheduler (unlimited on/off schedules per day)
-8.	Web Console Switch (Only Controllable Via Web UI)
+8.	Web Console Switch (Only controllable via web UI)
 9.	Raw Text Output Device (only for displaying text, cannot be used as a controller)
 
 The virtual input devices are where the Climate Czar really shines because they allow you to consider multiple sample points before taking action. For example, having temperature sensors on the east and west ends of a greenhouse. Each one of those could be reporting significantly different temperatures at the same time. It makes more sense to turn on heating or cooling based on the average temperature.
