@@ -24,9 +24,9 @@ All connected devices can be assigned to separate groups which allows you to hav
 This system will run effectively on a Raspberry PI or clone, or any Linux powered web server that supports PHP and MySQL. The Climate Czar server itself could actually monitor and control multiple greenhouses and grow operations in different locations if network enabled sensors and switches are utilized throughout with an on-site Raspberry Pi running an Nginx reverse proxy.
 
 ### Input Device Types
-1.	Variable Value Sensor (Temperature, Humidity, pH, EC, AD Convertor, Etc)
+1.	Variable Value Sensor (Temperature, Humidity, pH, EC, AD Convertor, etc)
 2.	Average From a Group of Variable Value Sensors
-3.	Remote Switch (Float Switch, Door/Window Switch, Photocell Switch, Etc)
+3.	Remote Switch (Float Switch, Door/Window Switch, Photocell Switch, etc)
 4.	AND Gate of a Group of Remote Switches
 5.	OR Gate of a Group of Remote Switches
 6.	NOT Gate of a Group of Remote Switches
