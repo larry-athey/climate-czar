@@ -41,6 +41,7 @@ sudo cp -f *.ico /var/www/html/cz/
 sudo cp -f *.gz /var/www/html/cz/
 sudo cp -f *.php /var/www/html/cz/
 sudo cp -f commands/* /var/www/html/cz/commands/
+sudo chmod +x /var/www/html/cz/commands/*
 cd /var/www/html/cz
 sudo tar -xzvf bootstrap.tar.gz
 sudo tar -xzvf css.tar.gz
