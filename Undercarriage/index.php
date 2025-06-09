@@ -3,7 +3,7 @@
 require_once("html.php");
 $DBcnx = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
 //---------------------------------------------------------------------------------------------------
-if (($_GET) && (! isset($_GET["page"]))){
+if (($_GET) && (! isset($_GET["page"]))) {
   if (isset($_GET["CZ_BASIC"])) {
     if ($_GET["CZ_BASIC"] == 1) {
       setcookie("CZ_BASIC",1,0,"/");
@@ -12,7 +12,7 @@ if (($_GET) && (! isset($_GET["page"]))){
     }
   }
   if ((isset($_GET["CZ_GROUP"])) && (UserLoggedIn($DBcnx))) {
-    // Check user security level before setting the cookie
+    // Check user security level before setting the cookie so they can't forge their way into a group
     $Result = mysqli_query($DBcnx,"SELECT * FROM DeviceGroups WHERE ID=" . $_GET["CZ_GROUP"]);
     if (mysqli_num_rows($Result) > 0) {
       $Group = mysqli_fetch_assoc($Result);
@@ -81,7 +81,6 @@ require_once("colors.php");
     }
   }
   //-----------------------------------------------------------------------------------------------------
-
   </script>
   <style>
   body {
