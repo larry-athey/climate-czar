@@ -2,6 +2,8 @@
 
 **Climate Czar Server** requires a Debian derivative Linux operating system in order to run its installer script. If you use Centos/Fedora or Arch, I'm sorry, feel free to modify the installer script to support your Linux distribution. This system has been tested on Raspberry Pi, Orange Pi, Banana Pi, as well as numerous x86_64 systems and works equally as well with all of them.
 
+Open a terminal or SSH into your device and execute the following commands to install **Climate Czar Server**.
+
 `git clone https://github.com/larry-athey/climate-czar`
 
 `cd climate-czar/Undercarriage`
