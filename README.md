@@ -42,6 +42,8 @@ WiFi controlled AC outlets such as TpLink/Kasa devices have a manual on/off butt
 
 While this system was designed and tested in a 51x18 foot greenhouse, there are probably many other uses for it besides greenhouses and indoor grow operations. If you need to read numeric values from sensors or switches and turn other devices on and off based on those values, then it's likely that this system will work for what you're needing to do. It was intentionally left completely open ended for this very reason.
 
+Again, there is no question as to whether Climate Czar is compatible with your devices. The only question is if your devices can be read or controlled from the command line. If so, then they'll work with Climate Czar.
+
 ![image](https://github.com/user-attachments/assets/323fe2f3-3c89-47ce-b2d9-7267f0555d43)
 
 ![image](https://github.com/user-attachments/assets/fd390f94-8900-4b51-87f2-3d0caf7e173d)
