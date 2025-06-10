@@ -1,5 +1,5 @@
 # Climate Czar
-Universal remote climate monitoring and management system for greenhouses and indoor grow operations. No hardware brand dependencies, if you can read or control a device from the command line, then it's compatible with Climate Czar.
+Universal remote climate monitoring and management system for greenhouses and indoor grow operations. No hardware brand dependencies, if you can read or control a sensor or smart switch from the command line, then it's compatible with Climate Czar.
 
 Live demo at https://greenhouse.panhandleponics.com/cz/?CZ_THEME=1
 
