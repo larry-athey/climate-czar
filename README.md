@@ -15,7 +15,7 @@ Most smart home devices are controllable from the command line of your computer 
 
 Virtual input sensors/switches can be created that return the average of multiple variable value sensors _(temperature, humidity, etc)_ as well as AND/OR/NOT logic gates based on multiple binary switch type input sensors.
 
-Enabling of output switches may be over-ridden by the status of another output switch. For example, an output switch that controls exhaust fans can be disabled if another switch running a heater is turned on.
+Enabling of output switches may be over-ridden by the status of another output switch. For example, an output switch that controls exhaust fans can be disabled if another switch running a heater is turned on. However, you can manually over-ride this if need be.
 
 Output switches really don't even have to physically exist. Since their operation is controlled with on/off bash scripts, these scripts can also be used to send email/SMS notifications or even make a curl URL call. Input sensors/switches can be assigned to multiple output switches, so you can easily receive a notification at the same time that a physical output switch is toggled on or off.
 
