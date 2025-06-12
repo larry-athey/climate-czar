@@ -336,7 +336,7 @@ require_once("colors.php");
       <div id="SwitchListHelp" class="form-text">Control/Command+Click all switches to include in the array</div>
     </div>
     <div class="mb-3" id="ScheduleListDiv">
-      <label for="ScheduleList" class="form-label">Daily Schedule List</label>
+      <label for="ScheduleList" class="form-label" style="margin-top: 0.75em;">Daily Schedule List</label>
       <textarea class="form-control" id="ScheduleList" name="ScheduleList" style="height: 100px;" aria-describedby="ScheduleListHelp"><?= $Dev["ScheduleList"] ?></textarea>
       <div id="ScheduleListHelp" class="form-text">ON/OFF schedules in 24 hour format on separate lines (example: 06:00-21:00)</div>
     </div>
