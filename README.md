@@ -6,7 +6,7 @@ Live demo at https://greenhouse.panhandleponics.com/cz/?CZ_THEME=1
 You may also contact me directly at https://panhandleponics.com<br>
 Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandlePonics<br>
 
-![image](https://github.com/user-attachments/assets/9f134904-7ba4-407a-9525-c2ee06a02bb6)
+![image](https://github.com/user-attachments/assets/7b411953-9304-4b04-ab87-2358f437c058)
 ---
 
 Climate Czar is a Linux based system that gathers readings from any type of sensor or switch that can be read from the command line, whether it is a local device connected to a GPIO bus or a network device. By the same token, the system will control output switches that can also be toggled from the command line. There are no brand/model hardware dependencies, you can even use it with your own custom IoT devices.
@@ -44,7 +44,7 @@ While this system was designed and tested in a 51x18 foot greenhouse, there are 
 
 Again, there is no question as to whether Climate Czar is compatible with your devices. The only question is if your devices can be read or controlled from the command line. If so, then they'll work with Climate Czar.
 
-![image](https://github.com/user-attachments/assets/5703442e-570b-4c28-99d8-0346bf7dda0f)
+![image](https://github.com/user-attachments/assets/a88d4a47-f467-4531-a873-9ef5e695710c)
 
 ![image](https://github.com/user-attachments/assets/fd390f94-8900-4b51-87f2-3d0caf7e173d)
 
