@@ -44,7 +44,7 @@ While this system was designed and tested in a 51x18 foot greenhouse, there are 
 
 Again, there is no question as to whether Climate Czar is compatible with your devices. The only question is if your devices can be read or controlled from the command line. If so, then they'll work with Climate Czar.
 
-![image](https://github.com/user-attachments/assets/323fe2f3-3c89-47ce-b2d9-7267f0555d43)
+![image](https://github.com/user-attachments/assets/5703442e-570b-4c28-99d8-0346bf7dda0f)
 
 ![image](https://github.com/user-attachments/assets/fd390f94-8900-4b51-87f2-3d0caf7e173d)
 
