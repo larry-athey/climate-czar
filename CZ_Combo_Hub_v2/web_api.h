@@ -51,6 +51,14 @@ inline String getDallasTemp(int ID, String Address, String Format) {
   }
 }
 //------------------------------------------------------------------------------------------------
+inline String getDeviceName(int ID) {
+  if (ID > 0) {
+    return QuerySlave(ID,"/0/devicename");
+  } else {
+    return CZ_deviceName;
+  }
+}
+//------------------------------------------------------------------------------------------------
 inline String getHumidity(int ID) {
   if (ID > 0) {
     return QuerySlave(ID,"/0/humidity");
@@ -104,6 +112,14 @@ inline String getUptime(int ID) {
     return QuerySlave(ID,"/0/uptime");
   } else {
     return Uptime;
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline String getWifiStats(int ID) {
+  if (ID > 0) {
+    return QuerySlave(ID,"/0/wifi-stats");
+  } else {
+    return "WiFi Channel: " + String(WiFi.channel()) + "\n" + "WiFi Signal: " + String(WiFi.RSSI());
   }
 }
 //------------------------------------------------------------------------------------------------
@@ -166,7 +182,7 @@ inline String handleWebRequest(String Msg) {
   // parts[1] : The request type identifier
   // parts[2..(partCount-1)] : Any additional parameters for the request type 
   if (parts[1] == "devicename") {
-    //if (partCount == 2) Result = getDeviceName(parts[0].toInt());
+    if (partCount == 2) Result = getDeviceName(parts[0].toInt());
   } else if (parts[1] == "ds18b20") {
     if (partCount == 4) Result = getDallasTemp(parts[0].toInt(),parts[2],parts[3]);
   } else if (parts[1] == "humidity") {
@@ -186,7 +202,7 @@ inline String handleWebRequest(String Msg) {
   } else if (parts[1] == "uptime") {
     if (partCount == 2) Result = getUptime(parts[0].toInt());
   } else if (parts[1] == "wifi-stats") {
-    //if (partCount == 2) Result = getWifiStats(parts[0].toInt());
+    if (partCount == 2) Result = getWifiStats(parts[0].toInt());
   }
   digitalWrite(LED,LOW);
 
