@@ -159,6 +159,10 @@ inline void get_ipMode() { // Get the network IP address mode (DHCP or Static IP
     if (! isValidIP(Net_DNS)) Net_DNS = "0.0.0.0";
   } else {
     Net_useDHCP = 1;
+    Net_IP = "";
+    Net_Mask = "";
+    Net_Gateway = "";
+    Net_DNS = "";
   }
 }
 //-----------------------------------------------------------------------------------------------
