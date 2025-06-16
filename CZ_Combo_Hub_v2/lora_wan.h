@@ -1,0 +1,51 @@
+//------------------------------------------------------------------------------------------------
+// Climate Czar Combo Hub v2 | (CopyLeft) 2022-Present | Larry Athey (https://panhandleponics.com)
+//
+// Inline functions used for modular unit organization
+//------------------------------------------------------------------------------------------------
+inline void LoRa_Init() { // Initialize the RYLR998 modem after configuration changes
+  Serial2.println("AT+RESET");
+  delay(500);
+  Serial2.println("AT+NETWORKID=" + LoRa_Network);
+  delay(100);
+  Serial2.println("AT+ADDRESS=" + LoRa_Address);
+  delay(100);
+}
+//------------------------------------------------------------------------------------------------
+inline String handleSlaveRequest() {
+  String Result = jsonFailure;
+  digitalWrite(LED,HIGH);
+
+  String incoming = Serial2.readStringUntil('\n');
+  // Check if the message is a received LoRa message
+  if (incoming.startsWith("+RCV")) {
+    // Parse the Result: +RCV=SenderID,length,message,RSSI,SNR
+    int firstComma = incoming.indexOf(',');
+    if (firstComma > 4) { // Ensure valid +RCV format
+      String senderIDStr = incoming.substring(4,firstComma); // Extract SenderID
+      int senderID = senderIDStr.toInt();
+          
+      // Only process if the sender is the master hub (ID 1)
+      if (senderID == 1) {
+        int secondComma = incoming.indexOf(',',firstComma + 1);
+        int thirdComma = incoming.indexOf(',',secondComma + 1);
+        if (thirdComma > secondComma) {
+          String message = incoming.substring(secondComma + 1,thirdComma);
+              
+          // Example: Respond with a fixed message (modify as needed)
+          String reply = "ACK:" + message; // Acknowledge with received message
+          String command = "AT+SEND=1," + String(reply.length()) + "," + reply;
+          Serial2.println(command);
+              
+          Result = handleWebRequest(message);
+          digitalWrite(LED,LOW);
+          return Result; // Return the master hub's request
+        }
+      }
+    }
+  }
+
+  digitalWrite(LED,LOW);
+  return Result;
+}
+//------------------------------------------------------------------------------------------------
