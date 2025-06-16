@@ -43,6 +43,14 @@ inline String QuerySlave(int ID, String Msg) {
   return Result; // Return jsonFailure if no response
 }
 //------------------------------------------------------------------------------------------------
+inline String getDallasTemp(int ID, String Address, String Format) {
+  if (ID > 0) {
+    return QuerySlave(ID,"/0/ds18b20/" + Address + "/" + Format);
+  } else {
+    return GetDS18B20(Address,Format);
+  }
+}
+//------------------------------------------------------------------------------------------------
 inline String getHumidity(int ID) {
   if (ID > 0) {
     return QuerySlave(ID,"/0/humidity");
@@ -80,6 +88,43 @@ inline String getTemperature(int ID, String Format) {
     } else {
       return GetDHT22(3);
     }
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline String getSwitch(int ID, String Switch) {
+  if (ID > 0) {
+    return QuerySlave(ID,"/0/switch/" + Switch);
+  } else {
+    return GetSwitch(Switch.toInt());
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline String getUptime(int ID) {
+  if (ID > 0) {
+    return QuerySlave(ID,"/0/uptime");
+  } else {
+    return Uptime;
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline String rebootHub(int ID) {
+  if (ID > 0) {
+    return QuerySlave(ID,"/0/reboot");
+  } else {
+    if (LoRa_Mode == 0) {
+      return "Rebooting...";
+    } else {
+      return "Restarting...";
+    }
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline String setRelay(int ID, String Relay, String State) {
+  if (ID > 0) {
+    return QuerySlave(ID,"/0/relay/" + Relay + "/" + State);
+  } else {
+    SetRelay(Relay.toInt(),State.toInt());
+    return jsonSuccess;
   }
 }
 //------------------------------------------------------------------------------------------------
@@ -121,27 +166,27 @@ inline String handleWebRequest(String Msg) {
   // parts[1] : The request type identifier
   // parts[2..(partCount-1)] : Any additional parameters for the request type 
   if (parts[1] == "devicename") {
-
+    //if (partCount == 2) Result = getDeviceName(parts[0].toInt());
   } else if (parts[1] == "ds18b20") {
-
+    if (partCount == 4) Result = getDallasTemp(parts[0].toInt(),parts[2],parts[3]);
   } else if (parts[1] == "humidity") {
-    Result = getHumidity(parts[0].toInt());
+    if (partCount == 2) Result = getHumidity(parts[0].toInt());
   } else if (parts[1] == "light") {
     if (partCount == 3) Result = getLightLevel(parts[0].toInt(),parts[2]);
   } else if (parts[1] == "lora-sensor") {
     if ((LoRa_Mode == 0) && (partCount == 3)) Result = getRemoteSensor(parts[0].toInt(),parts[2]);
   } else if (parts[1] == "reboot") {
-    Result = "Rebooting...";
+    if (partCount == 2) Result = rebootHub(parts[0].toInt());
   } else if (parts[1] == "relay") {
-
+    if (partCount == 4) Result = setRelay(parts[0].toInt(),parts[2],parts[3]);
   } else if (parts[1] == "switch") {
-
+    if (partCount == 3) Result = getSwitch(parts[0].toInt(),parts[2]);
   } else if (parts[1] == "temperature") {
     if (partCount == 3) Result = getTemperature(parts[0].toInt(),parts[2]);
   } else if (parts[1] == "uptime") {
-
+    if (partCount == 2) Result = getUptime(parts[0].toInt());
   } else if (parts[1] == "wifi-stats") {
-
+    //if (partCount == 2) Result = getWifiStats(parts[0].toInt());
   }
   digitalWrite(LED,LOW);
 
