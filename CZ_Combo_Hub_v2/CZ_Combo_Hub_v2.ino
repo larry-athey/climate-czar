@@ -263,11 +263,14 @@ String GetBH1750(byte WhichOne) { // Get ambient light level from the BH1750
 }
 //------------------------------------------------------------------------------------------------
 String GetSwitch(byte WhichOne) { // Get the on/off status of one of the eight switch ports
-
+  WhichOne --;
+  return String(digitalRead(inputPins[WhichOne]));
 }
 //------------------------------------------------------------------------------------------------
-void SetRelay(byte WhichOne) { // Set one of the eight relays ports on or off
-
+void SetRelay(byte WhichOne, byte State) { // Set one of the eight relays ports on or off
+  WhichOne --;
+  if ((Serial) && (WhichOne < 2)) return;
+  digitalWrite(relayPins[WhichOne],State);
 }
 //------------------------------------------------------------------------------------------------
 void ScreenUpdate() {
@@ -308,7 +311,10 @@ void loop() {
   // Msg.remove(0,4); // Delete the "GET " from the beginning
   // Msg.remove(Msg.indexOf(" HTTP/1.1"),9); // Delete the " HTTP/1.1" from the end
   // Client.println(handleWebRequest(Msg));
-  // if (Msg == "Rebooting...") {
+  // if ((LoRa_Mode == 0) && (Msg == "Rebooting...")) {
+  //   delay(2000);
+  //   ESP.restart();
+  // } else if ((LoRa_Mode == 1) && (Msg == "Restarting...")) {
   //   delay(2000);
   //   ESP.restart();
   // }
