@@ -50,8 +50,6 @@
 #include "WiFi.h"                // WiFi interface library
 #include "ESP32Ping.h"           // ICMP (ping) library from https://github.com/marian-craciunescu/ESP32Ping
 //------------------------------------------------------------------------------------------------
-EthernetServer server(80);
-WiFiServer Server(80);
 // Flash memory initialization
 Preferences preferences;
 // SSD1306 configuration
