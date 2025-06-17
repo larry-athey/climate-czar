@@ -46,12 +46,12 @@
 #include "BH1750.h"              // BH1750 light sensor library
 #include "OneWire.h"             // OneWire Network communications library
 #include "DallasTemperature.h"   // Dallas Semiconductor DS18B20 temperature sensor library
-#include "Ethernet.h"            // Ethernet interface library
+#include "UIPEthernet.h"         // Ethernet interface library compatible with W5500 modules
 #include "WiFi.h"                // WiFi interface library
-//#include "Client.h"              // TCP/IP client library
-//#include "Server.h"              // TCP/IP server library
 #include "ESP32Ping.h"           // ICMP (ping) library from https://github.com/marian-craciunescu/ESP32Ping
 //------------------------------------------------------------------------------------------------
+EthernetServer server(80);
+WiFiServer Server(80);
 // Flash memory initialization
 Preferences preferences;
 // SSD1306 configuration
