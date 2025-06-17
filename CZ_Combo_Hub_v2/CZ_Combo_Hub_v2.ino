@@ -294,13 +294,22 @@ bool StartNetwork() {
           ethConnected = false;
         }
       }
-      if (ethConnected) ethServer.begin();
+      if (ethConnected) {
+        Serial.print(F("\nEthernet connected"));
+        Net_IP = Ethernet.localIP().toString();
+        Net_Mask = Ethernet.subnetMask().toString();
+        Net_Gateway = Ethernet.gatewayIP().toString();
+        Net_DNS = Ethernet.dnsServerIP().toString();
+        ethServer.begin();
+      }
     } else {
       Result = false;
       ethConnected = false;
       spiStarted = false;
       SPI.end();
     }
+    if (! ethConnected) Serial.print(F("\nEthernet connection failed"));
+    delay(1000);
   }
   return Result;
 }
