@@ -266,7 +266,7 @@ bool StartNetwork() {
       Serial.print(F("\nWiFi connection failed"));
       Result = false;
     } else {
-      Serial.print(F("\nWiFi connected"));
+      Serial.print(F("\r\nWiFi connected"));
       Net_IP = WiFi.localIP().toString();
       Net_Mask = WiFi.subnetMask().toString();
       Net_Gateway = WiFi.gatewayIP().toString();
