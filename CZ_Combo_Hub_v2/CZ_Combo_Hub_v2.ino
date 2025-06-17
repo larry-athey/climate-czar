@@ -72,7 +72,6 @@ DHTesp dhtSensor;
 #define SPI_MISO 19
 #define SPI_SCK 18
 #define ETH_CS 25
-#define ETH_INT 26
 // Status LED
 #define LED 2
 // Screen page button
@@ -80,7 +79,7 @@ DHTesp dhtSensor;
 // Inputs (digital switches)
 const int inputPins[8] = {34,35,36,39,12,13,14,15};
 // Relays (3.3V SSRs)
-const int relayPins[8] = {1,3,9,10,11,27,21,22}; // relayPins[0/1] will not work if a serial configuration is active
+const int relayPins[8] = {3,9,10,11,26,27,21,22}; // relayPins[1] will not work if a serial configuration is active
 //------------------------------------------------------------------------------------------------
 int ActiveMenu = 0;              // Used for tracking which serial config menu is in use
 int ActivePage = 0;              // Used for tracking which OLED screen page to display
@@ -133,7 +132,7 @@ void setup() {
 
   // Initialize SSD1306
   if (! display.begin(SSD1306_SWITCHCAPVCC,OLED_ADDRESS)) {
-    Serial.println("SSD1306 init failed!");
+    Serial.println(F("SSD1306 init failed!"));
   }
 
   // Initialize Dallas Temperature bus
@@ -150,7 +149,7 @@ void setup() {
 
   // Initialize the RYLR998 modem
   digitalWrite(LED,HIGH);
-  Serial2.println("AT+RESET");
+  Serial2.println(F("AT+RESET"));
   delay(500);
   Serial2.println("AT+NETWORKID=" + LoRa_Network);
   delay(100);
@@ -344,7 +343,7 @@ String GetSwitch(byte WhichOne) { // Get the on/off status of one of the eight s
 //------------------------------------------------------------------------------------------------
 void SetRelay(byte WhichOne, byte State) { // Set one of the eight relays ports on or off
   WhichOne --;
-  if ((Serial) && (WhichOne < 2)) return;
+  if ((Serial) && (WhichOne == 0)) return;
   digitalWrite(relayPins[WhichOne],State);
 }
 //------------------------------------------------------------------------------------------------
