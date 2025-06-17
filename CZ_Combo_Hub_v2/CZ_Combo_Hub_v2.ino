@@ -402,7 +402,7 @@ void handleClient(Client& client) {
       }
     }
   }
-  if (Msg.length() > 0) {
+  if ((Msg.length() > 0) && (Msg.indexOf("GET ") == 0)) {
     Msg.remove(0,4); // Delete the "GET " from the beginning
     Msg.remove(Msg.indexOf(" HTTP/1.1"),9); // Delete the " HTTP/1.1" from the end
     client.println(handleWebRequest(Msg));
