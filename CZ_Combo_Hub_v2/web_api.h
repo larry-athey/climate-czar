@@ -2,6 +2,13 @@
 // Climate Czar Combo Hub v2 | (CopyLeft) 2022-Present | Larry Athey (https://panhandleponics.com)
 //
 // Inline functions used for modular unit organization
+//
+// Example Climate Czar Server web API calls:
+//
+// curl -s -m 5 --http0.9 http://192.168.1.100/0/humidity (get humidity from the master hub)
+// curl -s -m 5 --http0.9 http://192.168.1.100/1/humidity (get humidity from the first slave hub)
+// curl -s -m 5 --http0.9 http://192.168.1.100/2/humidity (get humidity from the second slave hub)
+//
 //------------------------------------------------------------------------------------------------
 inline String jsonSuccess = "{\"status\": \"success\",\"message\": \"Operation completed successfully\"}";
 inline String jsonFailure = "{\"status\": \"error\",\"message\": \"Operation failed\"}";
