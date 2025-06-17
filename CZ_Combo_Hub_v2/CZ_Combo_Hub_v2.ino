@@ -11,7 +11,7 @@
 //
 // If you are a user of Climate Czar Combo Hub 1.1.0 there is nothing to worry about, your units
 // will still continue to work with Climate Czar Server perfectly fine. This version is a complete
-// rewrite and utilizes a completely different web API.
+// rewrite from the ground up and utilizes a completely different web API.
 //
 // The biggest change in this version is the addition of a master/slave topography where the slave
 // units are controlled via LoRa WAN. Climate Czar Server stll communicates with the master unit
@@ -36,7 +36,8 @@
 // can now configure all hub settings using a serial terminal program connected to the USB port.
 //
 // Climate Czar Combo Hub is now a far more sophisticated device and much easier to implement in
-// your greenhouse or indoor grow operation.
+// your greenhouse or indoor grow operation. Until a printed circuit board is available, they're a
+// bit of a lesson in patience to build because of about 40 wires that need to be cut & soldered.
 //------------------------------------------------------------------------------------------------
 #include "Preferences.h"         // ESP32 Flash memory read/write library
 #include "SPI.h"                 // SPI bus library
