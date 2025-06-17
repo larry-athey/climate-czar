@@ -36,17 +36,14 @@ inline String getBaseMacString() { // Returns the ESP32 MAC address as a hyphena
   return String(macStr);
 }
 //------------------------------------------------------------------------------------------------
-inline bool isValidIP(String ip) { // Validates IPv4 addresses
-  // Convert String to std::string for easier manipulation
+inline bool isValidIP(String ip) { // Validates IPv4 addresses used in static IP configuration
   std::string ipStr = ip.c_str();
-
   if (ipStr.find('.') != std::string::npos) {
     IPAddress ipv4Addr;
     if (ipv4Addr.fromString(ip)) {
       return true;
     }
   }
-
   return false;
 }
 //------------------------------------------------------------------------------------------------

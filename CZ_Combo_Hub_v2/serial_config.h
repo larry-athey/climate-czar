@@ -52,7 +52,7 @@ inline void NetworkMenu() { // Display the network configuration menu
   Serial.println("  2. Set WiFi SSID");
   Serial.println("  3. Set WiFi Password");
   Serial.println("  4. Set DHCP or Static IP");
-  if (Net_useWifi == 1) Serial.println("  5. Connect to WiFi");
+  Serial.println("  5. Restart Network Services");
   Serial.println("  Q. Quit this menu");
   Serial.print("\nChoose an option: ");
 }
@@ -248,7 +248,7 @@ inline void SerialConfigInput() { // Handle user configuration via the serial co
   PurgeBuffer();
   Serial.println("\n\n");
 
-  if (ActiveMenu == 0) {
+  if (ActiveMenu == 0) { // Main configuration menu
     if (Option == "1") {
       ActiveMenu = 1;
       NetworkMenu();
@@ -274,7 +274,7 @@ inline void SerialConfigInput() { // Handle user configuration via the serial co
     } else {
       ConfigMenu();
     }
-  } else if (ActiveMenu == 1) {
+  } else if (ActiveMenu == 1) { // Network Configuration Menu
     if (Option == "1") {
       get_enableWifi();
       NetworkMenu();
@@ -287,6 +287,9 @@ inline void SerialConfigInput() { // Handle user configuration via the serial co
     } else if (Option == "4") {
       get_ipMode();
       NetworkMenu();
+    } else if (Option == "5") {
+      StartNetwork();
+      NetworkMenu();
     } else {
       Option.toLowerCase();
       if (Option == "q") {
@@ -296,7 +299,7 @@ inline void SerialConfigInput() { // Handle user configuration via the serial co
         NetworkMenu();
       }
     }
-  } else if (ActiveMenu == 2) {
+  } else if (ActiveMenu == 2) { // LoRa WAN configuration menu
     if (Option == "1") {
       get_LoRaMode();
       LoRaMenu();
@@ -317,7 +320,7 @@ inline void SerialConfigInput() { // Handle user configuration via the serial co
         LoRaMenu();
       }
     }
-  } else if (ActiveMenu == 3) {
+  } else if (ActiveMenu == 3) { // Combo Hub configuration menu
     if (Option == "1") {
       get_czDeviceName();
       HubMenu();
@@ -336,7 +339,7 @@ inline void SerialConfigInput() { // Handle user configuration via the serial co
         HubMenu();
       }
     }
-  } else if (ActiveMenu == 4) {
+  } else if (ActiveMenu == 4) { // Show all connected DS18B20 sensors
     Option.toLowerCase();
     if (Option == "q") {
       ActiveMenu = 0;

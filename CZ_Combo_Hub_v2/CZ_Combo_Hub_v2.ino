@@ -48,11 +48,11 @@
 #include "DallasTemperature.h"   // Dallas Semiconductor DS18B20 temperature sensor library
 #include "Ethernet.h"            // Ethernet interface library
 #include "WiFi.h"                // WiFi interface library
-#include "Client.h"              // TCP/IP client library
-#include "Server.h"              // TCP/IP server library
+//#include "Client.h"              // TCP/IP client library
+//#include "Server.h"              // TCP/IP server library
 #include "ESP32Ping.h"           // ICMP (ping) library from https://github.com/marian-craciunescu/ESP32Ping
 //------------------------------------------------------------------------------------------------
-// Flash memory storage
+// Flash memory initialization
 Preferences preferences;
 // SSD1306 configuration
 #define SCREEN_WIDTH 128
@@ -216,6 +216,81 @@ void SetMemory() { // Update flash memory with the current configuration setting
   preferences.end();
 }
 //------------------------------------------------------------------------------------------------
+void ConnectWiFi() { // Connect to WiFi network, must be WPA2-PSK, not WPA3
+  /*
+  byte x = 0;
+  WiFi.mode(WIFI_STA);
+  if (Net_useDHCP == o) {
+    bool Passed = true;
+    int segCount = 0;
+    int ipSegments[4];
+    int maskSegments[4];
+    int gwSegments[4];
+    int dnsSegments[4];
+    segCount = sscanf(Net_IP.c_str(),"%d.%d.%d.%d",&ipSegments[0],&ipSegments[1],&ipSegments[2],&ipSegments[3]);
+    if (segCount != 4) {
+      if (Serial) Serial.println("\nCannot parse static IP address!");
+      Passed = false;
+    }
+    segCount = sscanf(Net_Mask.c_str(),"%d.%d.%d.%d",&maskSegments[0],&maskSegments[1],&maskSegments[2],&maskSegments[3]);
+    if (segCount != 4) {
+      if (Serial) Serial.println("\nCannot parse subnet mask!");
+      Passed = false;
+    }
+    segCount = sscanf(Net_Gateway.c_str(),"%d.%d.%d.%d",&gwSegments[0],&gwSegments[1],&gwSegments[2],&gwSegments[3]);
+    if (segCount != 4) {
+      if (Serial) Serial.println("\nCannot parse gateway address!");
+      Passed = false;
+    }
+    segCount = sscanf(Net_DNS.c_str(),"%d.%d.%d.%d",&dnsSegments[0],&dnsSegments[1],&dnsSegments[2],&dnsSegments[3]);
+    if (segCount != 4) {
+      if (Serial) Serial.println("\nCannot parse DNS resolver address!");
+      Passed = false;
+    }
+    if (Passed) {
+      IPAddress staticIP(ipSegments[0],ipSegments[1],ipSegments[2],ipSegments[3]);
+      IPAddress subnet(maskSegments[0],maskSegments[1],maskSegments[2],maskSegments[3]);
+      IPAddress gateway(gwSegments[0],gwSegments[1],gwSegments[2],gwSegments[3]);
+      IPAddress dns(dnsSegments[0],dnsSegments[1],dnsSegments[2],dnsSegments[3]);
+      if (! WiFi.config(staticIP,gateway,subnet,dns,dns)) {
+        if (Serial) Serial.println("\nWiFi static IP configuration failed!");
+        delay(2000);
+      }
+    } else {
+      delay(2000);
+    }
+  }
+  WiFi.setHostname(CZ_deviceName.c_str());
+  WiFi.begin(Net_wifiSSID,Net_wifiPW);
+  if (Serial) Serial.print("\nConnecting to WiFi ..");
+  while (WiFi.status() != WL_CONNECTED) {
+    if (Serial) Serial.print('.');
+    delay(1000);
+    x ++;
+    if (x == 15) break;
+  }
+  if (WiFi.status() == WL_CONNECTED) {
+    Server.begin();
+    wifiIP = WiFi.localIP().toString();
+    wifiMask = WiFi.subnetMask().toString();
+    wifiGateway = WiFi.gatewayIP().toString();
+    wifiDNS = WiFi.dnsIP(0).toString();
+    SlavesPinging = PingAllSlaves();
+  } else {
+    wifiIP = "";
+    wifiMask = "";
+    wifiGateway = "";
+    wifiDNS = "";
+    if (Serial) Serial.println("\nConnection Failed!");
+    delay(2000);
+  }
+  */
+}
+//------------------------------------------------------------------------------------------------
+void StartNetwork() {
+
+}
+//------------------------------------------------------------------------------------------------
 String GetDHT22(byte WhichOne) { // Get humidity and temperature from the DHT22
   TempAndHumidity DHT = dhtSensor.getTempAndHumidity();
   float T = DHT.temperature;
@@ -236,10 +311,12 @@ String GetDS18B20(String Address, String Format) { // Get DS18B20 sensor tempera
   if (stringToDeviceAddress(Address.c_str(),Addr)) {
     DT.requestTemperatures();
     oneWire.reset_search();
+    float Temp = DT.getTempC(Addr);
+    if (Temp == 127.0) Temp = 0.0;
     if (Format =="c") {
-      return String(DT.getTempC(Addr),1);
+      return String(Temp,1);
     } else {
-      return String(DT.getTempF(Addr),1);
+      return String(Temp * 9 / 5 + 32,1);
     }
   }
 }
