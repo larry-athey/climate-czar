@@ -32,8 +32,8 @@
 // most people prefer a hard-wired network connection over a WiFi-only connection.
 //
 // The unit still supports unlimited DS18B20 remote temperature sensors, 8 digital inputs (ground
-// the pin to trigger), and 8 digital outputs for controlling solid state relays. What's more, you
-// can now configure all hub settings using a serial terminal program connected to the USB port.
+// the pin to trigger), and now 16 digital outputs via MCP23017 for controlling solid state relays.
+// What's more, you can now configure all hub settings using a serial terminal program over USB.
 //
 // Climate Czar Combo Hub is now a far more sophisticated device and much easier to implement in
 // your greenhouse or indoor grow operation. Until a printed circuit board is available, they're a
@@ -43,6 +43,7 @@
 #include "SPI.h"                 // SPI bus library
 #include "Wire.h"                // I2C bus library
 #include "Adafruit_SSD1306.h"    // SSD1306 OLED display library
+#include "Adafruit_MCP23X17.h"   // MCP23017 I2C 16 port GPIO expansion module library
 #include "DHTesp.h"              // DHT22 temperature/humidity sensor library
 #include "BH1750.h"              // BH1750 light sensor library
 #include "OneWire.h"             // OneWire Network communications library
@@ -64,6 +65,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH,SCREEN_HEIGHT,&Wire,-1);
 // I2C pins
 #define SDA_PIN 33
 #define SCL_PIN 32
+// MCP23017 I2C address
+#define MCP_ADDR 0x20
 // DS18B20 (1-Wire)
 #define ONE_WIRE_BUS 4
 OneWire oneWire(ONE_WIRE_BUS);
