@@ -31,13 +31,18 @@ inline void NetworkMenu() { // Display the network configuration menu
   Serial.print(F("\033[2J\033[H\n"));
   if (Net_useWifi == 1) {
     Serial.println(F("WiFi Enabled  : Yes"));
+    Serial.print(F("WiFi SSID     : ")); Serial.println(Net_wifiSSID);
+    Serial.print(F("WiFi Password : ")); Serial.println(Net_wifiPW);
     Serial.println("WiFi Channel  : " + String(WiFi.channel()));
-    Serial.println("WiFi Signal   : " + String(WiFi.RSSI()));
+    Serial.println("WiFi Signal   : " + String(WiFi.RSSI()) + "\n");
   } else {
     Serial.println(F("WiFi Enabled  : No"));
+    if (ethConnected) {
+      Serial.println(F("Ethernet Up   : Yes\n"));
+    } else {
+      Serial.println(F("Ethernet Up   : No\n"));
+    }
   }
-  Serial.print(F("WiFi SSID     : ")); Serial.println(Net_wifiSSID);
-  Serial.print(F("WiFi Password : ")); Serial.println(Net_wifiPW + "\n");
   if (Net_useDHCP == 1) {
     Serial.println(F("Use DHCP      : Yes"));
   } else {
