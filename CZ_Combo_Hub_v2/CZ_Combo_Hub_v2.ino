@@ -52,6 +52,9 @@
 //------------------------------------------------------------------------------------------------
 // Flash memory initialization
 Preferences preferences;
+// Server instances
+WiFiServer wifiServer(80);
+EthernetServer ethServer(80);
 // SSD1306 configuration
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
@@ -81,6 +84,9 @@ const int inputPins[8] = {34,35,36,39,12,13,14,15};
 // Relays (3.3V SSRs)
 const int relayPins[8] = {3,9,10,11,26,27,21,22}; // relayPins[1] will not work if a serial configuration is active
 //------------------------------------------------------------------------------------------------
+bool spiStarted = false;         // Work-around since "if (SPI)" doesn't convert to a boolean value
+bool ethConnected = false;       // Used for tracking the ethernet port connected status
+byte ethMAC[6];                  // Placeholder for the ethernet interface MAC address
 int ActiveMenu = 0;              // Used for tracking which serial config menu is in use
 int ActivePage = 0;              // Used for tracking which OLED screen page to display
 int CZ_pingFailures = 5;         // How many consecutive ping failures required for a reboot
@@ -137,6 +143,13 @@ void setup() {
 
   // Initialize Dallas Temperature bus
   DT.begin();
+
+  // Copy the WiFi MAC address for use with the W5500
+  WiFi.macAddress(ethMAC);
+
+  if (! StartNetwork()) {
+    Serial.println(F("Network connection failed!"));
+  }
 
   // Splash screen
   display.clearDisplay();
@@ -213,79 +226,83 @@ void SetMemory() { // Update flash memory with the current configuration setting
   preferences.end();
 }
 //------------------------------------------------------------------------------------------------
-void ConnectWiFi() { // Connect to WiFi network, must be WPA2-PSK, not WPA3
-  /*
-  byte x = 0;
-  WiFi.mode(WIFI_STA);
-  if (Net_useDHCP == o) {
-    bool Passed = true;
-    int segCount = 0;
+bool StartNetwork() {
+  bool Result = true;
+  IPAddress staticIP;
+  IPAddress subnet;
+  IPAddress gateway;
+  IPAddress dns;
+
+  if (wifiServer) wifiServer.end();
+  if (ethServer) ethServer.end();
+
+  if (Net_useDHCP == 0) {
     int ipSegments[4];
     int maskSegments[4];
     int gwSegments[4];
     int dnsSegments[4];
-    segCount = sscanf(Net_IP.c_str(),"%d.%d.%d.%d",&ipSegments[0],&ipSegments[1],&ipSegments[2],&ipSegments[3]);
-    if (segCount != 4) {
-      if (Serial) Serial.println("\nCannot parse static IP address!");
-      Passed = false;
-    }
-    segCount = sscanf(Net_Mask.c_str(),"%d.%d.%d.%d",&maskSegments[0],&maskSegments[1],&maskSegments[2],&maskSegments[3]);
-    if (segCount != 4) {
-      if (Serial) Serial.println("\nCannot parse subnet mask!");
-      Passed = false;
-    }
-    segCount = sscanf(Net_Gateway.c_str(),"%d.%d.%d.%d",&gwSegments[0],&gwSegments[1],&gwSegments[2],&gwSegments[3]);
-    if (segCount != 4) {
-      if (Serial) Serial.println("\nCannot parse gateway address!");
-      Passed = false;
-    }
-    segCount = sscanf(Net_DNS.c_str(),"%d.%d.%d.%d",&dnsSegments[0],&dnsSegments[1],&dnsSegments[2],&dnsSegments[3]);
-    if (segCount != 4) {
-      if (Serial) Serial.println("\nCannot parse DNS resolver address!");
-      Passed = false;
-    }
-    if (Passed) {
-      IPAddress staticIP(ipSegments[0],ipSegments[1],ipSegments[2],ipSegments[3]);
-      IPAddress subnet(maskSegments[0],maskSegments[1],maskSegments[2],maskSegments[3]);
-      IPAddress gateway(gwSegments[0],gwSegments[1],gwSegments[2],gwSegments[3]);
-      IPAddress dns(dnsSegments[0],dnsSegments[1],dnsSegments[2],dnsSegments[3]);
-      if (! WiFi.config(staticIP,gateway,subnet,dns,dns)) {
-        if (Serial) Serial.println("\nWiFi static IP configuration failed!");
-        delay(2000);
-      }
-    } else {
-      delay(2000);
+    sscanf(Net_IP.c_str(),"%d.%d.%d.%d",&ipSegments[0],&ipSegments[1],&ipSegments[2],&ipSegments[3]);
+    sscanf(Net_Mask.c_str(),"%d.%d.%d.%d",&maskSegments[0],&maskSegments[1],&maskSegments[2],&maskSegments[3]);
+    sscanf(Net_Gateway.c_str(),"%d.%d.%d.%d",&gwSegments[0],&gwSegments[1],&gwSegments[2],&gwSegments[3]);
+    sscanf(Net_DNS.c_str(),"%d.%d.%d.%d",&dnsSegments[0],&dnsSegments[1],&dnsSegments[2],&dnsSegments[3]);
+    staticIP = IPAddress(ipSegments[0],ipSegments[1],ipSegments[2],ipSegments[3]);
+    subnet = IPAddress(maskSegments[0],maskSegments[1],maskSegments[2],maskSegments[3]);
+    gateway = IPAddress(gwSegments[0],gwSegments[1],gwSegments[2],gwSegments[3]);
+    dns = IPAddress(dnsSegments[0],dnsSegments[1],dnsSegments[2],dnsSegments[3]);
+    if (Net_useWifi == 1) {
+      WiFi.config(staticIP,gateway,subnet,dns,dns);
     }
   }
-  WiFi.setHostname(CZ_deviceName.c_str());
-  WiFi.begin(Net_wifiSSID,Net_wifiPW);
-  if (Serial) Serial.print("\nConnecting to WiFi ..");
-  while (WiFi.status() != WL_CONNECTED) {
-    if (Serial) Serial.print('.');
-    delay(1000);
-    x ++;
-    if (x == 15) break;
-  }
-  if (WiFi.status() == WL_CONNECTED) {
-    Server.begin();
-    wifiIP = WiFi.localIP().toString();
-    wifiMask = WiFi.subnetMask().toString();
-    wifiGateway = WiFi.gatewayIP().toString();
-    wifiDNS = WiFi.dnsIP(0).toString();
-    SlavesPinging = PingAllSlaves();
-  } else {
-    wifiIP = "";
-    wifiMask = "";
-    wifiGateway = "";
-    wifiDNS = "";
-    if (Serial) Serial.println("\nConnection Failed!");
-    delay(2000);
-  }
-  */
-}
-//------------------------------------------------------------------------------------------------
-void StartNetwork() {
 
+  if (Net_useWifi == 1) {
+    WiFi.begin(Net_wifiSSID,Net_wifiPW);
+    unsigned long startTime = millis();
+    Serial.print("\nConnecting to " + Net_wifiSSID + ":");
+    while (WiFi.status() != WL_CONNECTED && millis() - startTime < 10000) {
+      delay(500);
+      Serial.print(F("."));
+    }
+    if (WiFi.status() != WL_CONNECTED) {
+      Serial.print(F("\nWiFi connection failed"));
+      Result = false;
+    } else {
+      Serial.print(F("\nWiFi connected"));
+      Net_IP = WiFi.localIP().toString();
+      Net_Mask = WiFi.subnetMask().toString();
+      Net_Gateway = WiFi.gatewayIP().toString();
+      Net_DNS = WiFi.dnsIP(0).toString();
+      wifiServer.begin();
+    }
+    delay(1000);
+  } else {
+    if (spiStarted) {
+      spiStarted = false;
+      SPI.end();
+    }
+    if (! spiStarted) {
+      spiStarted = true;
+      SPI.begin(SPI_SCK,SPI_MISO,SPI_MOSI,ETH_CS);
+    }
+    Ethernet.init(ETH_CS);
+    if (Ethernet.linkStatus() == LinkON) {
+      ethConnected = true;
+      if (Net_useDHCP == 0) {
+        Ethernet.begin(ethMAC,staticIP,dns,gateway,subnet);
+      } else {
+        if (Ethernet.begin(ethMAC) == 0) {
+          Result = false;
+          ethConnected = false;
+        }
+      }
+      if (ethConnected) ethServer.begin();
+    } else {
+      Result = false;
+      ethConnected = false;
+      spiStarted = false;
+      SPI.end();
+    }
+  }
+  return Result;
 }
 //------------------------------------------------------------------------------------------------
 String GetDHT22(byte WhichOne) { // Get humidity and temperature from the DHT22
