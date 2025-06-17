@@ -94,6 +94,22 @@ inline String getRemoteSensor(int ID, String Payload) {
   }
 }
 //------------------------------------------------------------------------------------------------
+inline String getRelay(int ID, String Relay) {
+  if (ID > 0) {
+    return QuerySlave(ID,"/0/relay-state/" + Relay);
+  } else {
+    return GetRelay(Relay.toInt());
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline String getSwitch(int ID, String Switch) {
+  if (ID > 0) {
+    return QuerySlave(ID,"/0/switch/" + Switch);
+  } else {
+    return GetSwitch(Switch.toInt());
+  }
+}
+//------------------------------------------------------------------------------------------------
 inline String getTemperature(int ID, String Format) {
   if (ID > 0) {
     return QuerySlave(ID,"/0/temperature/" + Format);
@@ -103,14 +119,6 @@ inline String getTemperature(int ID, String Format) {
     } else {
       return GetDHT22(3);
     }
-  }
-}
-//------------------------------------------------------------------------------------------------
-inline String getSwitch(int ID, String Switch) {
-  if (ID > 0) {
-    return QuerySlave(ID,"/0/switch/" + Switch);
-  } else {
-    return GetSwitch(Switch.toInt());
   }
 }
 //------------------------------------------------------------------------------------------------
@@ -208,6 +216,8 @@ inline String handleWebRequest(String Msg) {
     if (partCount == 2) Result = rebootHub(parts[0].toInt());
   } else if (parts[1] == "relay") {
     if (partCount == 4) Result = setRelay(parts[0].toInt(),parts[2],parts[3]);
+  } else if (parts[1] == "relay-state") {
+    if (partCount == 3) Result = getRelay(parts[0].toInt(),parts[2]);
   } else if (parts[1] == "switch") {
     if (partCount == 3) Result = getSwitch(parts[0].toInt(),parts[2]);
   } else if (parts[1] == "temperature") {
