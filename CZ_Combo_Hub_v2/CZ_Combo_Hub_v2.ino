@@ -388,8 +388,35 @@ void ScreenUpdate() {
 #include "lora_wan.h"            // Inline function library for the LoRa WAN functions
 #include "serial_config.h"       // Inline function library for system configutation via serial
 //------------------------------------------------------------------------------------------------
-void loop() {
+void handleClient(Client& client) {
   String Msg = "";
+  if (client) {
+    while (client.connected()) {
+      if (client.available()) {
+        char c = client.read();
+        if (c == '\n') {
+          break;
+        } else {
+          if (c != '\r') Msg += c;
+        }
+      }
+    }
+  }
+  if (Msg.length() > 0) {
+    Msg.remove(0,4); // Delete the "GET " from the beginning
+    Msg.remove(Msg.indexOf(" HTTP/1.1"),9); // Delete the " HTTP/1.1" from the end
+    client.println(handleWebRequest(Msg));
+    if ((LoRa_Mode == 0) && (Msg == "Rebooting...")) {
+      delay(2000);
+      ESP.restart();
+    } else if ((LoRa_Mode == 1) && (Msg == "Restarting...")) {
+      delay(2000);
+      ESP.restart();
+    }
+  }
+}
+//------------------------------------------------------------------------------------------------
+void loop() {
   long CurrentTime = millis();
   Uptime = formatMillis(CurrentTime);
   if (CurrentTime > 4200000000) {
@@ -407,21 +434,21 @@ void loop() {
   // Check for user input from the serial configuration system
   if ((Serial) && (Serial.available())) SerialConfigInput();
 
-  // Check for web API calls
-  // Msg.remove(0,4); // Delete the "GET " from the beginning
-  // Msg.remove(Msg.indexOf(" HTTP/1.1"),9); // Delete the " HTTP/1.1" from the end
-  // Client.println(handleWebRequest(Msg));
-  // if ((LoRa_Mode == 0) && (Msg == "Rebooting...")) {
-  //   delay(2000);
-  //   ESP.restart();
-  // } else if ((LoRa_Mode == 1) && (Msg == "Restarting...")) {
-  //   delay(2000);
-  //   ESP.restart();
-  // }
+  // Check for web API calls from Climate Czar Server
+  if (Net_useWifi == 1) {
+    WiFiClient client = wifiServer.available();
+    handleClient(client);
+  } else {
+    EthernetClient client = ethServer.available();
+    handleClient(client);
+    if (Net_useDHCP == 1) {
+      Ethernet.maintain();
+    }
+  }
 
   // Check for LoRa slave API calls from the master hub
   if ((Serial2) && (Serial2.available())) {
-    Msg = handleSlaveRequest();
+    String Msg = handleSlaveRequest();
     Serial2.println("AT+SEND=1," + String(Msg.length()) + "," + Msg);
   }
 
@@ -430,10 +457,9 @@ void loop() {
     ScreenUpdate();
     ScreenTimer = millis();
   }
-  // If this is a master, ping test the watchdog host every minute and reboot the hub if necessary
+  // If this is a master unit, ping test the watchdog host every minute and reboot the hub if necessary
   if (CurrentTime - PingTimer >= 60000) {
     digitalWrite(LED,HIGH);
-    /*
     if (LoRa_Mode == 0) {
       bool PingTest = Ping.ping(CZ_Watchdog.c_str(),2);
       if (! PingTest) {
@@ -443,7 +469,6 @@ void loop() {
       }
       if (PingFailures == CZ_pingFailures) ESP.restart();
     }
-    */
     PingTimer = millis();
     digitalWrite(LED,LOW);
   }
