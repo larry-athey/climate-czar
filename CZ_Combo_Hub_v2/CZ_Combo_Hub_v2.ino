@@ -368,9 +368,17 @@ String GetSwitch(byte WhichOne) { // Get the on/off status of one of the eight s
   return String(digitalRead(inputPins[WhichOne]));
 }
 //------------------------------------------------------------------------------------------------
+String GetRelay(byte WhichOne) { // Get the on/off status of one of the eight relay ports
+  WhichOne --;
+  if ((Serial) && (WhichOne == 0)) return "1010";
+  pinMode(WhichOne,OUTPUT);
+  return String(digitalRead(relayPins[WhichOne]));
+}
+//------------------------------------------------------------------------------------------------
 void SetRelay(byte WhichOne, byte State) { // Set one of the eight relays ports on or off
   WhichOne --;
   if ((Serial) && (WhichOne == 0)) return;
+  pinMode(WhichOne,OUTPUT);
   digitalWrite(relayPins[WhichOne],State);
 }
 //------------------------------------------------------------------------------------------------
