@@ -4,7 +4,7 @@
 // Inline functions used for modular unit organization
 //------------------------------------------------------------------------------------------------
 inline void LoRa_Init() { // Initialize the RYLR998 modem after configuration changes
-  Serial2.println("AT+RESET");
+  Serial2.println(F("AT+RESET"));
   delay(500);
   Serial2.println("AT+NETWORKID=" + LoRa_Network);
   delay(100);
@@ -32,10 +32,10 @@ inline String handleSlaveRequest() {
         if (thirdComma > secondComma) {
           String message = incoming.substring(secondComma + 1,thirdComma);
               
-          // Example: Respond with a fixed message (modify as needed)
-          String reply = "ACK:" + message; // Acknowledge with received message
-          String command = "AT+SEND=1," + String(reply.length()) + "," + reply;
-          Serial2.println(command);
+          // Debugging ACK message
+          //String reply = "ACK:" + CZ_deviceName;
+          //String command = "AT+SEND=1," + String(reply.length()) + "," + reply;
+          //Serial2.println(command);
               
           Result = handleWebRequest(message);
           digitalWrite(LED,LOW);
