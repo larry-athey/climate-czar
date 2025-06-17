@@ -156,7 +156,7 @@ inline String handleWebRequest(String Msg) {
 
   // Count "/" delimiters
   int delimiterCount = 0;
-  for (int i = 0; i < Msg.length(); i++) {
+  for (int i = 0; i < Msg.length(); i ++) {
     if (Msg[i] == '/') delimiterCount++;
   }
 
@@ -173,8 +173,14 @@ inline String handleWebRequest(String Msg) {
       break;
     }
     parts[partCount] = Msg.substring(startIndex,endIndex);
-    partCount++;
+    partCount ++;
     startIndex = endIndex + 1;
+  }
+
+  if (parts[0].length() == 0) {
+    for (int i = 0; i < partCount; i ++) {
+      parts[i] = parts[i + 1];
+    }
   }
 
   digitalWrite(LED,HIGH);
