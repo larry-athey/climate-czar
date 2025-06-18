@@ -23,3 +23,7 @@ Below are explanations of all available web API calls. All of these calls are ca
 **/hub-id/light/format** - Returns the ambient light level detected at the selected hub in the specified format, "0" for Lux or "1" for percentage.
 
 **/hub-id/lora-sensor/payload** - Returns the reading from any dedicated LoRa WAN stand-alone sensor. These sensors still use the same LoRa WAN addressing scheme as a Combo Hub, ID #1 is reserved for the master hub, all other devices use LoRa WAN ID values 2 through 65535. The **"payload"** field is a free-form message and can be anything that the LoRa WAN sensor requires.
+
+**/hub-id/reboot** - Reboots the selected hub.
+
+**/hub-id/relay/which-one/state** - Toggles the on/off state of a selected relay at the selected hub. **"which-one"** is a value of 1 to 16, **"state"** is 1 for on and 0 for off.
