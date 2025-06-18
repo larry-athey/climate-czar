@@ -38,6 +38,7 @@
 // Climate Czar Combo Hub is now a far more sophisticated device and much easier to implement in
 // your greenhouse or indoor grow operation. Until a printed circuit board is available, they're a
 // bit of a lesson in patience to build because of about 40 wires that need to be cut & soldered.
+// Luckily, there's no complicated electronics work involved, it's just point-to-point wiring.
 //------------------------------------------------------------------------------------------------
 #include "Preferences.h"         // ESP32 Flash memory read/write library
 #include "SPI.h"                 // SPI bus library
@@ -63,8 +64,8 @@ EthernetServer ethServer(80);
 #define OLED_ADDRESS 0x3C
 Adafruit_SSD1306 display(SCREEN_WIDTH,SCREEN_HEIGHT,&Wire,-1);
 // I2C pins
-#define SDA_PIN 33
-#define SCL_PIN 32
+#define SDA_PIN 21
+#define SCL_PIN 22
 // MCP23017 I2C address
 #define MCP_ADDR 0x20
 Adafruit_MCP23X17 mcp;
@@ -79,13 +80,13 @@ DHTesp dhtSensor;
 #define SPI_MOSI 23
 #define SPI_MISO 19
 #define SPI_SCK 18
-#define ETH_CS 25
+#define ETH_CS 32
 // Status LED
 #define LED 2
 // Screen page button
 #define BTN 0
 // Inputs (digital switches)
-const int inputPins[8] = {26,27,14,12,13,15,21,22};
+const int inputPins[8] = {33,25,26,27,14,12,13,15,33,25};
 //------------------------------------------------------------------------------------------------
 bool spiStarted = false;         // Work-around since "if (SPI)" doesn't convert to a boolean value
 bool ethConnected = false;       // Used for tracking the ethernet port connected status
