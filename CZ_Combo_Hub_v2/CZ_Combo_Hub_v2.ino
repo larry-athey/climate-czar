@@ -74,19 +74,19 @@ Adafruit_MCP23X17 mcp;
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature DT(&oneWire);
 // DHT22
-#define DHT_PIN 5
+#define DHT_PIN 15
 DHTesp dhtSensor;
 // W5500 Ethernet (SPI)
 #define SPI_MOSI 23
 #define SPI_MISO 19
 #define SPI_SCK 18
-#define ETH_CS 32
+#define ETH_CS 5
 // Status LED
 #define LED 2
 // Screen page button
 #define BTN 0
 // Inputs (digital switches)
-const int inputPins[8] = {33,25,26,27,14,12,13,15,33,25};
+const int inputPins[8] = {32,33,25,26,27,14,12,13};
 //------------------------------------------------------------------------------------------------
 bool spiStarted = false;         // Work-around since "if (SPI)" doesn't convert to a boolean value
 bool ethConnected = false;       // Used for tracking the ethernet port connected status
