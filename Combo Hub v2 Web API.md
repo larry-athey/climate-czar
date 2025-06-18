@@ -14,4 +14,6 @@ Example Climate Czar Server web API calls:
 
 **/hub-id/device-name** - Returns the device name of the selected hub.
 
+**/hub-id/ds18b20/address/format** - Returns the temperature of a DS18B20 temperature sensor connected to the selected hub in the specified format "c" or "f".
+
 **/hub-id/humidity** - Returns the humidity level detected at the selected hub.
