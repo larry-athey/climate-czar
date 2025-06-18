@@ -4,9 +4,9 @@ As of the 100% rewrite of the Climate Czar Combo Hub source code, a completely n
 
 Example Climate Czar Server web API calls:
 
-`curl -s -m 5 --http0.9 http://192.168.1.100/0/humidity` (get humidity from the master hub)<br>
-`curl -s -m 5 --http0.9 http://192.168.1.100/1/humidity` (get humidity from the first slave hub)<br>
-`curl -s -m 5 --http0.9 http://192.168.1.100/2/humidity` (get humidity from the second slave hub)<br>
+`curl -s -m 5 --http0.9 http://ip-address/0/humidity` (get humidity from the master hub)<br>
+`curl -s -m 5 --http0.9 http://ip-address/1/humidity` (get humidity from the first slave hub)<br>
+`curl -s -m 5 --http0.9 http://ip-address/2/humidity` (get humidity from the second slave hub)<br>
 
 `-s` tells curl run silently and not output download progress<br>
 `-m 5` tells curl to time out the connection attempt after 5 seconds<br>
