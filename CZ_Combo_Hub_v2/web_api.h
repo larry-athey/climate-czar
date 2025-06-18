@@ -10,9 +10,6 @@
 // curl -s -m 5 --http0.9 http://192.168.1.100/2/humidity (get humidity from the second slave hub)
 //
 //------------------------------------------------------------------------------------------------
-inline String jsonSuccess = "{\"status\": \"success\",\"message\": \"Operation completed successfully\"}";
-inline String jsonFailure = "{\"status\": \"error\",\"message\": \"Operation failed\"}";
-//------------------------------------------------------------------------------------------------
 inline String QuerySlave(int ID, String Msg) {
   String Result = jsonFailure;
   long timeout = millis() + 4000; // 4-second timeout

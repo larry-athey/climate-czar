@@ -67,6 +67,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH,SCREEN_HEIGHT,&Wire,-1);
 #define SCL_PIN 32
 // MCP23017 I2C address
 #define MCP_ADDR 0x20
+Adafruit_MCP23X17 mcp;
 // DS18B20 (1-Wire)
 #define ONE_WIRE_BUS 4
 OneWire oneWire(ONE_WIRE_BUS);
@@ -84,9 +85,7 @@ DHTesp dhtSensor;
 // Screen page button
 #define BTN 0
 // Inputs (digital switches)
-const int inputPins[8] = {34,35,36,39,12,13,14,15};
-// Relays (3.3V SSRs)
-const int relayPins[8] = {3,9,10,11,26,27,21,22}; // relayPins[1] will not work if a serial configuration is active
+const int inputPins[8] = {26,27,14,12,13,15,21,22};
 //------------------------------------------------------------------------------------------------
 bool spiStarted = false;         // Work-around since "if (SPI)" doesn't convert to a boolean value
 bool ethConnected = false;       // Used for tracking the ethernet port connected status
@@ -125,14 +124,19 @@ void setup() {
   }
 
   // Initialize inputs/outputs
-  for (int i = 0; i <= 7; i++) {
+  for (int i = 0; i <= 7; i ++) {
     pinMode(inputPins[i],INPUT_PULLUP); // Switch grounds the pin to register 1=true in the web API
-    digitalWrite(relayPins[i],HIGH);
-    digitalWrite(relayPins[i],LOW);
   }
   pinMode(BTN,INPUT_PULLUP);
   pinMode(LED,OUTPUT);
   digitalWrite(LED,LOW);
+
+  // Initialize MCP23017
+  mcp.begin_I2C(MCP_ADDR);
+  for (int i = 0; i <= 15; i ++) {
+    mcp.pinMode(i,OUTPUT);
+    mcp.digitalWrite(i,LOW);
+  }
 
   // Inidialize I2C
   Wire.begin(SDA_PIN,SCL_PIN);
@@ -366,23 +370,28 @@ String GetBH1750(byte WhichOne) { // Get ambient light level from the BH1750
   }
 }
 //------------------------------------------------------------------------------------------------
-String GetSwitch(byte WhichOne) { // Get the on/off status of one of the eight switch ports
+String GetRelay(byte WhichOne) { // Get the on/off status of one of the 16 relay ports
   WhichOne --;
-  return String(digitalRead(inputPins[WhichOne]));
+  if (WhichOne > 15) return jsonFailure;
+  return String(mcp.digitalRead(WhichOne));
 }
 //------------------------------------------------------------------------------------------------
-String GetRelay(byte WhichOne) { // Get the on/off status of one of the eight relay ports
+String GetSwitch(byte WhichOne) { // Get the on/off status of one of the eight switch ports
   WhichOne --;
-  if ((Serial) && (WhichOne == 0)) return "1010";
-  pinMode(WhichOne,OUTPUT);
-  return String(digitalRead(relayPins[WhichOne]));
+  if (WhichOne > 7) return jsonFailure;
+  byte State = digitalRead(inputPins[WhichOne]);
+  if (State == 0) {
+    State = 1;
+  } else if (State == 1) {
+    State = 0;
+  }
+  return String(State);
 }
 //------------------------------------------------------------------------------------------------
 void SetRelay(byte WhichOne, byte State) { // Set one of the eight relays ports on or off
   WhichOne --;
-  if ((Serial) && (WhichOne == 0)) return;
-  pinMode(WhichOne,OUTPUT);
-  digitalWrite(relayPins[WhichOne],State);
+  if (WhichOne > 15) return
+  mcp.digitalWrite(WhichOne,State);
 }
 //------------------------------------------------------------------------------------------------
 void ScreenUpdate() {

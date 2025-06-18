@@ -3,6 +3,9 @@
 //
 // Inline functions used for modular unit organization
 //------------------------------------------------------------------------------------------------
+inline String jsonSuccess = "{\"status\": \"success\",\"message\": \"Operation completed successfully\"}";
+inline String jsonFailure = "{\"status\": \"error\",\"message\": \"Operation failed\"}";
+//------------------------------------------------------------------------------------------------
 inline String addressToString(uint8_t deviceAddress[8]) { // Converts DS18B20 8 byte array address to a string
   String addressStr = "";
   for (int i = 0; i < 8; i++) {
