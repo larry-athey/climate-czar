@@ -12,7 +12,7 @@ Example Climate Czar Server web API calls:
 `-m 5` tells curl to time out the connection attempt after 5 seconds<br>
 `--http0.9` tells curl to use a pre version 1.0 HTTP call for compatibility safety<br>
 
-Below are explanations of all available web API calls. All of these calls are case sensitive, there is no AI at work here to decide if you're just "close enough". Breaking the rules will result in a JSON formatted error message being returned.
+Below are explanations of all available web API calls. All of these calls are case sensitive, there is no AI at work here to decide if you're just "close enough". Breaking the rules will result in a JSON formatted failure message being returned.
 
 **/hub-id/device-name** - Returns the device name of the selected hub.
 
@@ -26,4 +26,4 @@ Below are explanations of all available web API calls. All of these calls are ca
 
 **/hub-id/reboot** - Reboots the selected hub.
 
-**/hub-id/relay/which-one/state** - Toggles the on/off state of a selected relay at the selected hub. **"which-one"** is a value of 1 to 16, **"state"** is 1 for on and 0 for off.
+**/hub-id/relay/which-one/state** - Toggles the on/off state of a selected relay at the selected hub. **"which-one"** is a value of 1 to 16, **"state"** is 1 for on and 0 for off. Returns a JSON formatted success or failure message.
