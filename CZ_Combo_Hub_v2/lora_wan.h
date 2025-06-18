@@ -14,7 +14,6 @@ inline void LoRa_Init() { // Initialize the RYLR998 modem after configuration ch
 //------------------------------------------------------------------------------------------------
 inline String handleSlaveRequest() {
   String Result = jsonFailure;
-  digitalWrite(LED,HIGH);
 
   String incoming = Serial2.readStringUntil('\n');
   // Check if the message is a received LoRa message
@@ -38,14 +37,12 @@ inline String handleSlaveRequest() {
           //Serial2.println(command);
               
           Result = handleWebRequest(message);
-          digitalWrite(LED,LOW);
           return Result; // Return the master hub's request
         }
       }
     }
   }
 
-  digitalWrite(LED,LOW);
   return Result;
 }
 //------------------------------------------------------------------------------------------------

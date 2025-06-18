@@ -484,7 +484,6 @@ void loop() {
   }
   // If this is a master unit, ping test the watchdog host every minute and reboot the hub if necessary
   if (CurrentTime - PingTimer >= 60000) {
-    digitalWrite(LED,HIGH);
     if (LoRa_Mode == 0) {
       bool PingTest = Ping.ping(CZ_Watchdog.c_str(),2);
       if (! PingTest) {
@@ -495,7 +494,6 @@ void loop() {
       if (PingFailures == CZ_pingFailures) ESP.restart();
     }
     PingTimer = millis();
-    digitalWrite(LED,LOW);
   }
 }
 //------------------------------------------------------------------------------------------------

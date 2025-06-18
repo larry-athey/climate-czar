@@ -194,7 +194,6 @@ inline String handleWebRequest(String Msg) {
     }
   }
 
-  digitalWrite(LED,HIGH);
   // parts[0] : Device ID, 0=local, anything else is a LoRa slave number
   // parts[1] : The request type identifier
   // parts[2..(partCount-1)] : Any additional parameters for the request type 
@@ -223,7 +222,6 @@ inline String handleWebRequest(String Msg) {
   } else if (parts[1] == "wifi-stats") {
     if (partCount == 2) Result = getWifiStats(parts[0].toInt());
   }
-  digitalWrite(LED,LOW);
 
   return Result;
 }
