@@ -10,4 +10,4 @@ Example Climate Czar Server web API calls:
 
 `-s` tells curl not to output download progress<br>
 `-m 5` tells curl to time out after 5 seconds<br>
-`--http0.9` tells curl to use a pre version 1 HTTP call<br>
+`--http0.9` tells curl to use a pre version 1.0 HTTP call<br>
