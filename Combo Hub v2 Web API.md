@@ -11,3 +11,7 @@ Example Climate Czar Server web API calls:
 `-s` tells curl run silently and not output download progress<br>
 `-m 5` tells curl to time out the connection attempt after 5 seconds<br>
 `--http0.9` tells curl to use a pre version 1.0 HTTP call for compatibility safety<br>
+
+**/hub-id/device-name** - Returns the device name of the selected hub.
+
+**/hub-id/humidity** - Returns the humidity level detected at the selected hub.
