@@ -12,8 +12,10 @@ Example Climate Czar Server web API calls:
 `-m 5` tells curl to time out the connection attempt after 5 seconds<br>
 `--http0.9` tells curl to use a pre version 1.0 HTTP call for compatibility safety<br>
 
+Below are explainations of all available web API calls. All of these calls are case sensitive, there is no AI at work here to decide if you're just "close enough".
+
 **/hub-id/device-name** - Returns the device name of the selected hub.
 
-**/hub-id/ds18b20/address/format** - Returns the temperature of a DS18B20 temperature sensor connected to the selected hub in the specified format "c" or "f".
+**/hub-id/ds18b20/address/format** - Returns the temperature of a DS18B20 temperature sensor connected to the selected hub in the specified format "c" or "f". Sensor identification is done using option 4 in the serial configuration main menu.
 
 **/hub-id/humidity** - Returns the humidity level detected at the selected hub.
