@@ -29,3 +29,5 @@ Below are explanations of all available web API calls. All of these calls are ca
 **/hub-id/relay/which-one/state** - Toggles the on/off state of a specified relay at the selected hub. **"which-one"** is a value of 1 to 16, **"state"** is 1 for on and 0 for off. Returns a JSON formatted success or failure message.
 
 **/hub-id/relay-state/which-one** - Returns the on/off state of a specified relay at the selected hub. **"which-one"** is a value of 1 to 16.
+
+**/hub-id/switch/which-one** - Returns the on/off state of a specified switch port at the selected hub. **"which-one"** is a value of 1 to 8.
