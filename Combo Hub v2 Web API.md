@@ -16,7 +16,7 @@ Below are explanations of all available web API calls. All of these calls are ca
 
 **/hub-id/device-name** - Returns the device name of the selected hub.
 
-**/hub-id/ds18b20/address/format** - Returns the temperature of a DS18B20 temperature sensor connected to the selected hub in the specified format "c" or "f". Sensor address identification is done using option 4 in the serial configuration main menu. Use ice water to determine which sensor is under test.
+**/hub-id/ds18b20/address/format** - Returns the temperature of a DS18B20 temperature sensor connected to the selected hub in the specified format "c" or "f". Sensor address identification is done using option 4 in the serial configuration main menu. Use ice water to determine which sensor is under test and make a note of its address.
 
 **/hub-id/humidity** - Returns the humidity level detected at the selected hub.
 
