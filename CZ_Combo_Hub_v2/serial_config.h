@@ -17,7 +17,6 @@
 //------------------------------------------------------------------------------------------------
 inline void ConfigMenu() { // Display the main configuration menu
   Serial.print(F("\033[2J\033[H\n"));
-  Serial.println(F("-=> NOTE: Power cylce the hub after disconnecting your USB connection! <=-\n\n"));
   Serial.println(F("Main Configuration Menu:\n"));
   Serial.println(F("  1. TCP/IP Settings"));
   Serial.println(F("  2. LoRa WAN Settings"));
