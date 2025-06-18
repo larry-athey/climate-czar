@@ -127,7 +127,7 @@ void setup() {
   // Initialize inputs/outputs
   for (int i = 0; i <= 7; i ++) {
     pinMode(inputPins[i],INPUT_PULLUP); // Switch grounds the pin to register 1=true in the web API
-  }
+  }                                     // 4.7K to 10K pullup resistors to +3.3 may still be needed
   pinMode(BTN,INPUT_PULLUP);
   pinMode(LED,OUTPUT);
   digitalWrite(LED,LOW);
