@@ -390,10 +390,11 @@ String GetSwitch(byte WhichOne) { // Get the on/off status of one of the eight s
   return String(State);
 }
 //------------------------------------------------------------------------------------------------
-void SetRelay(byte WhichOne, byte State) { // Set one of the eight relays ports on or off
+String SetRelay(byte WhichOne, byte State) { // Set one of the eight relays ports on or off
   WhichOne --;
-  if (WhichOne > 15) return
+  if (WhichOne > 15) return jsonFailure;
   mcp.digitalWrite(WhichOne,State);
+  return jsonSuccess;
 }
 //------------------------------------------------------------------------------------------------
 void ScreenUpdate() {
