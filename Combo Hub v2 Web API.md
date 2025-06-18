@@ -34,6 +34,6 @@ Below are explanations of all available web API calls. All of these calls are ca
 
 **/hub-id/temperature/format** - Returns the temperature detected at the selected hub in the specified format "c" or "f".
 
-**/hub-id/device-name** - Returns the device uptime at the selected hub.
+**/hub-id/uptime** - Returns the device uptime at the selected hub.
 
 **/hub-id/wifi-stats** - Returns the device WiFi stats of the selected hub, returns the channel number and signal level.
