@@ -31,3 +31,5 @@ Below are explanations of all available web API calls. All of these calls are ca
 **/hub-id/relay-state/which-one** - Returns the on/off state of a specified relay port at the selected hub. **"which-one"** is a value of 1 to 16.
 
 **/hub-id/switch/which-one** - Returns the on/off state of a specified switch port at the selected hub. **"which-one"** is a value of 1 to 8.
+
+**/hub-id/temperature/format** - Returns the temperature detected at the selected hub in the specified format "c" or "f".
