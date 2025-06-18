@@ -8,6 +8,6 @@ Example Climate Czar Server web API calls:
 `curl -s -m 5 --http0.9 http://192.168.1.100/1/humidity` (get humidity from the first slave hub)<br>
 `curl -s -m 5 --http0.9 http://192.168.1.100/2/humidity` (get humidity from the second slave hub)<br>
 
-`-s` tells curl not to output download progress
-`-m 5` tells curl to time out after 5 seconds
-`--http0.9` tells curl to use a pre version 1 HTTP call
+`-s` tells curl not to output download progress<br>
+`-m 5` tells curl to time out after 5 seconds<br>
+`--http0.9` tells curl to use a pre version 1 HTTP call<br>
