@@ -6,6 +6,8 @@ Live demo at https://greenhouse.panhandleponics.com/cz/?CZ_THEME=1
 You may also contact me directly at https://panhandleponics.com<br>
 Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandlePonics<br>
 
+_**NOTE:** The CZ Pellet Stove controller will soon be rewritten soon to run on a standard LiylGo T-Display S3 ESP32 just like the CZ Outdoor Monitor. The reason being, SD cards use in Raspberry Pi (and clone) SBCs have a limited lifespan. While it's easy to create a new SD card and install the system on it, this still presents an unnecessary inevitable point of failure._
+
 ![image](https://github.com/user-attachments/assets/7b411953-9304-4b04-ab87-2358f437c058)
 ---
 
