@@ -6,8 +6,8 @@
 // Example Climate Czar Server web API calls:
 //
 // curl -s -m 5 --http0.9 http://192.168.1.100/0/humidity (get humidity from the master hub)
-// curl -s -m 5 --http0.9 http://192.168.1.100/1/humidity (get humidity from the first slave hub)
-// curl -s -m 5 --http0.9 http://192.168.1.100/2/humidity (get humidity from the second slave hub)
+// curl -s -m 5 --http0.9 http://192.168.1.100/2/humidity (get humidity from the first slave hub)
+// curl -s -m 5 --http0.9 http://192.168.1.100/3/humidity (get humidity from the second slave hub)
 //
 //------------------------------------------------------------------------------------------------
 inline String QuerySlave(int ID, String Msg) {
@@ -194,10 +194,12 @@ inline String handleWebRequest(String Msg) {
     }
   }
 
+  if (parts[0].toInt() == 1) return Result; // LoRa ID 1 is the master hub and must be addressed as unit zero
+
   // parts[0] : Device ID, 0=local, anything else is a LoRa slave number
   // parts[1] : The request type identifier
   // parts[2..(partCount-1)] : Any additional parameters for the request type 
-  if (parts[1] == "devicename") {
+  if (parts[1] == "device-name") {
     if (partCount == 2) Result = getDeviceName(parts[0].toInt());
   } else if (parts[1] == "ds18b20") {
     if (partCount == 4) Result = getDallasTemp(parts[0].toInt(),parts[2],parts[3]);
