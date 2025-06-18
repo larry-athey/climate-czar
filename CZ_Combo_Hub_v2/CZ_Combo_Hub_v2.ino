@@ -155,8 +155,9 @@ void setup() {
   // Copy the WiFi MAC address for use with the W5500
   WiFi.macAddress(ethMAC);
 
+  // Connect to the network (TCP/IP)
   if (! StartNetwork()) {
-    Serial.println(F("Network connection failed!"));
+    Serial.println(F("\r\nNo TCP/IP network available"));
   }
 
   // Splash screen
