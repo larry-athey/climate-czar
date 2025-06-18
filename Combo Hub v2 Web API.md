@@ -19,3 +19,5 @@ Below are explanations of all available web API calls. All of these calls are ca
 **/hub-id/ds18b20/address/format** - Returns the temperature of a DS18B20 temperature sensor connected to the selected hub in the specified format "c" or "f". Sensor identification is done using option 4 in the serial configuration main menu.
 
 **/hub-id/humidity** - Returns the humidity level detected at the selected hub.
+
+**/hub-id/light/format** - Returns the ambient light level detected at the selected hub in the specified format, "0" for Lux or "1" for percentage.
