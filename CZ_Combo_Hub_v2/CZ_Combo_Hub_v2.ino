@@ -356,8 +356,8 @@ String GetDS18B20(String Address, String Format) { // Get DS18B20 sensor tempera
 //------------------------------------------------------------------------------------------------
 String GetBH1750(byte WhichOne) { // Get ambient light level from the BH1750
   BH1750 lightMeter(0x23);
-  delay(100);
   if (lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE)) {
+    delay(200);
     float lux = lightMeter.readLightLevel();
     if (lux < 0 || lux > 65535) {
       return "-1"; // Indicate sensor error
