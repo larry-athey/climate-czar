@@ -14,14 +14,14 @@
 // rewrite from the ground up and utilizes a completely different web API.
 //
 // The biggest change in this version is the addition of a master/slave topography where the slave
-// units are controlled via LoRa WAN. Climate Czar Server stll communicates with the master unit
+// units are controlled via LoRa WAN. Climate Czar Server still communicates with the master unit
 // via TCP/IP and HTTP calls. However, when you make an API call to anything other than unit zero,
 // the API call is sent to the slave as a LoRa WAN message and the result returns to the master as
 // LoRa WAN message, which is then returned to Climate Czar Server via HTTP.
 //
 // http://ip-address/0/humidity (get the humidity from the master unit)
-// http://ip-address/1/humidity (get the humidity from the first slave unit)
-// http://ip-address/2/humidity (get the humidity from the second slave unit)
+// http://ip-address/2/humidity (get the humidity from the first slave unit)
+// http://ip-address/3/humidity (get the humidity from the second slave unit)
 //
 // Aside from the local temperature & humidity at the hub via DHT22, a local BH1750 ambient light
 // sensor has been added as well. This allows you to trigger daylight extension lights, or monitor
@@ -156,6 +156,16 @@ void setup() {
   // Copy the WiFi MAC address for use with the W5500
   WiFi.macAddress(ethMAC);
 
+  // Initialize the RYLR998 modem
+  digitalWrite(LED,HIGH);
+  Serial2.println(F("AT+RESET"));
+  delay(500);
+  Serial2.println("AT+NETWORKID=" + LoRa_Network);
+  delay(100);
+  Serial2.println("AT+ADDRESS=" + LoRa_Address);
+  delay(100);
+  digitalWrite(LED,LOW);
+
   // Connect to the network (TCP/IP)
   if (! StartNetwork()) {
     Serial.println(F("\r\nNo TCP/IP network available"));
@@ -169,16 +179,6 @@ void setup() {
   display.println("CZ Combo Hub v" + Version);
   display.println(CZ_deviceName);
   display.display();
-
-  // Initialize the RYLR998 modem
-  digitalWrite(LED,HIGH);
-  Serial2.println(F("AT+RESET"));
-  delay(500);
-  Serial2.println("AT+NETWORKID=" + LoRa_Network);
-  delay(100);
-  Serial2.println("AT+ADDRESS=" + LoRa_Address);
-  delay(100);
-  digitalWrite(LED,LOW);
 
   PingTimer = millis();
   ScreenTimer = PingTimer;
@@ -360,7 +360,7 @@ String GetBH1750(byte WhichOne) { // Get ambient light level from the BH1750
   if (lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE)) {
     float lux = lightMeter.readLightLevel();
     if (lux < 0 || lux > 65535) {
-      return String(-1.0,1); // Indicate error
+      return "-1"; // Indicate sensor error
     }
     if (WhichOne == 0) {
       return String(lux,1);
