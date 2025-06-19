@@ -112,9 +112,9 @@ inline String getTemperature(int ID, String Format) {
     return QuerySlave(ID,"/0/temperature/" + Format);
   } else {
     if (Format == "c") {
-      return GetDHT22(2);
+      return GetDHT22(1);
     } else {
-      return GetDHT22(3);
+      return GetDHT22(2);
     }
   }
 }
