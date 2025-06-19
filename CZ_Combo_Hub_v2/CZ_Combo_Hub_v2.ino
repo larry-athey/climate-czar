@@ -205,10 +205,10 @@ void GetMemory() { // Get the configuration settings from flash memory on startu
   Net_wifiPW       = preferences.getString("net_wifipw","");
 
   Net_useDHCP      = preferences.getUInt("net_usedhcp",1);
-  Net_IP           = preferences.getString("net_ip","");
-  Net_Mask         = preferences.getString("net_mask","");
-  Net_Gateway      = preferences.getString("net_gateway","");
-  Net_DNS          = preferences.getString("net_dns","");
+  Net_IP           = preferences.getString("net_ip","0.0.0.0");
+  Net_Mask         = preferences.getString("net_mask","255.255.255.0");
+  Net_Gateway      = preferences.getString("net_gateway","0.0.0.0");
+  Net_DNS          = preferences.getString("net_dns","0.0.0.0");
   preferences.end();
 }
 //------------------------------------------------------------------------------------------------
@@ -332,7 +332,7 @@ String GetDHT22(byte WhichOne) { // Get humidity and temperature from the DHT22
   if (isnan(H)) H = 0;
   if (WhichOne == 0) {
     return String(H,1);
-  } else if (WhichOne == 2) {
+  } else if (WhichOne == 1) {
     return String(T,1);
   } else {
     return String(T * 9 / 5 + 32,1);
@@ -402,7 +402,39 @@ void ScreenUpdate() {
   display.clearDisplay();
   display.setCursor(0,0);
   if (ActivePage == 0) {
-
+    display.println(F("System Uptime"));
+    display.println(Uptime);
+  } else if (ActivePage == 1) {
+    display.println(F("LoRa WAN Mode"));
+    if (LoRa_Mode == 0) {
+      display.println("Master - ID " + LoRa_Address);
+    } else {
+      display.println("Slave - ID " + LoRa_Address);
+    }
+  } else if (ActivePage == 2) {
+    display.println("IP Address: " + Net_IP);
+    if (Net_useWifi == 1) {
+      display.println("Channel: " + String(WiFi.channel()) + " - " + "Signal: " + String(WiFi.RSSI()));
+    } else {
+      if (ethConnected) {
+        display.println(F("Ethernet link is up"));
+      } else {
+        display.println(F("Ethernet link is down"));
+      }
+    }
+  } else if (ActivePage == 3) {
+    display.println(F("Local Temperature"));
+    display.println(String(GetDHT22(1)) + "C, " + String(GetDHT22(2)) + "F");
+  } else if (ActivePage == 4) {
+    display.println(F("Local Humidity"));
+    display.println(String(GetDHT22(0)) + "%");
+  } else if (ActivePage == 5) {
+    display.println(F("Local Light Level"));
+    display.println(String(GetBH1750(0)) + " Lux, " + String(GetBH1750(1) + "%"));
+  } else if (ActivePage == 6) {
+    int deviceCount = DT.getDeviceCount();
+    display.println(F("DS18B20 Temp Sensors"));
+    display.println("Total Detected: " + deviceCount);
   }
   display.display();
 }
@@ -453,7 +485,7 @@ void loop() {
   if (digitalRead(BTN) == 0) {
     while (digitalRead(BTN) == 0) delay(100);
     ActivePage ++;
-    if (ActivePage > 5) ActivePage = 0;
+    if (ActivePage > 6) ActivePage = 0;
     ScreenUpdate();
     ScreenTimer = CurrentTime;
   }
@@ -485,7 +517,7 @@ void loop() {
   }
   // If this is a master unit, ping test the watchdog host every minute and reboot the hub if necessary
   if (CurrentTime - PingTimer >= 60000) {
-    if (LoRa_Mode == 0) {
+    if (Net_IP != "0.0.0.0") {
       bool PingTest = Ping.ping(CZ_Watchdog.c_str(),2);
       if (! PingTest) {
         PingFailures ++;
