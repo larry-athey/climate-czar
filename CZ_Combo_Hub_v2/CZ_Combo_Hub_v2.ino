@@ -345,7 +345,7 @@ String GetDS18B20(String Address, String Format) { // Get DS18B20 sensor tempera
     DT.requestTemperatures();
     oneWire.reset_search();
     float Temp = DT.getTempC(Addr);
-    if (Temp == 127.0) Temp = 0.0;
+    if (Temp == -127.0) Temp = 0.0;
     if (Format =="c") {
       return String(Temp,1);
     } else {
@@ -366,7 +366,7 @@ String GetBH1750(byte WhichOne) { // Get ambient light level from the BH1750
       return String(lux,1);
     } else {
       //float light = .12 * lux;
-      //if (light > 100) light = 100; 
+      //if (light > 100) light = 100;
       float light = (lux / 54612.5) * 100;
       return String(light,1);
     }
@@ -385,7 +385,7 @@ String GetSwitch(byte WhichOne) { // Get the on/off status of one of the eight s
   byte State = digitalRead(inputPins[WhichOne]);
   if (State == 0) {
     State = 1;
-  } else if (State == 1) {
+  } else {
     State = 0;
   }
   return String(State);
