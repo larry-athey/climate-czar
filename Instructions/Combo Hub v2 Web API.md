@@ -12,7 +12,7 @@ Example Climate Czar Server web API calls:
 `-m 5` tells curl to time out the connection attempt after 5 seconds<br>
 `--http0.9` tells curl to use a pre version 1.0 HTTP call for compatibility safety<br>
 
-The Climate Czar Combo Hub can also communicate with your own custom LoRa WAN powered sensors. Many people have created their own Arduino/ESP32 powered devices to read things like soil temperature/moisture/pH, dissolved oxygen in aquaponics, pH probes, etc and added LoRa WAN radios such as the RYLR998 to them. This web API allows you to make web calls to the hub with your own custom request message to your device and will return its response to the person making the web request.
+The Climate Czar Combo Hub can also communicate with your own custom LoRa WAN powered sensors. Many people have created their own Arduino/ESP32 powered devices to read things like soil temperature/moisture/pH, dissolved oxygen in aquaponics, pH probes, etc and added LoRa WAN radios to them such as the RYLR998. This web API allows you to make web calls to the hub with your own custom request message to your device and will return its response to the person making the web request.
 
 Below are explanations of all available web API calls. All of these calls are case sensitive, there is no AI at work here to decide if you're just "close enough". Breaking the rules will result in a JSON formatted failure message being returned.
 
