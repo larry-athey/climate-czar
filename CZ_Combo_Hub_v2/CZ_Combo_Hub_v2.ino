@@ -505,7 +505,7 @@ void loop() {
   }
 
   // Check for LoRa slave API calls from the master hub
-  if ((Serial2) && (Serial2.available())) {
+  if ((LoRa_Mode == 1) && (Serial2) && (Serial2.available())) {
     String Msg = handleSlaveRequest();
     Serial2.println("AT+SEND=1," + String(Msg.length()) + "," + Msg);
   }
@@ -515,7 +515,7 @@ void loop() {
     ScreenUpdate();
     ScreenTimer = millis();
   }
-  // If this is a master unit, ping test the watchdog host every minute and reboot the hub if necessary
+  // Ping test the watchdog host every minute and reboot the hub if necessary, null the IP to disable
   if (CurrentTime - PingTimer >= 60000) {
     if (Net_IP != "0.0.0.0") {
       bool PingTest = Ping.ping(CZ_Watchdog.c_str(),2);
