@@ -6,7 +6,7 @@ A: They're all overly complicated and they just continue to get even more compli
 ___
 Q: Can you recommend any specific brands of network sensors or switches/outlets to use?
 
-A: No, because it's not in my budget to frivolously buy a bunch of different devices just for testing. Personally, the only third party devices that I use are TP-Link/Kasa WiFi controlled outlets. Other than that, any sensors I use are various ones used in Raspberry PI or Arduino tutorials. These are actually kids' STEM class projects, so they're certainly not that hard to build.
+A: Sorry, I can't because it's not in my budget to frivolously buy a bunch of different devices just for testing. Personally, the only third party devices that I use are TP-Link/Kasa WiFi controlled outlets. Other than that, any sensors I use are various ones used in Raspberry PI or Arduino tutorials. These are actually kids' STEM class projects, so they're certainly not that hard to build.
 ___
 Q: Why do the device read/write loops run on 15 second intervals?
 
