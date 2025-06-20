@@ -365,8 +365,6 @@ String GetBH1750(byte WhichOne) { // Get ambient light level from the BH1750
     if (WhichOne == 0) {
       return String(lux,1);
     } else {
-      //float light = .12 * lux;
-      //if (light > 100) light = 100;
       float light = (lux / 54612.5) * 100;
       return String(light,1);
     }
