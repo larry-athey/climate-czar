@@ -104,7 +104,7 @@ int PingFailures = 0;            // Total number of watchdog host ping failures
 long PingTimer = 0;              // Milliseconds since the last watchdog host ping test
 long ScreenTimer = 0;            // Milliseconds since the last OLED screen update
 String CZ_deviceName = "null";   // Network host name and LoRa device name
-String CZ_Watchdog = "x.com";    // Watchdog host to ping to verify network connectivity
+String CZ_Watchdog = "8.8.8.8";  // Watchdog host to ping to verify network connectivity
 String Net_DNS = "";             // Network static DNS resolver
 String Net_Gateway = "";         // Network static default gateway
 String Net_IP = "";              // Network static IP address
@@ -192,7 +192,7 @@ void GetMemory() { // Get the configuration settings from flash memory on startu
   preferences.begin("prefs",true);
   CZ_deviceName    = preferences.getString("cz_devicename",sanitizeHostname(""));
   CZ_pingFailures  = preferences.getUInt("cz_pingfailures",5);
-  CZ_Watchdog      = preferences.getString("cz_watchdog","x.com");
+  CZ_Watchdog      = preferences.getString("cz_watchdog","8.8.8.8");
 
   FlashInit        = preferences.getUInt("flash_init",0);
 
