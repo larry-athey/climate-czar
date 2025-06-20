@@ -37,7 +37,7 @@
 //
 // Climate Czar Combo Hub is now a far more sophisticated device and much easier to implement in
 // your greenhouse or indoor grow operation. Until a printed circuit board is available, they're a
-// bit of a lesson in patience to build because of about 40 wires that need to be cut & soldered.
+// bit of a lesson in patience to build because of about 30 wires that need to be cut & soldered.
 // Luckily, there's no complicated electronics work involved, it's just point-to-point wiring.
 //------------------------------------------------------------------------------------------------
 #include "Preferences.h"         // ESP32 Flash memory read/write library
