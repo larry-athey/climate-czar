@@ -60,7 +60,7 @@ Preferences preferences;
 // Server instances
 WiFiServer wifiServer(80);
 EthernetServer ethServer(80);
-// SSD1306 configuration
+// SSD1306 display configuration (https://www.amazon.com/dp/B0925SSKHB)
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 32
 #define OLED_ADDRESS 0x3C
