@@ -51,7 +51,7 @@
 #include "BH1750.h"              // BH1750 light sensor library
 #include "OneWire.h"             // OneWire Network communications library
 #include "DallasTemperature.h"   // Dallas Semiconductor DS18B20 temperature sensor library
-#include "UIPEthernet.h"         // Ethernet interface library compatible with W5500 modules
+#include "EthernetENC.h"         // Ethernet interface library compatible with W5500 modules
 #include "WiFi.h"                // WiFi interface library
 #include "ESP32Ping.h"           // ICMP (ping) library from https://github.com/marian-craciunescu/ESP32Ping
 //------------------------------------------------------------------------------------------------
@@ -120,6 +120,7 @@ void setup() {
   Serial.begin(115200);
   Serial2.begin(115200,SERIAL_8N1,16,17);
   delay(500);
+
   GetMemory();
   if (FlashInit == 0) {
     SetMemory();
@@ -302,45 +303,48 @@ bool StartNetwork() {
       spiStarted = true;
       SPI.begin(SPI_SCK,SPI_MISO,SPI_MOSI,ETH_CS);
     }
+    ethConnected = false;
     Ethernet.init(ETH_CS);
-    if (Ethernet.linkStatus() == LinkON) {
-      ethConnected = true;
-      if (Net_useDHCP == 0) {
-        Ethernet.begin(ethMAC,staticIP,dns,gateway,subnet);
+
+    display.clearDisplay();
+    display.setTextColor(SSD1306_WHITE);
+    display.setFont(&FreeSans8pt7b);
+    display.setTextSize(1);
+    display.setCursor(0,12);
+    display.println(F("Connecting to"));
+    display.println(F("ethernet network"));
+    display.display();
+
+    if (Net_useDHCP == 0) {
+      Ethernet.begin(ethMAC,staticIP,dns,gateway,subnet);
+      if (Ethernet.localIP() == staticIP) {
+        ethConnected = true;
       } else {
-        if (Ethernet.begin(ethMAC) == 0) {
-          Result = false;
-          ethConnected = false;
-          spiStarted = false;
-          SPI.end();
-          if (Net_useDHCP == 1) {
-            Net_IP = "0.0.0.0";
-            Net_Mask = "255.255.255.0";
-            Net_Gateway = "0.0.0.0";
-            Net_DNS = "0.0.0.0"; 
-          }
-        }
-      }
-      if (ethConnected) {
-        if (Serial) Serial.print(F("\r\nEthernet connected"));
-        Net_IP = Ethernet.localIP().toString();
-        Net_Mask = Ethernet.subnetMask().toString();
-        Net_Gateway = Ethernet.gatewayIP().toString();
-        Net_DNS = Ethernet.dnsServerIP().toString();
-        ethServer.begin();
+        ethConnected = false;
       }
     } else {
-      if (Serial) Serial.print(F("\r\nNo ethernet port link detected"));
-      Result = false;
-      ethConnected = false;
-      spiStarted = false;
-      SPI.end();
-      if (Net_useDHCP == 1) {
-        Net_IP = "0.0.0.0";
-        Net_Mask = "255.255.255.0";
-        Net_Gateway = "0.0.0.0";
-        Net_DNS = "0.0.0.0"; 
+      if (Ethernet.begin(ethMAC) > 0) {
+        ethConnected = true;
+      } else {
+        Result = false;
+        ethConnected = false;
+        spiStarted = false;
+        SPI.end();
+        if (Net_useDHCP == 1) {
+          Net_IP = "0.0.0.0";
+          Net_Mask = "255.255.255.0";
+          Net_Gateway = "0.0.0.0";
+          Net_DNS = "0.0.0.0"; 
+        }
       }
+    }
+    if (ethConnected) {
+      if (Serial) Serial.print(F("\r\nEthernet connected"));
+      Net_IP = Ethernet.localIP().toString();
+      Net_Mask = Ethernet.subnetMask().toString();
+      Net_Gateway = Ethernet.gatewayIP().toString();
+      Net_DNS = Ethernet.dnsServerIP().toString();
+      ethServer.begin();
     }
     if ((Serial) && (! ethConnected)) Serial.print(F("\r\nEthernet connection failed"));
     delay(2000);
