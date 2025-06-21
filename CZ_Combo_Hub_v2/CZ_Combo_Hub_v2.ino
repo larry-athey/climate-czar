@@ -45,6 +45,8 @@
 #include "Wire.h"                // I2C bus library
 #include "Adafruit_SSD1306.h"    // SSD1306 OLED display library
 #include "Adafruit_MCP23X17.h"   // MCP23017 I2C 16 port GPIO expansion module library
+#include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.4.9
+#include "FreeSans8pt7b.h"       // https://github.com/moononournation/ArduinoFreeFontFile.git
 #include "DHTesp.h"              // DHT22 temperature/humidity sensor library
 #include "BH1750.h"              // BH1750 light sensor library
 #include "OneWire.h"             // OneWire Network communications library
@@ -60,7 +62,7 @@ WiFiServer wifiServer(80);
 EthernetServer ethServer(80);
 // SSD1306 configuration
 #define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
+#define SCREEN_HEIGHT 32
 #define OLED_ADDRESS 0x3C
 Adafruit_SSD1306 display(SCREEN_WIDTH,SCREEN_HEIGHT,&Wire,-1);
 // I2C pins
@@ -172,12 +174,14 @@ void setup() {
   }
 
   // Splash screen
+  display.begin(SSD1306_SWITCHCAPVCC,OLED_ADDRESS);
   display.clearDisplay();
-  display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
-  display.setCursor(0,0);
-  display.println("CZ Combo Hub v" + Version);
-  display.println(CZ_deviceName);
+  display.setFont(&FreeSans8pt7b);
+  display.setTextSize(1);
+  display.setCursor(0,12);
+  display.println(F("CZ Combo Hub"));
+  display.println("Version " + Version);
   display.display();
 
   PingTimer = millis();
@@ -398,41 +402,47 @@ String SetRelay(byte WhichOne, byte State) { // Set one of the eight relays port
 //------------------------------------------------------------------------------------------------
 void ScreenUpdate() {
   display.clearDisplay();
-  display.setCursor(0,0);
+  display.setCursor(0,12);
   if (ActivePage == 0) {
     display.println(F("System Uptime"));
     display.println(Uptime);
   } else if (ActivePage == 1) {
     display.println(F("LoRa WAN Mode"));
     if (LoRa_Mode == 0) {
-      display.println("Master - ID " + LoRa_Address);
+      display.print(F("Master - ID ")); display.print(LoRa_Address);
     } else {
-      display.println("Slave - ID " + LoRa_Address);
+      display.print(F("Slave - ID ")); display.print(LoRa_Address);
     }
   } else if (ActivePage == 2) {
-    display.println("IP Address: " + Net_IP);
+    display.println(F("IP Address"));
+    display.println(Net_IP);
+  } else if (ActivePage == 3) {
     if (Net_useWifi == 1) {
-      display.println("Channel: " + String(WiFi.channel()) + " - " + "Signal: " + String(WiFi.RSSI()));
+      display.println("WiFi Channel: " + String(WiFi.channel()));
+      display.println("WiFi Signal: " + String(WiFi.RSSI()));
     } else {
       if (ethConnected) {
-        display.println(F("Ethernet link is up"));
+        display.println(F("Ethernet Port"));
+        display.println(F("Link is up"));
       } else {
-        display.println(F("Ethernet link is down"));
+        display.println(F("Ethernet Port"));
+        display.println(F("Link is down"));
       }
     }
-  } else if (ActivePage == 3) {
-    display.println(F("Local Temperature"));
-    display.println(String(GetDHT22(1)) + "C, " + String(GetDHT22(2)) + "F");
+  
   } else if (ActivePage == 4) {
+    display.println(F("Local Temp"));
+    display.println(String(GetDHT22(1)) + "C / " + String(GetDHT22(2)) + "F");
+  } else if (ActivePage == 5) {
     display.println(F("Local Humidity"));
     display.println(String(GetDHT22(0)) + "%");
-  } else if (ActivePage == 5) {
-    display.println(F("Local Light Level"));
-    display.println(String(GetBH1750(0)) + " Lux, " + String(GetBH1750(1) + "%"));
   } else if (ActivePage == 6) {
+    display.println(F("Local Light Level"));
+    display.println(String(GetBH1750(0)) + " Lux / " + String(GetBH1750(1) + "%"));
+  } else if (ActivePage == 7) {
     int deviceCount = DT.getDeviceCount();
-    display.println(F("DS18B20 Temp Sensors"));
-    display.println("Total Detected: " + deviceCount);
+    display.println(F("1-Wire Sensors"));
+    display.print(F("Detected: ")); display.println(deviceCount);
   }
   display.display();
 }
@@ -483,7 +493,7 @@ void loop() {
   if (digitalRead(BTN) == 0) {
     while (digitalRead(BTN) == 0) delay(100);
     ActivePage ++;
-    if (ActivePage > 6) ActivePage = 0;
+    if (ActivePage > 7) ActivePage = 0;
     ScreenUpdate();
     ScreenTimer = CurrentTime;
   }
