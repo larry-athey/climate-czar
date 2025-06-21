@@ -174,7 +174,6 @@ void setup() {
   }
 
   // Splash screen
-  display.begin(SSD1306_SWITCHCAPVCC,OLED_ADDRESS);
   display.clearDisplay();
   display.setTextColor(SSD1306_WHITE);
   display.setFont(&FreeSans8pt7b);
@@ -277,7 +276,13 @@ bool StartNetwork() {
       Serial.print(F("."));
     }
     if (WiFi.status() != WL_CONNECTED) {
-      Serial.print(F("\nWiFi connection failed"));
+      if (Serial) Serial.print(F("\r\nWiFi connection failed"));
+      if (Net_useDHCP == 1) {
+        Net_IP = "0.0.0.0";
+        Net_Mask = "255.255.255.0";
+        Net_Gateway = "0.0.0.0";
+        Net_DNS = "0.0.0.0"; 
+      }
       Result = false;
     } else {
       Serial.print(F("\r\nWiFi connected"));
@@ -287,7 +292,7 @@ bool StartNetwork() {
       Net_DNS = WiFi.dnsIP(0).toString();
       wifiServer.begin();
     }
-    delay(1000);
+    delay(2000);
   } else {
     if (spiStarted) {
       spiStarted = false;
@@ -306,10 +311,18 @@ bool StartNetwork() {
         if (Ethernet.begin(ethMAC) == 0) {
           Result = false;
           ethConnected = false;
+          spiStarted = false;
+          SPI.end();
+          if (Net_useDHCP == 1) {
+            Net_IP = "0.0.0.0";
+            Net_Mask = "255.255.255.0";
+            Net_Gateway = "0.0.0.0";
+            Net_DNS = "0.0.0.0"; 
+          }
         }
       }
       if (ethConnected) {
-        Serial.print(F("\nEthernet connected"));
+        if (Serial) Serial.print(F("\r\nEthernet connected"));
         Net_IP = Ethernet.localIP().toString();
         Net_Mask = Ethernet.subnetMask().toString();
         Net_Gateway = Ethernet.gatewayIP().toString();
@@ -317,14 +330,22 @@ bool StartNetwork() {
         ethServer.begin();
       }
     } else {
+      if (Serial) Serial.print(F("\r\nNo ethernet port link detected"));
       Result = false;
       ethConnected = false;
       spiStarted = false;
       SPI.end();
+      if (Net_useDHCP == 1) {
+        Net_IP = "0.0.0.0";
+        Net_Mask = "255.255.255.0";
+        Net_Gateway = "0.0.0.0";
+        Net_DNS = "0.0.0.0"; 
+      }
     }
-    if (! ethConnected) Serial.print(F("\nEthernet connection failed"));
-    delay(1000);
+    if ((Serial) && (! ethConnected)) Serial.print(F("\r\nEthernet connection failed"));
+    delay(2000);
   }
+  SetMemory();
   return Result;
 }
 //------------------------------------------------------------------------------------------------
