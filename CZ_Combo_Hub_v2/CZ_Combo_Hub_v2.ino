@@ -270,7 +270,7 @@ bool StartNetwork() {
 
   if (Net_useWifi == 1) {
     WiFi.begin(Net_wifiSSID,Net_wifiPW);
-    unsigned long startTime = millis();
+    long startTime = millis();
     Serial.print("\nConnecting to " + Net_wifiSSID + ":");
     while (WiFi.status() != WL_CONNECTED && millis() - startTime < 10000) {
       delay(500);
