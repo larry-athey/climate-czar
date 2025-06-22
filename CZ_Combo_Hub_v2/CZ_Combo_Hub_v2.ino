@@ -299,11 +299,9 @@ bool StartNetwork() {
       spiStarted = false;
       SPI.end();
     }
-    if (! spiStarted) {
-      spiStarted = true;
-      SPI.begin(SPI_SCK,SPI_MISO,SPI_MOSI,ETH_CS);
-    }
     ethConnected = false;
+    spiStarted = true;
+    SPI.begin(SPI_SCK,SPI_MISO,SPI_MOSI,ETH_CS);
     Ethernet.init(ETH_CS);
 
     if (Serial) Serial.print(F("\r\nConnecting to ethernet network."));
