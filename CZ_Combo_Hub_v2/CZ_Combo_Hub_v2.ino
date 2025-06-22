@@ -315,19 +315,41 @@ bool StartNetwork() {
     display.println(F("ethernet network"));
     display.display();
 
+    long startTime = millis();
+    const long timeout = 10000;
+    bool cableConnected = false;
+    while (millis() - startTime < timeout) {
+      if (Ethernet.linkStatus() == LinkON) {
+        cableConnected = true;
+        break;
+      }
+      delay(100);
+    }
+    if (! cableConnected) {
+      if (Net_useDHCP == 1) {
+        Net_IP = "0.0.0.0";
+        Net_Mask = "255.255.255.0";
+        Net_Gateway = "0.0.0.0";
+        Net_DNS = "0.0.0.0"; 
+      }
+      spiStarted = false;
+      SPI.end();
+      SetMemory();
+      if (Serial) Serial.print(F("\r\nNo cable detected"));
+      delay(2000);
+      return false;
+    }
+
     if (Net_useDHCP == 0) {
       Ethernet.begin(ethMAC,staticIP,dns,gateway,subnet);
       if (Ethernet.localIP() == staticIP) {
         ethConnected = true;
-      } else {
-        ethConnected = false;
       }
     } else {
       if (Ethernet.begin(ethMAC) > 0) {
         ethConnected = true;
       } else {
         Result = false;
-        ethConnected = false;
         spiStarted = false;
         SPI.end();
         if (Net_useDHCP == 1) {
