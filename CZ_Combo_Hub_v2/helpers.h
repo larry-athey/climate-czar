@@ -31,11 +31,10 @@ inline String formatMillis(unsigned long millisValue) { // Converts a timestamp 
   return String(buffer);
 }
 //------------------------------------------------------------------------------------------------
-inline String getBaseMacString() { // Returns the ESP32 MAC address as a hyphenated string
-  byte mac[6];
-  char macStr[18];
-  esp_efuse_mac_get_default(mac);
-  snprintf(macStr,sizeof(macStr),"%02X-%02X-%02X-%02X-%02X-%02X",mac[0],mac[1],mac[2],mac[3],mac[4],mac[5]);
+inline String getMacString(byte mac[]) { // Returns the ESP32 MAC address as a hyphenated string
+  char macStr[18]; // 6 bytes * 2 chars + 5 hyphens + null terminator
+  snprintf(macStr, sizeof(macStr), "%02X-%02X-%02X-%02X-%02X-%02X",
+           mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
   return String(macStr);
 }
 //------------------------------------------------------------------------------------------------
@@ -83,7 +82,7 @@ inline String sanitizeHostname(String hostname) { // Sanitizes host names of inv
 
   // If empty after sanitization, return the default hostname
   if (j == 0) {
-    return "cz-combo-hub-" + getBaseMacString();
+    return "cz-combo-hub-" + getMacString(ethMAC);
   }
 
   return String(sanitized);

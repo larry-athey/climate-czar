@@ -1,9 +1,9 @@
 //------------------------------------------------------------------------------------------------
 // Climate Czar Combo Hub v2 | (CopyLeft) 2022-Present | Larry Athey (https://panhandleponics.com)
 //
-// You must be using a v2.x ESP32 library to compile this code. It appears that v3.x libraries do
-// not contain compatible headers for certain legacy libraries that I rely on. You should also use
-// the following URL in your preferences under Additional Boards Manager URLs.
+// You must be using a v2.0.14 or greater ESP32 library to compile this code. Please Keep in mind
+// that v3.x board libraries produce seriously BLOATED code and take much longer to compile this.
+// You should also use the following URL in your preferences under Additional Boards Manager URLs.
 //
 // https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
 //
