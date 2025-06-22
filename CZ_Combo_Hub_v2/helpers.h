@@ -33,8 +33,7 @@ inline String formatMillis(unsigned long millisValue) { // Converts a timestamp 
 //------------------------------------------------------------------------------------------------
 inline String getMacString(byte mac[]) { // Returns the ESP32 MAC address as a hyphenated string
   char macStr[18]; // 6 bytes * 2 chars + 5 hyphens + null terminator
-  snprintf(macStr, sizeof(macStr), "%02X-%02X-%02X-%02X-%02X-%02X",
-           mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+  snprintf(macStr, sizeof(macStr), "%02X-%02X-%02X-%02X-%02X-%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
   return String(macStr);
 }
 //------------------------------------------------------------------------------------------------

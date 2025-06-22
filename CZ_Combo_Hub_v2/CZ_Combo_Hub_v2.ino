@@ -121,6 +121,9 @@ void setup() {
   Serial2.begin(115200,SERIAL_8N1,16,17);
   delay(500);
 
+  // Copy the WiFi MAC address for use with the W5500 and default device name
+  WiFi.macAddress(ethMAC);
+
   GetMemory();
   if (FlashInit == 0) {
     SetMemory();
@@ -150,14 +153,11 @@ void setup() {
 
   // Initialize SSD1306
   if (! display.begin(SSD1306_SWITCHCAPVCC,OLED_ADDRESS)) {
-    Serial.println(F("SSD1306 init failed!"));
+    if (Serial) Serial.println(F("SSD1306 init failed!"));
   }
 
   // Initialize Dallas Temperature bus
   DT.begin();
-
-  // Copy the WiFi MAC address for use with the W5500
-  WiFi.macAddress(ethMAC);
 
   // Initialize the RYLR998 modem
   digitalWrite(LED,HIGH);
@@ -171,7 +171,7 @@ void setup() {
 
   // Connect to the network (TCP/IP)
   if (! StartNetwork()) {
-    Serial.println(F("\r\nNo TCP/IP network available"));
+    if (Serial) Serial.println(F("\r\nNo TCP/IP network available"));
   }
 
   // Splash screen
@@ -306,6 +306,7 @@ bool StartNetwork() {
     ethConnected = false;
     Ethernet.init(ETH_CS);
 
+    if (Serial) Serial.print(F("\r\nConnecting to ethernet network."));
     display.clearDisplay();
     display.setTextColor(SSD1306_WHITE);
     display.setFont(&FreeSans8pt7b);
@@ -316,14 +317,14 @@ bool StartNetwork() {
     display.display();
 
     long startTime = millis();
-    const long timeout = 10000;
     bool cableConnected = false;
-    while (millis() - startTime < timeout) {
+    while (millis() - startTime < 10000) {
       if (Ethernet.linkStatus() == LinkON) {
         cableConnected = true;
         break;
       }
-      delay(100);
+      delay(500);
+      Serial.print(F("."));
     }
     if (! cableConnected) {
       if (Net_useDHCP == 1) {
@@ -336,7 +337,6 @@ bool StartNetwork() {
       SPI.end();
       SetMemory();
       if (Serial) Serial.print(F("\r\nNo cable detected"));
-      delay(2000);
       return false;
     }
 

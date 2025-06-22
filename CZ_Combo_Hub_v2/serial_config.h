@@ -292,7 +292,10 @@ inline void SerialConfigInput() { // Handle user configuration via the serial co
       get_ipMode();
       NetworkMenu();
     } else if (Option == "5") {
-      StartNetwork();
+      if (! StartNetwork()) {
+        Serial.println(F("\r\nNo TCP/IP network available"));
+        delay(2000);
+      }
       NetworkMenu();
     } else {
       Option.toLowerCase();
