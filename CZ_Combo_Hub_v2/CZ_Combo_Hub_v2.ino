@@ -534,6 +534,7 @@ void loop() {
     // Reboot the system if we're reaching the maximum long integer value of CurrentTime (49 days)
     ESP.restart();
   }
+
   // Check for page button presses and switch the OLED screen page
   if (digitalRead(BTN) == 0) {
     while (digitalRead(BTN) == 0) delay(100);
@@ -542,6 +543,7 @@ void loop() {
     ScreenUpdate();
     ScreenTimer = CurrentTime;
   }
+
   // Check for user input from the serial configuration system
   if ((Serial) && (Serial.available())) SerialConfigInput();
 
@@ -568,6 +570,7 @@ void loop() {
     ScreenUpdate();
     ScreenTimer = millis();
   }
+
   // Ping test the watchdog host every minute and reboot the hub if necessary, null the IP to disable
   if (CurrentTime - PingTimer >= 60000) {
     if (Net_IP != "0.0.0.0") {
