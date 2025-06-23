@@ -187,7 +187,7 @@ void setup() {
   Serial2.println(F("AT+PARAMETER=9,7,1,8")); // SF=9, BW=125kHz, CR=1, Preamble=8
   delay(200);
   echoRYLR998();
-  Serial2.println("AT+NETWORKID=" + String(LoRa_Network)); // Set the Combo Hub network
+  Serial2.println("AT+NETWORKID=" + String(LoRa_Network)); // Set the Combo Hub network ID
   delay(200);
   echoRYLR998();
   Serial2.println("AT+ADDRESS=" + String(LoRa_Address)); // Set the Combo Hub network address
