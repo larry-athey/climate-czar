@@ -75,7 +75,7 @@ inline String getLightLevel(int ID, String Format) {
   if (ID > 0) {
     return QuerySlave(ID,"/0/light/" + Format);
   } else {
-    if (Format == "lux") {
+    if (Format == "0") {
       return GetBH1750(0);
     } else {
       return GetBH1750(1);
