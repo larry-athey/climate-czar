@@ -17,6 +17,7 @@
 //------------------------------------------------------------------------------------------------
 inline void ConfigMenu() { // Display the main configuration menu
   Serial.print(F("\033[2J\033[H\n"));
+  Serial.println(F("-=> Some settings require a reboot to become effective <=-\n"));
   Serial.println(F("Main Configuration Menu:\n"));
   Serial.println(F("  1. TCP/IP Settings"));
   Serial.println(F("  2. LoRa WAN Settings"));
