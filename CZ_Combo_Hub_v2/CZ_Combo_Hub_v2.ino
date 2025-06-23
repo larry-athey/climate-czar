@@ -116,6 +116,16 @@ String Net_wifiPW = "";          // Network WiFi Password
 String Uptime = "00:00:00";      // Current system uptime
 String Version = "2.0.1";        // Current release version of the project
 //------------------------------------------------------------------------------------------------
+void echoRYLR998() { // Strictly for debugging RYLR998 output
+  char Data;
+  if ((Serial) && (Serial2)) {
+    while (Serial2.available()) {
+      Data = Serial2.read();
+      Serial.print(Data);
+    }
+  }
+}
+//------------------------------------------------------------------------------------------------
 void setup() {
   Serial.begin(115200);
   Serial2.begin(115200,SERIAL_8N1,16,17);
@@ -161,12 +171,28 @@ void setup() {
 
   // Initialize the RYLR998 modem
   digitalWrite(LED,HIGH);
-  Serial2.println(F("AT+RESET"));
-  delay(500);
-  Serial2.println("AT+NETWORKID=" + LoRa_Network);
-  delay(100);
-  Serial2.println("AT+ADDRESS=" + LoRa_Address);
-  delay(100);
+  if (Serial) Serial.println(F("Initializing the RYLR998 modem..."));
+  Serial2.println(F("AT+RESET")); // Reset module
+  delay(1000);
+  echoRYLR998();
+  Serial2.println(F("AT+BAND=915000000")); // Set frequency to 915 MHz (adjust for your region)
+  delay(200);
+  echoRYLR998();
+  Serial2.println(F("AT+CRFOP=22")); // Set output power to max (22 dBm)
+  delay(200);
+  echoRYLR998();
+  Serial2.println(F("AT+MODE=0")); // Set to LoRa mode
+  delay(200);
+  echoRYLR998();
+  Serial2.println(F("AT+PARAMETER=9,7,1,8")); // SF=9, BW=125kHz, CR=1, Preamble=8
+  delay(200);
+  echoRYLR998();
+  Serial2.println("AT+NETWORKID=" + String(LoRa_Network)); // Set the Combo Hub network
+  delay(200);
+  echoRYLR998();
+  Serial2.println("AT+ADDRESS=" + String(LoRa_Address)); // Set the Combo Hub network address
+  delay(200);
+  echoRYLR998();
   digitalWrite(LED,LOW);
 
   // Connect to the network (TCP/IP)
