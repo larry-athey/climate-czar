@@ -187,6 +187,7 @@ void setup() {
   PingTimer = millis();
   ScreenTimer = PingTimer;
   while (Serial.available()) Serial.read();
+  while (Serial2.available()) Serial2.read();
 }
 //------------------------------------------------------------------------------------------------
 // External function includes are used here to reduce the overall size of the main sketch.
