@@ -186,6 +186,7 @@ void setup() {
 
   PingTimer = millis();
   ScreenTimer = PingTimer;
+  while (Serial.available()) Serial.read();
 }
 //------------------------------------------------------------------------------------------------
 // External function includes are used here to reduce the overall size of the main sketch.
@@ -271,10 +272,10 @@ bool StartNetwork() {
   if (Net_useWifi == 1) {
     WiFi.begin(Net_wifiSSID,Net_wifiPW);
     long startTime = millis();
-    Serial.print("\nConnecting to " + Net_wifiSSID + ":");
+    if (Serial) Serial.print("\nConnecting to " + Net_wifiSSID + ":");
     while (WiFi.status() != WL_CONNECTED && millis() - startTime < 10000) {
       delay(500);
-      Serial.print(F("."));
+      if (Serial) Serial.print(F("."));
     }
     if (WiFi.status() != WL_CONNECTED) {
       if (Serial) Serial.print(F("\r\nWiFi connection failed"));
@@ -286,7 +287,7 @@ bool StartNetwork() {
       }
       Result = false;
     } else {
-      Serial.print(F("\r\nWiFi connected"));
+      if (Serial) Serial.print(F("\r\nWiFi connected"));
       Net_IP = WiFi.localIP().toString();
       Net_Mask = WiFi.subnetMask().toString();
       Net_Gateway = WiFi.gatewayIP().toString();
@@ -322,7 +323,7 @@ bool StartNetwork() {
         break;
       }
       delay(500);
-      Serial.print(F("."));
+      if (Serial) Serial.print(F("."));
     }
     if (! cableConnected) {
       if (Net_useDHCP == 1) {
