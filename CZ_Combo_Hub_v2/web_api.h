@@ -18,12 +18,7 @@ inline String QuerySlave(int ID, String Msg) {
   String command = "AT+SEND=" + String(ID) + "," + String(Msg.length()) + "," + Msg;
   if ((Serial) && (ActiveMenu == 5)) Serial.println(command);
   Serial2.println(command);
-  delay(200);
-  if ((Serial) && (ActiveMenu == 5)) {
-    echoRYLR998();
-  } else {
-    while (Serial2.available()) Serial2.read();
-  }
+  delay(100);
   
   // Wait for Result
   while (millis() < timeout) {
