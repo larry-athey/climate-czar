@@ -118,7 +118,7 @@ String Version = "2.0.1";        // Current release version of the project
 //------------------------------------------------------------------------------------------------
 void echoRYLR998() { // Strictly for debugging RYLR998 output
   char Data;
-  if ((Serial) && (Serial2)) {
+  if (Serial) {
     while (Serial2.available()) {
       Data = Serial2.read();
       Serial.print(Data);
@@ -178,13 +178,13 @@ void setup() {
   Serial2.println(F("AT+BAND=915000000")); // Set frequency to 915 MHz (adjust for your region)
   delay(200);
   echoRYLR998();
-  Serial2.println(F("AT+CRFOP=22")); // Set output power to max (22 dBm)
+  Serial2.println(F("AT+CRFOP=15")); // Set output power to 15 dBm
   delay(200);
   echoRYLR998();
   Serial2.println(F("AT+MODE=0")); // Set to LoRa mode
   delay(200);
   echoRYLR998();
-  Serial2.println(F("AT+PARAMETER=9,7,1,8")); // SF=9, BW=125kHz, CR=1, Preamble=8
+  Serial2.println(F("AT+PARAMETER=7,7,1,6")); // SF=7, BW=125kHz, CR=1, Preamble=6
   delay(200);
   echoRYLR998();
   Serial2.println("AT+NETWORKID=" + String(LoRa_Network)); // Set the Combo Hub network ID
@@ -511,7 +511,7 @@ void ScreenUpdate() {
     display.println(String(GetDHT22(0)) + "%");
   } else if (ActivePage == 6) {
     display.println(F("Local Light Level"));
-    display.println(String(GetBH1750(0)) + " Lux / " + String(GetBH1750(1) + "%"));
+    display.println(String(GetBH1750(0)) + " / " + String(GetBH1750(1) + "%"));
   } else if (ActivePage == 7) {
     int deviceCount = DT.getDeviceCount();
     display.println(F("1-Wire Sensors"));
@@ -599,9 +599,9 @@ void loop() {
     ScreenTimer = millis();
   }
 
-  // Ping test the watchdog host every minute and reboot the hub if necessary, null the IP to disable
+  // Ping test the watchdog host every minute and reboot the hub if necessary, null the CZ_Watchdog to disable
   if (CurrentTime - PingTimer >= 60000) {
-    if (Net_IP != "0.0.0.0") {
+    if (CZ_Watchdog != "0.0.0.0") {
       bool PingTest = Ping.ping(CZ_Watchdog.c_str(),2);
       if (! PingTest) {
         PingFailures ++;

@@ -16,12 +16,20 @@ inline String QuerySlave(int ID, String Msg) {
   
   // Format and send the message: AT+SEND=address,length,message
   String command = "AT+SEND=" + String(ID) + "," + String(Msg.length()) + "," + Msg;
+  if ((Serial) && (ActiveMenu == 5)) Serial.println(command);
   Serial2.println(command);
+  delay(200);
+  if ((Serial) && (ActiveMenu == 5)) {
+    echoRYLR998();
+  } else {
+    while (Serial2.available()) Serial2.read();
+  }
   
   // Wait for Result
   while (millis() < timeout) {
     if (Serial2.available()) {
       String incoming = Serial2.readStringUntil('\n');
+      if ((Serial) && (ActiveMenu == 5)) Serial.println(incoming);
       // Check if the message is a received LoRa message
       if (incoming.startsWith("+RCV")) {
         // Parse the Result: +RCV=SenderID,length,message,RSSI,SNR
@@ -57,7 +65,7 @@ inline String getDallasTemp(int ID, String Address, String Format) {
 //------------------------------------------------------------------------------------------------
 inline String getDeviceName(int ID) {
   if (ID > 0) {
-    return QuerySlave(ID,"/0/devicename");
+    return QuerySlave(ID,"/0/device-name");
   } else {
     return CZ_deviceName;
   }

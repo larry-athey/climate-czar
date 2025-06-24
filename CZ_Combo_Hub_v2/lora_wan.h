@@ -16,6 +16,7 @@ inline String handleSlaveRequest() {
   String Result = jsonFailure;
 
   String incoming = Serial2.readStringUntil('\n');
+  if ((Serial) && (ActiveMenu == 5)) Serial.println(incoming);
   // Check if the message is a received LoRa message
   if (incoming.startsWith("+RCV")) {
     // Parse the Result: +RCV=SenderID,length,message,RSSI,SNR

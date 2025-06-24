@@ -23,7 +23,8 @@ inline void ConfigMenu() { // Display the main configuration menu
   Serial.println(F("  2. LoRa WAN Settings"));
   Serial.println(F("  3. Combo Hub Settings"));
   Serial.println(F("  4. Show DS18B20 sensors"));
-  Serial.println(F("  5. Reboot Combo Hub"));
+  Serial.println(F("  5. Debug LoRa WAN Data"));
+  Serial.println(F("  6. Reboot Combo Hub"));
   Serial.print(F("\nChoose an option: "));
 }
 //------------------------------------------------------------------------------------------------
@@ -134,7 +135,7 @@ inline void get_czPingFailures() { // Get the ping failure count to trigger a re
 }
 //-----------------------------------------------------------------------------------------------
 inline void get_czWatchdog() { // Get the ping watchdog host name or IP address
-  Serial.print(F("Enter the ping watchdog host name or IP: "));
+  Serial.print(F("Enter the ping watchdog host name or IP (0.0.0.0 to disable): "));
   CZ_Watchdog = ReadInput();
   CZ_Watchdog = sanitizeHostname(CZ_Watchdog);
 }
@@ -248,6 +249,10 @@ inline void showDS18B20() { // Show all DS18B20 sensor addresses and their curre
   }
 }
 //-----------------------------------------------------------------------------------------------
+inline void showLoRa() { // Show all outbound and inbound RYLR998 communications
+  Serial.print(F("\033[2J\033[H"));
+}
+//-----------------------------------------------------------------------------------------------
 inline void SerialConfigInput() { // Handle user configuration via the serial console
   String Option = ReadInput();
   PurgeBuffer();
@@ -268,6 +273,10 @@ inline void SerialConfigInput() { // Handle user configuration via the serial co
       showDS18B20();
       Serial.print(F("\n\nPress ENTER to refresh, or Q to return to the main menu: "));
     } else if (Option == "5") {
+      ActiveMenu = 5;
+      showLoRa();
+      Serial.println(F("Press Q to return to the main menu:\n"));
+    } else if (Option == "6") {
       Serial.print(F("Are you sure that you want to reboot this device? [Y/N] "));
       String Confirm = ReadInput();
       Confirm.toLowerCase();
@@ -355,6 +364,15 @@ inline void SerialConfigInput() { // Handle user configuration via the serial co
     } else {
       showDS18B20();
       Serial.print(F("\n\nPress ENTER to refresh, or Q to return to the main menu: "));
+    }
+  } else if (ActiveMenu == 5) { // Show all RYLR998 communications
+    Option.toLowerCase();
+    if (Option == "q") {
+      ActiveMenu = 0;
+      ConfigMenu();
+    } else {
+      showLoRa();
+      Serial.println(F("Press Q to return to the main menu:\n"));
     }
   }
   SetMemory();
