@@ -4,12 +4,28 @@
 // Inline functions used for modular unit organization
 //------------------------------------------------------------------------------------------------
 inline void LoRa_Init() { // Initialize the RYLR998 modem after configuration changes
-  Serial2.println(F("AT+RESET"));
-  delay(500);
-  Serial2.println("AT+NETWORKID=" + LoRa_Network);
-  delay(100);
-  Serial2.println("AT+ADDRESS=" + LoRa_Address);
-  delay(100);
+  if (Serial) Serial.println(F("Initializing the RYLR998 modem..."));
+  Serial2.println(F("AT+RESET")); // Reset module
+  delay(1000);
+  echoRYLR998();
+  Serial2.println(F("AT+BAND=915000000")); // Set frequency to 915 MHz (adjust for your region)
+  delay(200);
+  echoRYLR998();
+  Serial2.println(F("AT+CRFOP=15")); // Set output power to 15 dBm
+  delay(200);
+  echoRYLR998();
+  Serial2.println(F("AT+MODE=0")); // Set to LoRa mode
+  delay(200);
+  echoRYLR998();
+  Serial2.println(F("AT+PARAMETER=7,7,1,6")); // SF=7, BW=125kHz, CR=1, Preamble=6
+  delay(200);
+  echoRYLR998();
+  Serial2.println("AT+NETWORKID=" + String(LoRa_Network)); // Set the Combo Hub network ID
+  delay(200);
+  echoRYLR998();
+  Serial2.println("AT+ADDRESS=" + String(LoRa_Address)); // Set the Combo Hub network address
+  delay(200);
+  echoRYLR998();
 }
 //------------------------------------------------------------------------------------------------
 inline String handleSlaveRequest() {
