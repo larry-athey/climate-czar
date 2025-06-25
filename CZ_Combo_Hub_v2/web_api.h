@@ -17,7 +17,7 @@ inline String QuerySlave(int ID, String Msg) {
   // Format and send the message: AT+SEND=address,length,message
   String command = "AT+SEND=" + String(ID) + "," + String(Msg.length()) + "," + Msg;
   if ((Serial) && (ActiveMenu == 5)) Serial.println(command);
-  Serial2.println(command);
+  Serial2.print(command + "\r\n");
   delay(100);
   
   // Wait for Result

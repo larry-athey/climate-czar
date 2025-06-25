@@ -5,25 +5,25 @@
 //------------------------------------------------------------------------------------------------
 inline void LoRa_Init() { // Initialize the RYLR998 modem after configuration changes
   if (Serial) Serial.println(F("Initializing the RYLR998 modem..."));
-  Serial2.println(F("AT+RESET")); // Reset module
+  Serial2.print(F("AT+RESET\r\n")); // Reset module
   delay(1000);
   echoRYLR998();
-  Serial2.println(F("AT+BAND=915000000")); // Set frequency to 915 MHz (adjust for your region)
+  Serial2.print(F("AT+BAND=915000000\r\n")); // Set frequency to 915 MHz (adjust for your region)
   delay(200);
   echoRYLR998();
-  Serial2.println(F("AT+CRFOP=15")); // Set output power to 15 dBm
+  Serial2.print(F("AT+CRFOP=15\r\n")); // Set output power to 15 dBm
   delay(200);
   echoRYLR998();
-  Serial2.println(F("AT+MODE=0")); // Set to LoRa mode
+  Serial2.print(F("AT+MODE=0\r\n")); // Set to LoRa mode
   delay(200);
   echoRYLR998();
-  Serial2.println(F("AT+PARAMETER=7,7,1,6")); // SF=7, BW=125kHz, CR=1, Preamble=6
+  Serial2.print(F("AT+PARAMETER=7,7,1,6\r\n")); // SF=7, BW=125kHz, CR=1, Preamble=6
   delay(200);
   echoRYLR998();
-  Serial2.println("AT+NETWORKID=" + String(LoRa_Network)); // Set the Combo Hub network ID
+  Serial2.print("AT+NETWORKID=" + String(LoRa_Network) + "\r\n"); // Set the Combo Hub network ID
   delay(200);
   echoRYLR998();
-  Serial2.println("AT+ADDRESS=" + String(LoRa_Address)); // Set the Combo Hub network address
+  Serial2.print("AT+ADDRESS=" + String(LoRa_Address) + "\r\n"); // Set the Combo Hub network address
   delay(200);
   echoRYLR998();
 }
