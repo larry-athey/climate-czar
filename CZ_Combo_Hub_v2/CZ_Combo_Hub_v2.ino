@@ -90,8 +90,9 @@ DHTesp dhtSensor;
 // Inputs (digital switches)
 const int inputPins[8] = {32,33,25,26,27,14,12,13};
 //------------------------------------------------------------------------------------------------
-bool spiStarted = false;         // Work-around since "if (SPI)" doesn't convert to a boolean value
 bool ethConnected = false;       // Used for tracking the ethernet port connected status
+bool PageCycle = true;           // If true, OLED screen changes page number on every update
+bool spiStarted = false;         // Work-around since "if (SPI)" doesn't convert to a boolean value
 byte ethMAC[6];                  // Placeholder for the ethernet interface MAC address
 int ActiveMenu = 0;              // Used for tracking which serial config menu is in use
 int ActivePage = 0;              // Used for tracking which OLED screen page to display
@@ -585,6 +586,7 @@ void loop() {
   // Check for page button presses and switch the OLED screen page
   if (digitalRead(BTN) == 0) {
     while (digitalRead(BTN) == 0) delay(100);
+    PageCycle = false;
     ActivePage ++;
     if (ActivePage > 7) ActivePage = 0;
     ScreenUpdate();
@@ -621,6 +623,10 @@ void loop() {
   // Update the OLED screen every 5 seconds
   if (CurrentTime - ScreenTimer >= 5000) {
     ScreenUpdate();
+    if (PageCycle) {
+      ActivePage ++;
+      if (ActivePage > 7) ActivePage = 0;      
+    }
     ScreenTimer = millis();
   }
 
