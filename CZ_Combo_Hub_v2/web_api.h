@@ -35,7 +35,7 @@ inline String QuerySlave(int ID, String Msg) {
         // Parse the Result: +RCV=SenderID,length,message,RSSI,SNR
         int firstComma = incoming.indexOf(',');
         if (firstComma > 4) { // Ensure valid +RCV format
-          String senderIDStr = incoming.substring(4,firstComma); // Extract SenderID
+          String senderIDStr = incoming.substring(5,firstComma); // Extract SenderID
           int senderID = senderIDStr.toInt();
           // Only process if the sender matches the target ID
           if (senderID == ID) {
