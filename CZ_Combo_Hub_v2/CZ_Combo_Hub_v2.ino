@@ -87,6 +87,8 @@ DHTesp dhtSensor;
 #define LED 2
 // Screen page button
 #define BTN 0
+// RYLR998 reset line
+#define RYLR_RST 9
 // Inputs (digital switches)
 const int inputPins[8] = {32,33,25,26,27,14,12,13};
 //------------------------------------------------------------------------------------------------
@@ -128,6 +130,13 @@ void echoRYLR998() { // Strictly for debugging RYLR998 output
   } else {
     while (Serial2.available()) Serial2.read();
   }
+}
+//------------------------------------------------------------------------------------------------
+void resetRYLR998() { // Performs a hardware reset of the RYLR998
+  digitalWrite(RYLR_RST,LOW);
+  delay(10);
+  digitalWrite(RYLR_RST,HIGH);
+  delay(100);
 }
 //------------------------------------------------------------------------------------------------
 void setup() {
@@ -172,6 +181,12 @@ void setup() {
 
   // Initialize Dallas Temperature bus
   DT.begin();
+
+  // Hardware reset the RYLR998 modem
+  pinMode(RYLR_RST,OUTPUT);
+  digitalWrite(RYLR_RST,HIGH);
+  delay(100);
+  resetRYLR998();
 
   // Initialize the RYLR998 modem
   digitalWrite(LED,HIGH);
@@ -551,9 +566,11 @@ void handleClient(Client& client) {
     client.println(Result);
     if ((LoRa_Mode == 0) && (Result == "Rebooting...")) {
       delay(2000);
+      resetRYLR998();
       ESP.restart();
     } else if ((LoRa_Mode == 1) && (Result == "Restarting...")) {
       delay(2000);
+      resetRYLR998();
       ESP.restart();
     }
   }
@@ -564,6 +581,7 @@ void loop() {
   Uptime = formatMillis(CurrentTime);
   if (CurrentTime > 4200000000) {
     // Reboot the system if we're reaching the maximum long integer value of CurrentTime (49 days)
+    resetRYLR998();
     ESP.restart();
   }
 
@@ -618,7 +636,10 @@ void loop() {
       } else {
         PingFailures = 0;
       }
-      if (PingFailures == CZ_pingFailures) ESP.restart();
+      if (PingFailures == CZ_pingFailures) {
+        resetRYLR998();
+        ESP.restart();
+      }
     }
     PingTimer = millis();
   }
