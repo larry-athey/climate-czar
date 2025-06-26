@@ -105,6 +105,8 @@ int Net_useWifi = 0;             // Network use WiFi 0=False, 1=True
 int PingFailures = 0;            // Total number of watchdog host ping failures
 long PingTimer = 0;              // Milliseconds since the last watchdog host ping test
 long ScreenTimer = 0;            // Milliseconds since the last OLED screen update
+unsigned long apiCount = 0;      // Counts the total number of API requests (LoRa debugging)
+unsigned long slaveCount = 0;    // Counts the number of slave API requests (LoRa debugging)
 String CZ_deviceName = "null";   // Network host name and LoRa device name
 String CZ_Watchdog = "8.8.8.8";  // Watchdog host to ping to verify network connectivity
 String Net_DNS = "";             // Network static DNS resolver
@@ -592,14 +594,12 @@ void loop() {
   // Check for LoRa slave API calls from the master hub
   if ((LoRa_Mode == 1) && (Serial2) && (Serial2.available())) {
     String Msg = handleSlaveRequest();
-    String Response = "AT+SEND=1," + String(Msg.length()) + "," + Msg;
-    if ((Serial) && (ActiveMenu == 5)) Serial.println(Response);
-    Serial2.print(Response + "\r\n");
-    delay(100);
-    if ((Serial) && (ActiveMenu == 5)) {
-      echoRYLR998();
-    } else {
-      while (Serial2.available()) Serial2.read();
+    if (Msg.length() > 0) {
+      String Response = "AT+SEND=1," + String(Msg.length()) + "," + Msg;
+      if ((Serial) && (ActiveMenu == 5)) Serial.println("A" + String(apiCount) + ": " + Response);
+      Serial2.print(Response + "\r\n");
+      delay(100);
+      Serial2.readStringUntil('\n'); // Purge the +OK response
     }
   }
 

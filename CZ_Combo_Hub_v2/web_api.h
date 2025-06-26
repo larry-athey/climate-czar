@@ -13,18 +13,23 @@
 inline String QuerySlave(int ID, String Msg) {
   String Result = jsonFailure;
   long timeout = millis() + 4000; // 4-second timeout
+  slaveCount ++;
+
+  // Clear the modem buffer of any junk before sending to the slave
+  while (Serial2.available()) Serial2.read();
   
   // Format and send the message: AT+SEND=address,length,message
   String command = "AT+SEND=" + String(ID) + "," + String(Msg.length()) + "," + Msg;
-  if ((Serial) && (ActiveMenu == 5)) Serial.println(command);
+  if ((Serial) && (ActiveMenu == 5)) Serial.println("S" + String(slaveCount) + ": " + command);
   Serial2.print(command + "\r\n");
   delay(100);
+  Serial2.readStringUntil('\n'); // Purge the +OK response
   
   // Wait for Result
   while (millis() < timeout) {
     if (Serial2.available()) {
       String incoming = Serial2.readStringUntil('\n');
-      if ((Serial) && (ActiveMenu == 5)) Serial.println(incoming);
+      if ((Serial) && (ActiveMenu == 5)) Serial.println("Raw Msg: " + incoming);
       // Check if the message is a received LoRa message
       if (incoming.startsWith("+RCV")) {
         // Parse the Result: +RCV=SenderID,length,message,RSSI,SNR
@@ -38,6 +43,7 @@ inline String QuerySlave(int ID, String Msg) {
             int thirdComma = incoming.indexOf(',',secondComma + 1);
             if (thirdComma > secondComma) {
               Result = incoming.substring(secondComma + 1,thirdComma);
+              if ((Serial) && (ActiveMenu == 5)) Serial.println("A" + String(apiCount) + ": " + Result);
               return Result;
             }
           }
@@ -228,6 +234,7 @@ inline String handleWebRequest(String Msg) {
     if (partCount == 2) Result = getWifiStats(parts[0].toInt());
   }
 
+  apiCount ++;
   return Result;
 }
 //------------------------------------------------------------------------------------------------

@@ -29,10 +29,10 @@ inline void LoRa_Init() { // Initialize the RYLR998 modem after configuration ch
 }
 //------------------------------------------------------------------------------------------------
 inline String handleSlaveRequest() {
-  String Result = jsonFailure;
+  String Result = "";
 
   String incoming = Serial2.readStringUntil('\n');
-  if ((Serial) && (ActiveMenu == 5)) Serial.println(incoming);
+  if ((Serial) && (ActiveMenu == 5)) Serial.println("Raw Msg: " + incoming);
   // Check if the message is a received LoRa message
   if (incoming.startsWith("+RCV")) {
     // Parse the Result: +RCV=SenderID,length,message,RSSI,SNR
@@ -40,19 +40,21 @@ inline String handleSlaveRequest() {
     if (firstComma > 4) { // Ensure valid +RCV format
       String senderIDStr = incoming.substring(4,firstComma); // Extract SenderID
       int senderID = senderIDStr.toInt();
-          
+
       // Only process if the sender is the master hub (ID 1)
       if (senderID == 1) {
         int secondComma = incoming.indexOf(',',firstComma + 1);
         int thirdComma = incoming.indexOf(',',secondComma + 1);
         if (thirdComma > secondComma) {
           String message = incoming.substring(secondComma + 1,thirdComma);
-              
+
           // Debugging ACK message
           //String reply = "ACK:" + CZ_deviceName;
           //String command = "AT+SEND=1," + String(reply.length()) + "," + reply;
           //Serial2.println(command);
-              
+
+          slaveCount ++;
+          if ((Serial) && (ActiveMenu == 5)) Serial.println("S" + String(slaveCount) + ": " + message);
           Result = handleWebRequest(message);
           return Result; // Return the master hub's request
         }
