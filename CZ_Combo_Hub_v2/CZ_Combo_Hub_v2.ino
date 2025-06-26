@@ -98,7 +98,7 @@ int ActivePage = 0;              // Used for tracking which OLED screen page to 
 int CZ_pingFailures = 5;         // How many consecutive ping failures required for a reboot
 int FlashInit = 0;               // Used to indicate whether the flash memory has been initialized
 int LoRa_Mode = 0;               // LoRa operation mode 0=Master, 1=Slave
-int LoRa_Network = 0;            // LoRa network ID 0-16 (zero is the public network)
+int LoRa_Network = 7;            // LoRa network ID 0-15 (zero is the public network)
 int LoRa_Address = 1;            // LoRa network address 1-65535 (think of it like an IP address)
 int Net_useDHCP = 1;             // Network use DHCP 0=False, 1=True
 int Net_useWifi = 0;             // Network use WiFi 0=False, 1=True
@@ -229,7 +229,7 @@ void GetMemory() { // Get the configuration settings from flash memory on startu
   FlashInit        = preferences.getUInt("flash_init",0);
 
   LoRa_Mode        = preferences.getUInt("lora_mode",0);
-  LoRa_Network     = preferences.getUInt("lora_network",1);
+  LoRa_Network     = preferences.getUInt("lora_network",7);
   LoRa_Address     = preferences.getUInt("lora_address",1);
 
   Net_useWifi      = preferences.getUInt("net_usewifi",0);
