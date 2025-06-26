@@ -87,8 +87,6 @@ DHTesp dhtSensor;
 #define LED 2
 // Screen page button
 #define BTN 0
-// RYLR998 reset line
-#define RYLR_RST 9
 // Inputs (digital switches)
 const int inputPins[8] = {32,33,25,26,27,14,12,13};
 //------------------------------------------------------------------------------------------------
@@ -132,10 +130,10 @@ void echoRYLR998() { // Strictly for debugging RYLR998 output
   }
 }
 //------------------------------------------------------------------------------------------------
-void resetRYLR998() { // Performs a hardware reset of the RYLR998
-  digitalWrite(RYLR_RST,LOW);
+void resetRYLR998() { // Performs a hardware reset of the RYLR998 using the GPIO expander module
+  mcp.digitalWrite(15,LOW);
   delay(10);
-  digitalWrite(RYLR_RST,HIGH);
+  mcp.digitalWrite(15,HIGH);
   delay(100);
 }
 //------------------------------------------------------------------------------------------------
@@ -182,9 +180,8 @@ void setup() {
   // Initialize Dallas Temperature bus
   DT.begin();
 
-  // Hardware reset the RYLR998 modem
-  pinMode(RYLR_RST,OUTPUT);
-  digitalWrite(RYLR_RST,HIGH);
+  // Hardware reset the RYLR998 modem using the GPIO expander module
+  mcp.digitalWrite(15,HIGH);
   delay(100);
   resetRYLR998();
 
