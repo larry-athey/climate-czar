@@ -54,7 +54,7 @@ inline String handleSlaveRequest() {
           //Serial2.println(command);
 
           slaveCount ++;
-          if ((Serial) && (ActiveMenu == 5)) Serial.println("S" + String(slaveCount) + ": " + message);
+          if ((Serial) && (ActiveMenu == 5)) Serial.println("S" + String(slaveCount) + "<-: " + message);
           Result = handleWebRequest(message);
           return Result; // Return the master hub's request
         }

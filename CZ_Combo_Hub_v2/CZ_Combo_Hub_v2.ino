@@ -611,7 +611,7 @@ void loop() {
     String Msg = handleSlaveRequest();
     if (Msg.length() > 0) {
       String Response = "AT+SEND=1," + String(Msg.length()) + "," + Msg;
-      if ((Serial) && (ActiveMenu == 5)) Serial.println("A" + String(apiCount) + ": " + Response);
+      if ((Serial) && (ActiveMenu == 5)) Serial.println("A" + String(apiCount) + "->: " + Response);
       Serial2.print(Response + "\r\n");
       delay(100);
       Serial2.readStringUntil('\n'); // Purge the +OK response

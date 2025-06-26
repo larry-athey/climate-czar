@@ -20,7 +20,7 @@ inline String QuerySlave(int ID, String Msg) {
   
   // Format and send the message: AT+SEND=address,length,message
   String command = "AT+SEND=" + String(ID) + "," + String(Msg.length()) + "," + Msg;
-  if ((Serial) && (ActiveMenu == 5)) Serial.println("S" + String(slaveCount) + ": " + command);
+  if ((Serial) && (ActiveMenu == 5)) Serial.println("S" + String(slaveCount) + "->: " + command);
   Serial2.print(command + "\r\n");
   delay(100);
   Serial2.readStringUntil('\n'); // Purge the +OK response
@@ -43,7 +43,7 @@ inline String QuerySlave(int ID, String Msg) {
             int thirdComma = incoming.indexOf(',',secondComma + 1);
             if (thirdComma > secondComma) {
               Result = incoming.substring(secondComma + 1,thirdComma);
-              if ((Serial) && (ActiveMenu == 5)) Serial.println("A" + String(apiCount) + ": " + Result);
+              if ((Serial) && (ActiveMenu == 5)) Serial.println("A" + String(apiCount) + "<-: " + Result);
               return Result;
             }
           }
