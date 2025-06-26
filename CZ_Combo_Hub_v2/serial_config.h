@@ -186,7 +186,7 @@ inline void get_LoRaMode() { // Get the LoRa master/slave mode
 }
 //-----------------------------------------------------------------------------------------------
 inline void get_LoRaNetwork() { // Get the LoRa network ID
-  Serial.print(F("Enter the LoRa network ID [0..16]: "));
+  Serial.print(F("Enter the LoRa network ID [0..15]: "));
   LoRa_Network = ReadInput().toInt();
   if (LoRa_Network < 0) LoRa_Network = 0;
   if (LoRa_Network > 16) LoRa_Network = 16;
