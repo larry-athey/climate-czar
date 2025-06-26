@@ -590,7 +590,7 @@ void loop() {
   // Check for LoRa slave API calls from the master hub
   if ((LoRa_Mode == 1) && (Serial2) && (Serial2.available())) {
     String Msg = handleSlaveRequest();
-    Serial2.print("AT+SEND=1," + String(Msg.length()) + "," + Msg);
+    Serial2.print("AT+SEND=1," + String(Msg.length()) + "," + Msg + "\r\n");
   }
 
   // Update the OLED screen every 5 seconds
