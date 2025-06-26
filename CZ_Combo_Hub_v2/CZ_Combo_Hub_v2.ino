@@ -123,6 +123,8 @@ void echoRYLR998() { // Strictly for debugging RYLR998 output
       Data = Serial2.read();
       Serial.print(Data);
     }
+  } else {
+    while (Serial2.available()) Serial2.read();
   }
 }
 //------------------------------------------------------------------------------------------------
@@ -590,7 +592,15 @@ void loop() {
   // Check for LoRa slave API calls from the master hub
   if ((LoRa_Mode == 1) && (Serial2) && (Serial2.available())) {
     String Msg = handleSlaveRequest();
-    Serial2.print("AT+SEND=1," + String(Msg.length()) + "," + Msg + "\r\n");
+    String Response = "AT+SEND=1," + String(Msg.length()) + "," + Msg;
+    if ((Serial) && (ActiveMenu == 5)) Serial.println(Response);
+    Serial2.print(Response + "\r\n");
+    delay(100);
+    if ((Serial) && (ActiveMenu == 5)) {
+      echoRYLR998();
+    } else {
+      while (Serial2.available()) Serial2.read();
+    }
   }
 
   // Update the OLED screen every 5 seconds
