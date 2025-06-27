@@ -65,3 +65,51 @@ inline String handleSlaveRequest() {
   return Result;
 }
 //------------------------------------------------------------------------------------------------
+inline void pingCheck() { // Check for LoRa pings from slave hubs and sends a response back
+  long timeout = millis() + 5000; // 5-second timeout
+
+  while (millis() < timeout) {
+    if (Serial2.available()) {
+      String incoming = Serial2.readStringUntil('\n');
+      if ((incoming.startsWith("+RCV")) && (incoming.indexOf('PING') > 0)) {
+        if ((Serial) && (ActiveMenu == 5)) Serial.println("[Ping received]");
+
+        int firstComma = incoming.indexOf(',');
+        String senderIDStr = incoming.substring(5,firstComma);
+
+        if ((Serial) && (ActiveMenu == 5)) Serial.println("[Response sent to " + senderIDStr + "]");
+        Serial2.print("AT+SEND=" + senderIDStr + ",PONG,4\r\n");
+        delay(100);
+        Serial2.readStringUntil('\n'); // Purge the +OK response
+
+        return;
+      }
+    }
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline bool pingMaster() { // Pings the master hub via LoRa WAN messsage
+  long timeout = millis() + 5000; // 5-second timeout
+
+  // Clear the modem buffer of any junk pinging the master hub
+  while (Serial2.available()) Serial2.read();
+
+  if ((Serial) && (ActiveMenu == 5)) Serial.println("[Pinging master hub]");
+  Serial2.print("AT+SEND=1,PING,4\r\n");
+  delay(100);
+  Serial2.readStringUntil('\n'); // Purge the +OK response
+
+  while (millis() < timeout) {
+    if (Serial2.available()) {
+      String incoming = Serial2.readStringUntil('\n');
+      if ((incoming.startsWith("+RCV")) && (incoming.indexOf('PONG') > 0)) {
+        if ((Serial) && (ActiveMenu == 5)) Serial.println("[Response received]");
+        return true;
+      }
+    }
+  }
+
+  if ((Serial) && (ActiveMenu == 5)) Serial.println("[No response received]");
+  return false;
+}
+//------------------------------------------------------------------------------------------------

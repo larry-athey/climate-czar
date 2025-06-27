@@ -183,7 +183,8 @@ inline void get_LoRaMode() { // Get the LoRa master/slave mode
   Serial.print("Enter 1 to set slave mode or 0 to be the master: ");
   LoRa_Mode = ReadInput().toInt();
   if (LoRa_Mode != 0) LoRa_Mode = 1;
-  if (LoRa_Mode == 1) LoRa_Address = 1;
+  if (LoRa_Mode == 0) LoRa_Address = 1;
+  if ((LoRa_Mode == 1) && (LoRa_Address == 1)) LoRa_Address = 100;
 }
 //-----------------------------------------------------------------------------------------------
 inline void get_LoRaNetwork() { // Get the LoRa network ID

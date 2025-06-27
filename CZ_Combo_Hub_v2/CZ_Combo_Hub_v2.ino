@@ -617,6 +617,11 @@ void loop() {
     }
   }
 
+  // Check for LoRa slave pings to the master hub
+  if ((LoRa_Mode == 0) && (Serial2) && (Serial2.available())) {
+    pingCheck();
+  }
+
   // Update the OLED screen every 5 seconds
   if (CurrentTime - ScreenTimer >= 5000) {
     ScreenUpdate();
@@ -627,11 +632,22 @@ void loop() {
     ScreenTimer = millis();
   }
 
-  // Ping test the watchdog host every minute and reboot the hub if necessary, null the CZ_Watchdog to disable
   if (CurrentTime - PingTimer >= 60000) {
+    // Ping test the watchdog host every minute and reboot the hub if necessary
     if (CZ_Watchdog != "0.0.0.0") {
       bool PingTest = Ping.ping(CZ_Watchdog.c_str(),2);
       if (! PingTest) {
+        PingFailures ++;
+      } else {
+        PingFailures = 0;
+      }
+      if (PingFailures == CZ_pingFailures) {
+        ESP.restart();
+      }
+    }
+    // If this is a slave hub, LoRa ping the master hub
+    if (LoRa_Mode == 1) {
+      if (! pingMaster()) {
         PingFailures ++;
       } else {
         PingFailures = 0;
