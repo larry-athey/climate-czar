@@ -119,7 +119,7 @@ String Net_wifiPW = "";          // Network WiFi Password
 String Uptime = "00:00:00";      // Current system uptime
 String Version = "2.0.1";        // Current release version of the project
 //------------------------------------------------------------------------------------------------
-void echoRYLR998() { // Strictly for debugging RYLR998 output
+void echoRYLR998() { // Used for debugging RYLR998 output
   char Data;
   if (Serial) {
     while (Serial2.available()) {
@@ -181,7 +181,7 @@ void setup() {
   // Initialize Dallas Temperature bus
   DT.begin();
 
-  // Hardware reset the RYLR998 modem using the GPIO expander module
+  // Hardware reset the RYLR998 modem using one of the GPIO expander module outputs
   mcp.digitalWrite(15,HIGH);
   delay(100);
   resetRYLR998();
@@ -564,11 +564,9 @@ void handleClient(Client& client) {
     client.println(Result);
     if ((LoRa_Mode == 0) && (Result == "Rebooting...")) {
       delay(2000);
-      resetRYLR998();
       ESP.restart();
     } else if ((LoRa_Mode == 1) && (Result == "Restarting...")) {
       delay(2000);
-      resetRYLR998();
       ESP.restart();
     }
   }
@@ -579,7 +577,6 @@ void loop() {
   Uptime = formatMillis(CurrentTime);
   if (CurrentTime > 4200000000) {
     // Reboot the system if we're reaching the maximum long integer value of CurrentTime (49 days)
-    resetRYLR998();
     ESP.restart();
   }
 
@@ -640,7 +637,6 @@ void loop() {
         PingFailures = 0;
       }
       if (PingFailures == CZ_pingFailures) {
-        resetRYLR998();
         ESP.restart();
       }
     }
