@@ -28,7 +28,7 @@ inline void LoRa_Init() { // Initialize the RYLR998 modem after configuration ch
   echoRYLR998();
 }
 //------------------------------------------------------------------------------------------------
-inline String handleSlaveRequest() {
+inline String handleSlaveRequest() { // Handle API requests from the master hub sent via LoRa WAN
   String Result = "";
 
   String incoming = Serial2.readStringUntil('\n');
