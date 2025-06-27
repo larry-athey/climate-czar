@@ -325,10 +325,12 @@ inline void SerialConfigInput() { // Handle user configuration via the serial co
       LoRaMenu();
     } else if (Option == "2") {
       get_LoRaNetwork();
+      resetRYLR998();
       LoRa_Init();
       LoRaMenu();
     } else if (Option == "3") {
       get_LoRaAddress();
+      resetRYLR998();
       LoRa_Init();
       LoRaMenu();
     } else {
