@@ -78,7 +78,7 @@ inline void pingCheck() { // Check for LoRa pings from slave hubs and sends a re
         String senderIDStr = incoming.substring(5,firstComma);
 
         if ((Serial) && (ActiveMenu == 5)) Serial.println("[Response sent to " + senderIDStr + "]");
-        Serial2.print("AT+SEND=" + senderIDStr + ",PONG,4\r\n");
+        Serial2.print("AT+SEND=" + senderIDStr + ",4,PONG\r\n");
         delay(100);
         Serial2.readStringUntil('\n'); // Purge the +OK response
 
@@ -95,7 +95,7 @@ inline bool pingMaster() { // Pings the master hub via LoRa WAN messsage
   while (Serial2.available()) Serial2.read();
 
   if ((Serial) && (ActiveMenu == 5)) Serial.println("[Pinging master hub]");
-  Serial2.print("AT+SEND=1,PING,4\r\n");
+  Serial2.print("AT+SEND=1,4,PING\r\n");
   delay(100);
   Serial2.readStringUntil('\n'); // Purge the +OK response
 
