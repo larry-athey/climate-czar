@@ -12,7 +12,7 @@
 //------------------------------------------------------------------------------------------------
 inline String QuerySlave(int ID, String Msg) {
   String Result = jsonFailure;
-  long timeout = millis() + 4000; // 4-second timeout
+  long timeout = millis() + 5000; // 5-second timeout
   slaveCount ++;
 
   // Clear the modem buffer of any junk before sending to the slave
