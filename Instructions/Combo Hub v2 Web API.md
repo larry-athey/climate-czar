@@ -30,9 +30,9 @@ Below are explanations of all available web API calls. All of these calls are ca
 
 **/hub-id/reboot** - Reboots the selected hub.
 
-**/hub-id/relay/which-one/state** - Toggles the on/off state of a specified relay port at the selected hub. **"which-one"** is a value of 1 to 16, **"state"** is 1 for on and 0 for off. Returns a JSON formatted success or failure message.
+**/hub-id/relay/which-one/state** - Toggles the on/off state of a specified relay port at the selected hub. **"which-one"** is a value of 1 to 15, **"state"** is 1 for on and 0 for off. Returns a JSON formatted success or failure message. Avoid toggling relay 16 unless you modify the source code to no longer use that output to perform hardware resets of the RYLR998 modem.
 
-**/hub-id/relay-state/which-one** - Returns the on/off state of a specified relay port at the selected hub. **"which-one"** is a value of 1 to 16.
+**/hub-id/relay-state/which-one** - Returns the on/off state of a specified relay port at the selected hub. **"which-one"** is a value of 1 to 15.
 
 **/hub-id/sensor-address/which-one** - Returns the address and current temperatures of the specified DS18B20 sensor connected to the selected hub. Since all API results are less than 100 characters due to LoRa WAN message length limitations, the entire list of all detected DS18B20 sensors via API call isn't possible. First make a call to **/hub-id/sensor-count** to get the total number of sensors, then call this function with any number from 1 to the total number of detected sensors. This can aid in Climate Czar Server configuration without the need to connect a laptop to the hub and using serial configuration menu option #4.
 
