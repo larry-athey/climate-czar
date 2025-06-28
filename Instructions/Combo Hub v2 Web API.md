@@ -34,6 +34,8 @@ Below are explanations of all available web API calls. All of these calls are ca
 
 **/hub-id/relay-state/which-one** - Returns the on/off state of a specified relay port at the selected hub. **"which-one"** is a value of 1 to 16.
 
+**/hub-id/sensor-address/which-one** - Returns the address and current temperatures of the specified DS18B20 sensor connected to the selected hub. Since all API results are less than 100 characters due to LoRa WAB message length limitations, the entire list of all detected DS18B20 sensors isn't possible. First make a call to **/hub-id/sensor-count** to get the total number of sensors, then call this function with any number from 1 to the total number of detected sensors. This can aid in Climate Czar Server configuration without the need to connect a laptop to the hub and using main menu function #4.
+
 **/hub-id/sensor-count** - Returns the total number of DS18B20 temperature sensors connected to the selected hub.
 
 **/hub-id/switch/which-one** - Returns the on/off state of a specified switch port at the selected hub. **"which-one"** is a value of 1 to 8.
