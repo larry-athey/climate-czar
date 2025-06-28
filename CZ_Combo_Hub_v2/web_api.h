@@ -108,6 +108,29 @@ inline String getRelayState(int ID, String Relay) {
   }
 }
 //------------------------------------------------------------------------------------------------
+inline String getSensorAddress(int ID, int WhichOne) {
+  if (ID > 0) {
+    return QuerySlave(ID,"/0/sensor-address/" + String(WhichOne));
+  } else {
+    if ((WhichOne > 0) && (WhichOne <= DT.getDeviceCount())) {
+      uint8_t deviceAddress[8];
+      DT.getAddress(deviceAddress,WhichOne - 1);
+      String addressStr = addressToString(deviceAddress);
+      return addressStr + " | " + GetDS18B20(addressStr,"c") + "C | " + GetDS18B20(addressStr,"f") + "F";
+    } else {
+      return jsonFailure;
+    }
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline String getSensorCount(int ID) {
+  if (ID > 0) {
+    return QuerySlave(ID,"/0/sensor-count");
+  } else {
+    return String(DT.getDeviceCount());
+  }
+}
+//------------------------------------------------------------------------------------------------
 inline String getSwitch(int ID, String Switch) {
   if (ID > 0) {
     return QuerySlave(ID,"/0/switch/" + Switch);
@@ -226,6 +249,10 @@ inline String handleWebRequest(String Msg) {
     if (partCount == 4) Result = setRelayState(parts[0].toInt(),parts[2],parts[3]);
   } else if (parts[1] == "relay-state") {
     if (partCount == 3) Result = getRelayState(parts[0].toInt(),parts[2]);
+  } else if (parts[1] == "sensor-address") {
+    if (partCount == 3) Result = getSensorAddress(parts[0].toInt(),parts[2].toInt());
+  } else if (parts[1] == "sensor-count") {
+    if (partCount == 2) Result = getSensorCount(parts[0].toInt());
   } else if (parts[1] == "switch") {
     if (partCount == 3) Result = getSwitch(parts[0].toInt(),parts[2]);
   } else if (parts[1] == "temperature") {
