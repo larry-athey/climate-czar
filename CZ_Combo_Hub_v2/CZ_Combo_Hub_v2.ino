@@ -533,6 +533,9 @@ void ScreenUpdate() {
     int deviceCount = DT.getDeviceCount();
     display.println(F("1-Wire Sensors"));
     display.print(F("Detected: ")); display.println(deviceCount);
+  } else if (ActivePage == 8) {
+    display.println(F("Ping Failures"));
+    display.print(PingFailures); display.print(F(" of ")); display.print(CZ_pingFailures);  display.print(F(" allowed"));
   }
   display.display();
 }
@@ -585,7 +588,7 @@ void loop() {
     while (digitalRead(BTN) == 0) delay(100);
     PageCycle = false;
     ActivePage ++;
-    if (ActivePage > 7) ActivePage = 0;
+    if (ActivePage > 8) ActivePage = 0;
     ScreenUpdate();
     ScreenTimer = CurrentTime;
   }
@@ -627,7 +630,7 @@ void loop() {
     ScreenUpdate();
     if (PageCycle) {
       ActivePage ++;
-      if (ActivePage > 7) ActivePage = 0;      
+      if (ActivePage > 8) ActivePage = 0;      
     }
     ScreenTimer = millis();
   }
