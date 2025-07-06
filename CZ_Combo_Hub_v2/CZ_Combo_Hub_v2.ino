@@ -617,6 +617,10 @@ void loop() {
       Serial2.print(Response + "\r\n");
       delay(100);
       Serial2.readStringUntil('\n'); // Purge the +OK response
+      if (Response == "Restarting...") {
+        delay(2000);
+        ESP.restart();
+      }
     }
   }
 
