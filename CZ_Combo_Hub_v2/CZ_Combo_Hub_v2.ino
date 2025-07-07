@@ -141,6 +141,7 @@ void resetRYLR998() { // Performs a hardware reset of the RYLR998 using the GPIO
 //------------------------------------------------------------------------------------------------
 void setup() {
   Serial.begin(115200);
+  Serial2.setRxBufferSize(1024);
   Serial2.begin(115200,SERIAL_8N1,16,17);
   delay(500);
 
