@@ -17,6 +17,9 @@ inline void LoRa_Init() { // Initialize the RYLR998 modem after configuration ch
   Serial2.print("AT+NETWORKID=" + String(LoRa_Network) + "\r\n");
   delay(200);
   echoRYLR998();
+  Serial2.print("AT+CPIN=" + LoRa_PW + "\r\n");
+  delay(200);
+  echoRYLR998();
   Serial2.print(F("AT+BAND=915000000\r\n"));
   delay(200);
   echoRYLR998();

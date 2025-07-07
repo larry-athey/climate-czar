@@ -110,6 +110,7 @@ unsigned long apiCount = 0;      // Counts the total number of API requests (LoR
 unsigned long slaveCount = 0;    // Counts the number of slave API requests (LoRa debugging)
 String CZ_deviceName = "null";   // Network host name and LoRa device name
 String CZ_Watchdog = "8.8.8.8";  // Watchdog host to ping to verify network connectivity
+String LoRa_PW = "1A2B3C4D";     // LoRa domain password (8 char hex), change to something else
 String Net_DNS = "";             // Network static DNS resolver
 String Net_Gateway = "";         // Network static default gateway
 String Net_IP = "";              // Network static IP address
@@ -201,6 +202,9 @@ void setup() {
   Serial2.print("AT+NETWORKID=" + String(LoRa_Network) + "\r\n");
   delay(200);
   echoRYLR998();
+  Serial2.print("AT+CPIN=" + LoRa_PW + "\r\n");
+  delay(200);
+  echoRYLR998();
   Serial2.print(F("AT+BAND=915000000\r\n"));
   delay(200);
   echoRYLR998();
@@ -248,6 +252,7 @@ void GetMemory() { // Get the configuration settings from flash memory on startu
   LoRa_Mode        = preferences.getUInt("lora_mode",0);
   LoRa_Network     = preferences.getUInt("lora_network",7);
   LoRa_Address     = preferences.getUInt("lora_address",1);
+  LoRa_PW          = preferences.getString("lora_pw","1A2B3C4D");
 
   Net_useWifi      = preferences.getUInt("net_usewifi",0);
   Net_wifiSSID     = preferences.getString("net_wifissid","");
@@ -272,6 +277,7 @@ void SetMemory() { // Update flash memory with the current configuration setting
   preferences.putUInt("lora_mode",LoRa_Mode);
   preferences.putUInt("lora_network",LoRa_Network);
   preferences.putUInt("lora_address",LoRa_Address);
+  preferences.putString("lora_pw",LoRa_PW);
 
   preferences.putUInt("net_usewifi",Net_useWifi);
   preferences.putString("net_wifissid",Net_wifiSSID);

@@ -76,6 +76,7 @@ inline void LoRaMenu() { // Display the LoRa WAN configuration menu
   Serial.println(F("  1. Set Master/Slave Mode"));
   Serial.println(F("  2. Set Network ID"));
   Serial.println(F("  3. Set Network Address"));
+  Serial.println(F("  4. Set Domain Password"));
   Serial.println(F("  Q. Quit this menu"));
   Serial.print(F("\nChoose an option: "));
 }
@@ -194,6 +195,12 @@ inline void get_LoRaNetwork() { // Get the LoRa network ID
   if (LoRa_Network != 18) { // Valid network ID, but mostly unknown to others
     if (LoRa_Network > 15) LoRa_Network = 15;
   }
+}
+//-----------------------------------------------------------------------------------------------
+inline void get_LoRaPW() { // Get the LoRa domain password
+  Serial.print(F("Enter the LoRa domain password (8 characters, hex): "));
+  LoRa_PW = ReadInput().substring(0,8);
+  LoRa_PW.toUpperCase();
 }
 //-----------------------------------------------------------------------------------------------
 inline void get_wifiPassword() { // Get the WiFi password
@@ -331,6 +338,11 @@ inline void SerialConfigInput() { // Handle user configuration via the serial co
       LoRaMenu();
     } else if (Option == "3") {
       get_LoRaAddress();
+      resetRYLR998();
+      LoRa_Init();
+      LoRaMenu();
+    } else if (Option == "4") {
+      get_LoRaPW();
       resetRYLR998();
       LoRa_Init();
       LoRaMenu();
