@@ -154,6 +154,9 @@ void setup() {
     GetMemory();
   }
 
+  // Inidialize I2C
+  Wire.begin(SDA_PIN,SCL_PIN);
+  
   // Initialize inputs/outputs
   for (int i = 0; i <= 7; i ++) {
     pinMode(inputPins[i],INPUT_PULLUP); // Switch grounds the pin to register 1=true in the web API
@@ -168,9 +171,6 @@ void setup() {
     mcp.pinMode(i,OUTPUT);
     mcp.digitalWrite(i,LOW);
   }
-
-  // Inidialize I2C
-  Wire.begin(SDA_PIN,SCL_PIN);
 
   // Initialize the DHT22
   dhtSensor.setup(DHT_PIN,DHTesp::DHT22);
