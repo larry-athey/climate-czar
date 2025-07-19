@@ -230,9 +230,9 @@ void loop() {
   Humidity = DHT.humidity;
   TempC = DHT.temperature;
   TempF = TempC * 9 / 5 + 32;
+
   float Lux = lightMeter.readLightLevel(); // Value range is 0 (darkness)..65535 (direct sunlight)
-  Light = .1 * Lux; // Adjust multiplier as needed, depending on the location of the outdoor unit
-  if (Light > 100) Light = 100; // For daylight sensing, all you need to worry about is 0..1000 Lux
+  Light = (Lux / 54612.5) * 100;; // Adjust multiplier as needed, depending on the location of the outdoor unit
 
   if (ScreenTimer == 1000) {
     ScreenUpdate();
