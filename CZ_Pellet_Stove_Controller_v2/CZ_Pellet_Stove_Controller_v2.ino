@@ -48,7 +48,7 @@
 // If the stove body temperature fails to reach the minimum operating temperature in time, this
 // initiates the stove shutdown procedure. This disables the top auger feed timer. The power to
 // the combustion blower, bottom auger, and room air blower is left on for twice the length of
-// the countdown timer to make sure that all pellets and coals have completely burned out.
+// the startup timer to make sure that all pellets and coals have completely burned out.
 //
 // The countdown timer for the shutdown process cannot be interrupted from the web UI or using
 // the buttons on the ESP32. The only way to interrupt this is to make a web API call to reset
