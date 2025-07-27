@@ -55,12 +55,6 @@
 // the pellet stove controller. Complicating this is intentional so a person can't accidentally
 // cause a burn-back situation and ignite the pellets in the hopper.
 //------------------------------------------------------------------------------------------------
-//sqlite3 $DB "CREATE TABLE Stats (ID INTEGER PRIMARY KEY,Temperature FLOAT,Probe1 FLOAT,Probe2 FLOAT,Probe3 FLOAT,Probe4 FLOAT,Probe5 FLOAT,Probe6 FLOAT,Probe7 FLOAT,Probe8 FLOAT,Combustion INT,RoomBlower INT,Ignitor INT,OpMode INT,StoveOn INT,HighBurn INT,CountDown INT,Restart INT,LowTempFail TEXT,ShutDownTime TEXT)"
-//sqlite3 $DB "INSERT INTO Stats (Temperature,Probe1,Probe2,Probe3,Probe4,Probe5,Probe6,Probe7,Probe8,Combustion,RoomBlower,Ignitor,OpMode,StoveOn,HighBurn,CountDown,Restart,LowTempFail,ShutDownTime) VALUES (32.5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'','')"
-
-//sqlite3 $DB "CREATE TABLE Settings (ID INTEGER PRIMARY KEY,Deadline INT,OpTemp INT,MaxTemp INT,HighFeed FLOAT,LowFeed FLOAT,CookTemp INT)"
-//sqlite3 $DB "INSERT INTO Settings (Deadline,OpTemp,MaxTemp,HighFeed,LowFeed,CookTemp) VALUES (1500,90,400,4.5,1.6,225)"
-//------------------------------------------------------------------------------------------------
 #include "WiFi.h"                // WiFi network connectivity library
 #include "ESP32Ping.h"           // ICMP (ping) library from https://github.com/marian-craciunescu/ESP32Ping
 #include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.6.0
@@ -96,17 +90,21 @@ Adafruit_MLX90614 mlx = Adafruit_MLX90614();
 Preferences preferences;
 hw_timer_t *timer = NULL;
 //------------------------------------------------------------------------------------------------
-bool FaultState = false;         // True if a critical fault is detected
 bool UpToTemp = false;           // True if the run startup has reached operating temperature
 bool UseThermostat = true;       // Use the internal thermostat routines Y/N
 byte TemperatureMode = 0;        // 0=Fahrenheit, 1=Celcius
-byte OpMode = 0;                 // 0=Off, 1=Startup, 2=Running, 3=Shutdown, 4=TempFail, 5=Fault
+byte OpMode = 0;                 // 0=Off, 1=Startup, 2=Running, 3=Shutdown, 4=TempFail, 5=Shutdown, 6=Fault
 byte wifiCheckCounter = 0;       // Used to check the WiFi connection once per minute
 byte wifiMode = 0;               // DHCP (0) or manual configuration (1)
+int StartupTimer = 1200;         // Seconds allowed for the stove body to reach operating temperature
 long LoopCounter = 0;            // Timekeeper for the loop to eliminate the need to delay it
 long StartTime = 0;              // Start time of the current stove run
 float feedRateLow = 1.6;         // Top auger feed time in seconds (idle mode)
 float feedRateHigh = 4.5;        // Top auger feed time in seconds (high burn mode)
+float maxTempC = 148.9;          // Maximum stove body temperature in Celcius
+float maxTempF = 300.0;          // Maximum stove body temperature in Fahrenheit
+float minTempC = 32.2;           // Minimum stove body temperature in Celcius
+float minTempF = 90.0;           // Minimum stove body temperature in Fahrenheit
 float roomTempC = 0.0;           // Room temperature in Celcius
 float roomTempF = 0.0;           // Room temperature in Fahrenheit
 float stoveTempC = 0.0;          // Stove body temperature in Celcius
@@ -204,7 +202,7 @@ void setup() {
 
   if (! mlx.begin()) {
     Serial.println(F("Error initializing the stove body temperature sensor"));
-    FaultState = true;
+    OpMode = 6;
   };
 
   LoopCounter = millis();
@@ -341,10 +339,16 @@ void loop() {
   }
 
   // Check the external control GPIO pins
-  if (digitalRead(FAULT) == 0) FaultState = true;
-  if (digitalRead(HIGH_BURN) == 0) FEED_TIME = feedRatehigh * 1000;
+  if (digitalRead(FAULT) == 0) OpMode = 6;
+  if ((digitalRead(HIGH_BURN) == 0) && (OpMode == 2)) FEED_TIME = feedRateHigh * 1000;
 
   // Check for button presses
+  if ((digitalRead(START_BTN) == 0) && ((OpMode == 0) || (OpMode == 2))) {
+    
+  }
+  if ((digitalRead(BURN_BTN) == 0) && (OpMode == 2)) {
+    
+  }
 
   // Check for HTTP API calls and handle as necessary
   WiFiClient Client = Server.available();
@@ -379,8 +383,12 @@ void loop() {
   if (CurrentTime - LoopCounter >= 1000) {
     GetStoveTemp();
     GetRoomTemp();
-    if (! FaultState) {
+    if (OpMode < 6) {
 
+
+    } else {
+      timerAlarmDisable(timer);
+      digitalWrite(TOP_AUGER,LOW);
 
     }
     if (wifiCheckCounter >= 60) {
