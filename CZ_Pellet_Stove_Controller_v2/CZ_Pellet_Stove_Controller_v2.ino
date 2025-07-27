@@ -380,6 +380,8 @@ void loop() {
 
   // Check for serial console input and handle as necessary
   //if ((Serial) && (Serial.available())) HandleSerialInput();
+
+  // Execute the 1-second non-blocking timer routines
   if (CurrentTime - LoopCounter >= 1000) {
     GetStoveTemp();
     GetRoomTemp();
