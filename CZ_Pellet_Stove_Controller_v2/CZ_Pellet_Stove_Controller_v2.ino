@@ -8,7 +8,7 @@
 // Make sure that you only install the Espressif ESP32 v2.0.14 board library since the 3.x stuff
 // is not backward compatible and will throw syntax errors all over the place. <Nice fkin upgrade>
 //
-// This project is an easy drop-in replacement for any common pellet stove controller that brings
+// This project is an easy drop-in replacement for any common pellet stove controller, and brings
 // WiFi connectivity to it and eliminates the need for an add-on thermostat. Aside from the stove
 // now having a web UI that you can control from any mobile phone or desktop/laptop, a web API is
 // also included. This allows Climate Czar Server and most any home automation software to run it.
@@ -99,6 +99,7 @@ byte wifiCheckCounter = 0;       // Used to check the WiFi connection once per m
 byte wifiMode = 0;               // DHCP (0) or manual configuration (1)
 long StartupTimer = 1200;        // Seconds allowed for the stove body to reach operating temperature
 unsigned long LoopCounter = 0;   // Timekeeper for the loop to eliminate the need to delay it
+unsigned long StartTime = 0;     // Start timestamp of the current run
 unsigned long TargetTime = 0;    // Startup and shutdown target time
 float feedRateLow = 1.6;         // Top auger feed time in seconds (idle mode)
 float feedRateHigh = 4.5;        // Top auger feed time in seconds (high burn mode)
@@ -112,7 +113,6 @@ float stoveTempC = 0.0;          // Stove body temperature in Celcius
 float stoveTempF = 0.0;          // Stove body temperature in Fahrenheit
 float targetTempF = 0.0;         // Thermostat target temperature in Celcius
 float targetTempC = 0.0;         // Thermostat target temperature in Fahrenheit
-
 String DeviceName = "";          // Network host name and device name to be displayed in the web UI
 String Runtime = "00:00:00";     // Current stove runtime
 String Uptime = "00:00:00";      // Current system uptime
@@ -296,6 +296,7 @@ void GetMemory() { // Get the configuration settings from flash memory on startu
   wifiMask         = preferences.getString("wifi_mask","");
   wifiGateway      = preferences.getString("wifi_gateway","");
   wifiDNS          = preferences.getString("wifi_dns","");
+
   DeviceName       = preferences.getString("device_name",sanitizeHostname(""));
   feedRateHigh     = preferences.getFloat("feed_rate_high",4.5);
   feedRateLow      = preferences.getFloat("feed_rate_low",1.6);
@@ -322,6 +323,7 @@ void SetMemory() { // Update flash memory with the current configuration setting
   preferences.putString("wifi_mask",wifiMask);
   preferences.putString("wifi_gateway",wifiGateway);
   preferences.putString("wifi_dns",wifiDNS);
+
   preferences.putString("device_name",DeviceName);
   preferences.putUInt("op_mode",OpMode);
   preferences.putUInt("temperature_mode",TemperatureMode);
@@ -366,6 +368,7 @@ void ScreenUpdate() { // Update the LCD screen
 void ToggleRunState(bool Running) { // Start or stop the pellet stove
   if (Running) {
     TargetTime = millis() + (StartupTimer * 1000);
+    StartTime = millis();
     digitalWrite(BOTTOM_AUGER,HIGH);
     digitalWrite(COMBUSTION_BLOWER,HIGH);
     digitalWrite(IGNITOR,HIGH);
@@ -476,7 +479,7 @@ void loop() {
     GetStoveTemp();
     GetRoomTemp();
     if (OpMode < 5) {
-
+      if (OpMode > 0) Runtime = formatMillis(CurrentTime - StartTime);
 
     } else {
       timerAlarmDisable(timer);
