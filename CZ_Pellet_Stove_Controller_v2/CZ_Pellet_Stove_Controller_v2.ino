@@ -224,7 +224,7 @@ void setup() {
 //------------------------------------------------------------------------------------------------
 // External function includes are used here to reduce the overall size of the main sketch.
 // Go ahead and call it non-standard, but I don't like spaghetti code that goes on forever.
-#include "helpers.h"  // Inline function library for data validation/formatting helpers
+#include "helpers.h" // Inline function library for data validation/formatting helpers
 //------------------------------------------------------------------------------------------------
 void ConnectWiFi() { // Connect to WiFi network, must be WPA2-PSK, not WPA3
   byte x = 0;
@@ -407,9 +407,9 @@ void ToggleRunState(bool Running) { // Start or stop the pellet stove
 //------------------------------------------------------------------------------------------------
 // External function includes are used here to reduce the overall size of the main sketch.
 // Go ahead and call it non-standard, but I don't like spaghetti code that goes on forever.
-#include "web_api.h"             // Inline function library for the web API functions
-#include "web_ui.h"              // Inline function library for the web UI functions
-#include "serial_config.h"       // Inline function library for system configutation via serial
+#include "web_ui.h"        // Inline function library for the web UI functions
+#include "web_api.h"       // Inline function library for the web API functions
+#include "serial_config.h" // Inline function library for system configutation via serial
 //------------------------------------------------------------------------------------------------
 void loop() {
   unsigned long CurrentTime = millis();
