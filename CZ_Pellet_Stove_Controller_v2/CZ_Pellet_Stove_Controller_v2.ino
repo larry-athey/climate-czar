@@ -94,12 +94,12 @@ bool HighBurn = false;           // True if high burn mode is active
 bool UpToTemp = false;           // True if the run startup has reached operating temperature
 bool UseThermostat = true;       // Use the internal thermostat routines Y/N
 byte TemperatureMode = 0;        // 0=Fahrenheit, 1=Celcius
-byte OpMode = 0;                 // 0=Off, 1=Startup, 2=Running, 3=Shutdown, 4=TempFail, 5=Shutdown, 6=Fault
+byte OpMode = 0;                 // 0=Off, 1=Startup, 2=Running, 3=TempFail, 4=Shutdown, 5=Fault
 byte wifiCheckCounter = 0;       // Used to check the WiFi connection once per minute
 byte wifiMode = 0;               // DHCP (0) or manual configuration (1)
-int StartupTimer = 1200;         // Seconds allowed for the stove body to reach operating temperature
-long LoopCounter = 0;            // Timekeeper for the loop to eliminate the need to delay it
-long StartTime = 0;              // Start time of the current stove run
+long StartupTimer = 1200;        // Seconds allowed for the stove body to reach operating temperature
+unsigned long LoopCounter = 0;   // Timekeeper for the loop to eliminate the need to delay it
+unsigned long TargetTime = 0;    // Startup and shutdown target time
 float feedRateLow = 1.6;         // Top auger feed time in seconds (idle mode)
 float feedRateHigh = 4.5;        // Top auger feed time in seconds (high burn mode)
 float maxTempC = 148.9;          // Maximum stove body temperature in Celcius
@@ -174,13 +174,6 @@ void setup() {
   timerAttachInterrupt(timer,&onTimer,true);
   timerAlarmWrite(timer,100000,true);  // Trigger every 100ms (100,000µs)
 
-  // Enable top auger PWM
-  //timerAlarmEnable(timer);
-
-  // Disable top auger PWM
-  //timerAlarmDisable(timer);
-  //digitalWrite(TOP_AUGER,LOW);
-
   // Initialize the OneWire and I2C buses
   DT.begin();
   Wire.begin(SDA,SCL);
@@ -201,14 +194,22 @@ void setup() {
   canvas->begin();
   ScreenUpdate();
 
+  // Initialize the stove body temperature sensor
   if (! mlx.begin()) {
     canvas->fillScreen(RED);
     PopoverMessage("Stove body temp sensor failure");
     ScreenUpdate();
     Serial.println(F("Stove body temperature sensor failure"));
-    OpMode = 6;
+    OpMode = 5;
     delay(2000);
   };
+
+  // Power failure recovery routine
+  if ((OpMode == 1) || (OpMode == 2)) {
+    ToggleRunState(true);
+  } else if ((OpMode == 3) || (OpMode == 4)) {
+    ToggleRunState(false);
+  }
 
   LoopCounter = millis();
 }
@@ -303,6 +304,7 @@ void GetMemory() { // Get the configuration settings from flash memory on startu
   minTempC         = preferences.getFloat("min_temp_c",32.2);
   minTempF         = preferences.getFloat("min_temp_f",90.0);
   OpMode           = preferences.getUInt("op_mode",0);
+  StartupTimer     = preferences.getUInt("startup_timer",1200);
   targetTempC      = preferences.getFloat("target_temp_c",20.5);
   targetTempF      = preferences.getFloat("target_temp_f",69.0);
   TemperatureMode  = preferences.getUInt("temperature_mode",0);
@@ -361,6 +363,27 @@ void ScreenUpdate() { // Update the LCD screen
   canvas->flush();
 }
 //------------------------------------------------------------------------------------------------
+void ToggleRunState(bool Running) { // Start or stop the pellet stove
+  if (Running) {
+    TargetTime = millis() + (StartupTimer * 1000);
+    digitalWrite(BOTTOM_AUGER,HIGH);
+    digitalWrite(COMBUSTION_BLOWER,HIGH);
+    digitalWrite(IGNITOR,HIGH);
+    OpMode = 2;
+    HighBurn = true;
+    FEED_TIME = feedRateHigh * 1000;
+    timerAlarmEnable(timer);
+  } else {
+    TargetTime = millis() + ((StartupTimer * 1000) * 2);
+    OpMode = 3;
+    HighBurn = false;
+    FEED_TIME = feedRateLow * 1000;
+    timerAlarmDisable(timer);
+    digitalWrite(TOP_AUGER,LOW);
+  }
+  SetMemory();
+}
+//------------------------------------------------------------------------------------------------
 // External function includes are used here to reduce the overall size of the main sketch.
 // Go ahead and call it non-standard, but I don't like spaghetti code that goes on forever.
 #include "web_api.h"             // Inline function library for the web API functions
@@ -368,7 +391,7 @@ void ScreenUpdate() { // Update the LCD screen
 #include "serial_config.h"       // Inline function library for system configutation via serial
 //------------------------------------------------------------------------------------------------
 void loop() {
-  long CurrentTime = millis();
+  unsigned long CurrentTime = millis();
   Uptime = formatMillis(CurrentTime);
   wifiCheckCounter ++;
   if (CurrentTime > 4200000000) {
@@ -377,10 +400,10 @@ void loop() {
   }
 
   // Check the external control GPIO pins
-  if (digitalRead(FAULT) == 0) OpMode = 6; // Forced fault detection, must reboot the controller to clear the OpCode
+  if (digitalRead(FAULT) == 0) OpMode = 5; // Forced fault detection, must reboot the controller to clear the OpCode
   if (! UseThermostat) {
     if (digitalRead(HIGH_BURN) == 0) { // Toggle the high burn mode if using an external thermostat
-      if (OpMode == 2)) {
+      if (OpMode == 2) {
         HighBurn = true;
         FEED_TIME = feedRateHigh * 1000;
       }
@@ -398,9 +421,9 @@ void loop() {
       HoldCount ++;
       if (HoldCount == 5) { // 5 second hold detected
         if (OpMode == 0) { // Start up
-
+          ToggleRunState(true);
         } else { // Shut down
-
+          ToggleRunState(false);
         }
       }
     }
@@ -428,14 +451,15 @@ void loop() {
         char c = Client.read();
         if ((c != '\r') && (c != '\n')) Header += c;
         if (c == '\n') {
-          if (Header.indexOf("GET ") == 0) {
-            //String Content = HandleAPI(Header);
-            //Client.println(Content);
-            //if (Content == "Rebooting...") { // Need to wait to reboot until after the response is sent
-            //  Client.stop();
-            //  delay(1000);
-            //  ESP.restart();
-            //}
+          if ((Header.length() > 0) && (Header.indexOf("GET ") == 0)) {
+            Header.remove(0,4); // Delete the "GET " from the beginning
+            Header.remove(Header.indexOf(" HTTP/1.1"),9); // Delete the " HTTP/1.1" from the end
+            String Result = handleWebRequest(Header);
+            if (Result == "Rebooting...") { // Need to wait to reboot until after the response is sent
+              Client.stop();
+              delay(1000);
+              ESP.restart();
+            }
             break;
           }
         }
@@ -451,13 +475,12 @@ void loop() {
   if (CurrentTime - LoopCounter >= 1000) {
     GetStoveTemp();
     GetRoomTemp();
-    if (OpMode < 6) {
+    if (OpMode < 5) {
 
 
     } else {
       timerAlarmDisable(timer);
       digitalWrite(TOP_AUGER,LOW);
-
     }
     if (wifiCheckCounter >= 60) {
       bool PingTest = Ping.ping(wifiGateway.c_str(),2);
