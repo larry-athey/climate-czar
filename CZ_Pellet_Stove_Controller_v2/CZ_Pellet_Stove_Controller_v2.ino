@@ -115,6 +115,7 @@ float targetTempF = 0.0;         // Thermostat target temperature in Celcius
 float targetTempC = 0.0;         // Thermostat target temperature in Fahrenheit
 String DeviceName = "";          // Network host name and device name to be displayed in the web UI
 String Runtime = "00:00:00";     // Current stove runtime
+String Status = "";              // Status bar message displayed on the screen
 String Uptime = "00:00:00";      // Current system uptime
 String Version = "2.0.1";        // Current release version of the project
 String wifiSSID = "none";        // WiFi network SSID
@@ -196,9 +197,10 @@ void setup() {
 
   // Initialize the stove body temperature sensor
   if (! mlx.begin()) {
+    Status = "Stove body temp sensor failure";
     canvas->fillScreen(RED);
-    PopoverMessage("Stove body temp sensor failure");
-    ScreenUpdate();
+    PopoverMessage(Status);
+    canvas->flush();
     Serial.println(F("Stove body temperature sensor failure"));
     OpMode = 5;
     delay(2000);
@@ -207,9 +209,14 @@ void setup() {
   // Power failure recovery routine
   if ((OpMode == 1) || (OpMode == 2)) {
     ToggleRunState(true);
+    Status = "Stove is restarting";
   } else if ((OpMode == 3) || (OpMode == 4)) {
     ToggleRunState(false);
+    Status = "Stove shutdown process resumed";
+  } else {
+    Status = "Stove is not running";
   }
+  ScreenUpdate();
 
   LoopCounter = millis();
 }
@@ -314,7 +321,6 @@ void GetMemory() { // Get the configuration settings from flash memory on startu
 }
 //------------------------------------------------------------------------------------------------
 void SetMemory() { // Update flash memory with the current configuration settings
-  /*
   preferences.begin("prefs",false);
   preferences.putUInt("wifi_mode",wifiMode);
   preferences.putString("wifi_ssid",wifiSSID);
@@ -325,10 +331,19 @@ void SetMemory() { // Update flash memory with the current configuration setting
   preferences.putString("wifi_dns",wifiDNS);
 
   preferences.putString("device_name",DeviceName);
+  preferences.putFloat("feed_rate_high",feedRateHigh);
+  preferences.putFloat("feed_rate_low",feedRateLow);
+  preferences.putFloat("max_temp_c",maxTempC);
+  preferences.putFloat("max_temp_f",maxTempF);
+  preferences.putFloat("min_temp_c",minTempC);
+  preferences.putFloat("min_temp_f",minTempF);
   preferences.putUInt("op_mode",OpMode);
+  preferences.putUInt("startup_timer",StartupTimer);
+  preferences.putFloat("target_temp_c",targetTempC);
+  preferences.putFloat("target_temp_f",targetTempF);
   preferences.putUInt("temperature_mode",TemperatureMode);
+  preferences.putBool("use_thermostat",UseThermostat);
   preferences.end();
-  */
 }
 //------------------------------------------------------------------------------------------------
 void GetStoveTemp() { // Gets the stove body temperature
@@ -403,7 +418,7 @@ void loop() {
   }
 
   // Check the external control GPIO pins
-  if (digitalRead(FAULT) == 0) OpMode = 5; // Forced fault detection, must reboot the controller to clear the OpCode
+  if (digitalRead(FAULT) == 0) OpMode = 5; // Forced fault detection by GPIO, must reboot the controller to clear the fault
   if (! UseThermostat) {
     if (digitalRead(HIGH_BURN) == 0) { // Toggle the high burn mode if using an external thermostat
       if (OpMode == 2) {
@@ -425,7 +440,7 @@ void loop() {
       if (HoldCount == 5) { // 5 second hold detected
         if (OpMode == 0) { // Start up
           ToggleRunState(true);
-        } else { // Shut down
+        } else if (OpMode == 2) { // Shut down
           ToggleRunState(false);
         }
       }
