@@ -478,6 +478,7 @@ void loop() {
             Header.remove(0,4); // Delete the "GET " from the beginning
             Header.remove(Header.indexOf(" HTTP/1.1"),9); // Delete the " HTTP/1.1" from the end
             String Result = handleWebRequest(Header);
+            Client.println(Result);
             if (Result == "Rebooting...") { // Need to wait to reboot until after the response is sent
               Client.stop();
               delay(1000);
