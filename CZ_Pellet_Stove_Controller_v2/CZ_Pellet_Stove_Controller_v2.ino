@@ -114,6 +114,7 @@ float stoveTempF = 0.0;          // Stove body temperature in Fahrenheit
 float targetTempF = 0.0;         // Thermostat target temperature in Celcius
 float targetTempC = 0.0;         // Thermostat target temperature in Fahrenheit
 String DeviceName = "";          // Network host name and device name to be displayed in the web UI
+String Countdown = "00:00:00";   // Visual countdown timer for startup and shutdown
 String Runtime = "00:00:00";     // Current stove runtime
 String Status = "";              // Status bar message displayed on the screen
 String Uptime = "00:00:00";      // Current system uptime
@@ -391,6 +392,7 @@ void ToggleRunState(bool Running) { // Start or stop the pellet stove
     HighBurn = true;
     FEED_TIME = feedRateHigh * 1000;
     timerAlarmEnable(timer);
+    Status = "Pellet stove starting up";
   } else {
     TargetTime = millis() + ((StartupTimer * 1000) * 2);
     OpMode = 4;
@@ -398,6 +400,7 @@ void ToggleRunState(bool Running) { // Start or stop the pellet stove
     FEED_TIME = feedRateLow * 1000;
     timerAlarmDisable(timer);
     digitalWrite(TOP_AUGER,LOW);
+    Status = "Pellet stove shutting down";
   }
   SetMemory();
 }
@@ -451,9 +454,11 @@ void loop() {
     if (HighBurn) {
       HighBurn = false;
       FEED_TIME = feedRateLow * 1000;
+      Status = "Idle burn mode activated";
     } else {
       HighBurn = true;
       FEED_TIME = feedRateHigh * 1000;
+      Status = "High burn mode activated";
     }
   }
 
@@ -497,17 +502,20 @@ void loop() {
       if (OpMode != 2) Runtime = formatMillis(CurrentTime - StartTime);
       if (OpMode == 1) { // Starting up
         // All temperature checks are performed in Fahrenheit due to its greater level of granularity
+        Countdown = formatMillis(TargetTime - CurrentTime);
         if (stoveTempF >= minTempF) { // Startup successful, stove body up to temperature
           OpMode = 2;
           TargetTime = 0;
           HighBurn = false;
           FEED_TIME = feedRateLow * 1000;
           digitalWrite(IGNITOR,LOW);
+          Status = "Stove is now up to temperature";
         } else {
           if (CurrentTime > TargetTime) { // Startup failed, timer expired before the stove body reached minimum temperature
             ToggleRunState(false);
             OpMode = 3;
             SetMemory();
+            Status = "Startup temperature failure";
           }
         }
       } else if (OpMode == 2) { // Stove body is up to temp and running
@@ -515,17 +523,21 @@ void loop() {
           if (roomTempF < targetTempF) {
             HighBurn = true;
             FEED_TIME = feedRateHigh * 1000;
+            Status = "High burn mode activated";
           } else if (roomTempF > targetTempF) {
             HighBurn = false;
             FEED_TIME = feedRateLow * 1000;
+            Status = "Idle burn mode activated";
           }
         }
         if ((stoveTempF <= minTempF) || (stoveTempF >= maxTempF)) { // Stove body temperature failure during a normal run
           ToggleRunState(false);
           OpMode = 3;
           SetMemory();
+          Status = "Temp failure, shutting down";
         }
       } else if (OpMode == 3) { // Stove body temperature failure (either under minimum or over maximum)
+        Countdown = formatMillis(TargetTime - CurrentTime);
         if (CurrentTime > TargetTime) { // Shutdown procedure complete
           OpMode = 0;
           StartTime = 0;
@@ -534,8 +546,10 @@ void loop() {
           digitalWrite(COMBUSTION_BLOWER,LOW);
           digitalWrite(IGNITOR,LOW);
           SetMemory();
+          Status = "Temp failure shutdown complete";
         }
       } else if (OpMode == 4) { // Manual shutdown
+        Countdown = formatMillis(TargetTime - CurrentTime);
         if (CurrentTime > TargetTime) { // Shutdown procedure complete
           OpMode = 0;
           StartTime = 0;
@@ -544,6 +558,7 @@ void loop() {
           digitalWrite(COMBUSTION_BLOWER,LOW);
           digitalWrite(IGNITOR,LOW);
           SetMemory();
+          Status = "Manual shutdown complete";
         }
       }
     } else {
