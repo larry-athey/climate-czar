@@ -533,6 +533,7 @@ void loop() {
       }
     } else {
       ToggleRunState(false);
+      OpMode = 5;
       SetMemory();
     }
     if (wifiCheckCounter >= 60) {
