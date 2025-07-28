@@ -146,7 +146,7 @@ void setup() {
   Serial.begin(115200);
   Serial.setDebugOutput(false);
   delay(1000);
-  //PurgeBuffer();
+  while (Serial.available()) Serial.read();
   if (Serial) Serial.println("");
 
   // Get the last user settings from flash memory
@@ -201,12 +201,20 @@ void setup() {
   ScreenUpdate();
 
   if (! mlx.begin()) {
-    Serial.println(F("Error initializing the stove body temperature sensor"));
+    canvas->fillScreen(RED);
+    PopoverMessage("Stove body temp sensor failure");
+    ScreenUpdate();
+    Serial.println(F("Stove body temperature sensor failure"));
     OpMode = 6;
+    delay(5000);
   };
 
   LoopCounter = millis();
 }
+//------------------------------------------------------------------------------------------------
+// External function includes are used here to reduce the overall size of the main sketch.
+// Go ahead and call it non-standard, but I don't like spaghetti code that goes on forever.
+#include "helpers.h"  // Inline function library for data validation/formatting helpers
 //------------------------------------------------------------------------------------------------
 void ConnectWiFi() { // Connect to WiFi network, must be WPA2-PSK, not WPA3
   byte x = 0;
@@ -287,9 +295,10 @@ void GetMemory() { // Get the configuration settings from flash memory on startu
   wifiMask         = preferences.getString("wifi_mask","");
   wifiGateway      = preferences.getString("wifi_gateway","");
   wifiDNS          = preferences.getString("wifi_dns","");
-  DeviceName       = preferences.getString("device_name","Boilermaker-" + WiFi.macAddress());
+  DeviceName       = preferences.getString("device_name",sanitizeHostname(""));
   OpMode           = preferences.getUInt("op_mode",1);
-  TargetTemp       = preferences.getFloat("target_temp",80.0);
+  targetTempC      = preferences.getFloat("target_temp_c",20.5);
+  targetTempF      = preferences.getFloat("target_temp_f",69.0);
   preferences.end();
   */
 }
@@ -325,13 +334,35 @@ void GetRoomTemp () { // Gets the room temperature if using the built-in thermos
   }
 }
 //------------------------------------------------------------------------------------------------
+void PopoverMessage(String Msg) { // Display popover message to the user
+  int16_t nX = 0, nY = 0, TextX;
+  uint16_t nWidth = 0, nHeight = 0;
+
+  canvas->setFont(&FreeSans9pt7b);
+  canvas->setTextColor(BLACK);
+  canvas->getTextBounds(Msg,0,0,&nX,&nY,&nWidth,&nHeight);
+  TextX = round(nWidth / 2);
+  canvas->fillRoundRect(160 - TextX - 12,60,nWidth + 26,40,5,WHITE);
+  canvas->drawRoundRect(160 - TextX - 12,60,nWidth + 26,40,5,BLACK);
+  canvas->setCursor(160 - TextX,85);
+  canvas->print(Msg);
+  canvas->flush();
+}
+//------------------------------------------------------------------------------------------------
 void ScreenUpdate() { // Update the LCD screen
 
+  canvas->flush();
 }
+//------------------------------------------------------------------------------------------------
+// External function includes are used here to reduce the overall size of the main sketch.
+// Go ahead and call it non-standard, but I don't like spaghetti code that goes on forever.
+#include "web_api.h"             // Inline function library for the web API functions
+#include "web_ui.h"              // Inline function library for the web UI functions
+#include "serial_config.h"       // Inline function library for system configutation via serial
 //------------------------------------------------------------------------------------------------
 void loop() {
   long CurrentTime = millis();
-  //Uptime = formatMillis(CurrentTime);
+  Uptime = formatMillis(CurrentTime);
   wifiCheckCounter ++;
   if (CurrentTime > 4200000000) {
     // Reboot the system if we're reaching the maximum long integer value of CurrentTime (49 days)
