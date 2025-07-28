@@ -154,7 +154,7 @@ void setup() {
   if (wifiSSID == "none") {
     SetMemory();
   } else {
-    //if ((wifiSSID != "none") && (wifiPassword != "")) ConnectWiFi();
+    if ((wifiSSID != "none") && (wifiPassword != "")) ConnectWiFi();
   }
 
   // Initialize the GPIO pins
@@ -206,7 +206,7 @@ void setup() {
     ScreenUpdate();
     Serial.println(F("Stove body temperature sensor failure"));
     OpMode = 6;
-    delay(5000);
+    delay(2000);
   };
 
   LoopCounter = millis();
@@ -286,7 +286,6 @@ void ConnectWiFi() { // Connect to WiFi network, must be WPA2-PSK, not WPA3
 }
 //------------------------------------------------------------------------------------------------
 void GetMemory() { // Get the configuration settings from flash memory on startup
-  /*
   preferences.begin("prefs",true);
   wifiMode         = preferences.getUInt("wifi_mode",0);
   wifiSSID         = preferences.getString("wifi_ssid","none");
@@ -296,11 +295,12 @@ void GetMemory() { // Get the configuration settings from flash memory on startu
   wifiGateway      = preferences.getString("wifi_gateway","");
   wifiDNS          = preferences.getString("wifi_dns","");
   DeviceName       = preferences.getString("device_name",sanitizeHostname(""));
-  OpMode           = preferences.getUInt("op_mode",1);
+  OpMode           = preferences.getUInt("op_mode",0);
+  TemperatureMode  = preferences.getUInt("temperature_mode",0);
+  UseThermostat    = preferences.getBool("use_thermostat",true);
   targetTempC      = preferences.getFloat("target_temp_c",20.5);
   targetTempF      = preferences.getFloat("target_temp_f",69.0);
   preferences.end();
-  */
 }
 //------------------------------------------------------------------------------------------------
 void SetMemory() { // Update flash memory with the current configuration settings
@@ -315,7 +315,7 @@ void SetMemory() { // Update flash memory with the current configuration setting
   preferences.putString("wifi_dns",wifiDNS);
   preferences.putString("device_name",DeviceName);
   preferences.putUInt("op_mode",OpMode);
-  preferences.putUInt("op_mode",OpMode);
+  preferences.putUInt("temperature_mode",TemperatureMode);
   preferences.end();
   */
 }
@@ -409,8 +409,8 @@ void loop() {
     Client.stop();
   }
 
-  // Check for serial console input and handle as necessary
-  //if ((Serial) && (Serial.available())) HandleSerialInput();
+  // Check for user input from the serial configuration system
+  if ((Serial) && (Serial.available())) SerialConfigInput();
 
   // Execute the 1-second non-blocking timer routines
   if (CurrentTime - LoopCounter >= 1000) {

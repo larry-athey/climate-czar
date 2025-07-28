@@ -79,7 +79,7 @@ inline String sanitizeHostname(String hostname) { // Sanitizes host names of inv
 
   // If empty after sanitization, return the default hostname
   if (j == 0) {
-    return "CZ-Pellet-Stove-" + WiFi.macAddress();
+    return "CZ-Pellet-Stove_" + WiFi.macAddress();
   }
 
   return String(sanitized);
