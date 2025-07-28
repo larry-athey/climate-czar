@@ -90,6 +90,7 @@ Adafruit_MLX90614 mlx = Adafruit_MLX90614();
 Preferences preferences;
 hw_timer_t *timer = NULL;
 //------------------------------------------------------------------------------------------------
+bool HighBurn = false;           // True if high burn mode is active
 bool UpToTemp = false;           // True if the run startup has reached operating temperature
 bool UseThermostat = true;       // Use the internal thermostat routines Y/N
 byte TemperatureMode = 0;        // 0=Fahrenheit, 1=Celcius
@@ -295,11 +296,17 @@ void GetMemory() { // Get the configuration settings from flash memory on startu
   wifiGateway      = preferences.getString("wifi_gateway","");
   wifiDNS          = preferences.getString("wifi_dns","");
   DeviceName       = preferences.getString("device_name",sanitizeHostname(""));
+  feedRateHigh     = preferences.getFloat("feed_rate_high",4.5);
+  feedRateLow      = preferences.getFloat("feed_rate_low",1.6);
+  maxTempC         = preferences.getFloat("max_temp_c",148.9);
+  maxTempF         = preferences.getFloat("max_temp_f",300.0);
+  minTempC         = preferences.getFloat("min_temp_c",32.2);
+  minTempF         = preferences.getFloat("min_temp_f",90.0);
   OpMode           = preferences.getUInt("op_mode",0);
-  TemperatureMode  = preferences.getUInt("temperature_mode",0);
-  UseThermostat    = preferences.getBool("use_thermostat",true);
   targetTempC      = preferences.getFloat("target_temp_c",20.5);
   targetTempF      = preferences.getFloat("target_temp_f",69.0);
+  TemperatureMode  = preferences.getUInt("temperature_mode",0);
+  UseThermostat    = preferences.getBool("use_thermostat",true);
   preferences.end();
 }
 //------------------------------------------------------------------------------------------------
@@ -370,15 +377,43 @@ void loop() {
   }
 
   // Check the external control GPIO pins
-  if (digitalRead(FAULT) == 0) OpMode = 6;
-  if ((digitalRead(HIGH_BURN) == 0) && (OpMode == 2)) FEED_TIME = feedRateHigh * 1000;
-
-  // Check for button presses
-  if ((digitalRead(START_BTN) == 0) && ((OpMode == 0) || (OpMode == 2))) {
-    
+  if (digitalRead(FAULT) == 0) OpMode = 6; // Forced fault detection, must reboot the controller to clear the OpCode
+  if (! UseThermostat) {
+    if (digitalRead(HIGH_BURN) == 0) { // Toggle the high burn mode if using an external thermostat
+      if (OpMode == 2)) {
+        HighBurn = true;
+        FEED_TIME = feedRateHigh * 1000;
+      }
+    } else {
+      HighBurn = false;
+      FEED_TIME = feedRateLow * 1000;
+    }
   }
-  if ((digitalRead(BURN_BTN) == 0) && (OpMode == 2)) {
-    
+
+  // Check for ESP32 button presses
+  if ((digitalRead(START_BTN) == 0) && ((OpMode == 0) || (OpMode == 2))) { // Toggle the stove run state
+    byte HoldCount = 0;
+    while (digitalRead(START_BTN) == 0) {
+      delay(1000);
+      HoldCount ++;
+      if (HoldCount == 5) { // 5 second hold detected
+        if (OpMode == 0) { // Start up
+
+        } else { // Shut down
+
+        }
+      }
+    }
+  }
+  if ((digitalRead(BURN_BTN) == 0) && (OpMode == 2)) { // Toggle the high burn mode
+    while (digitalRead(BURN_BTN) == 0) delay(10);
+    if (HighBurn) {
+      HighBurn = false;
+      FEED_TIME = feedRateLow * 1000;
+    } else {
+      HighBurn = true;
+      FEED_TIME = feedRateHigh * 1000;
+    }
   }
 
   // Check for HTTP API calls and handle as necessary
