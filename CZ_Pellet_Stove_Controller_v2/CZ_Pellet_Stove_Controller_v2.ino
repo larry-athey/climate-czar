@@ -378,7 +378,7 @@ void ToggleRunState(bool Running) { // Start or stop the pellet stove
     timerAlarmEnable(timer);
   } else {
     TargetTime = millis() + ((StartupTimer * 1000) * 2);
-    OpMode = 3;
+    OpMode = 4;
     HighBurn = false;
     FEED_TIME = feedRateLow * 1000;
     timerAlarmDisable(timer);
@@ -479,11 +479,61 @@ void loop() {
     GetStoveTemp();
     GetRoomTemp();
     if (OpMode < 5) {
-      if (OpMode > 0) Runtime = formatMillis(CurrentTime - StartTime);
-
+      if (OpMode != 2) Runtime = formatMillis(CurrentTime - StartTime);
+      if (OpMode == 1) { // Starting up
+        // All temperature checks are performed in Fahrenheit due to its greater level of granularity
+        if (stoveTempF >= minTempF) { // Startup successful, stove body up to temperature
+          OpMode = 2;
+          TargetTime = 0;
+          HighBurn = false;
+          FEED_TIME = feedRateLow * 1000;
+          digitalWrite(IGNITOR,LOW);
+        } else {
+          if (CurrentTime > TargetTime) { // Startup failed, timer expired before the stove body reached minimum temperature
+            ToggleRunState(false);
+            OpMode = 3;
+            SetMemory();
+          }
+        }
+      } else if (OpMode == 2) { // Stove body is up to temp and running
+        if (UseThermostat) {
+          if (roomTempF < targetTempF) {
+            HighBurn = true;
+            FEED_TIME = feedRateHigh * 1000;
+          } else if (roomTempF > targetTempF) {
+            HighBurn = false;
+            FEED_TIME = feedRateLow * 1000;
+          }
+        }
+        if ((stoveTempF <= minTempF) || (stoveTempF >= maxTempF)) { // Stove body temperature failure during a normal run
+          ToggleRunState(false);
+          OpMode = 3;
+          SetMemory();
+        }
+      } else if (OpMode == 3) { // Stove body temperature failure (either under minimum or over maximum)
+        if (CurrentTime > TargetTime) { // Shutdown procedure complete
+          OpMode = 0;
+          StartTime = 0;
+          TargetTime = 0;
+          digitalWrite(BOTTOM_AUGER,LOW);
+          digitalWrite(COMBUSTION_BLOWER,LOW);
+          digitalWrite(IGNITOR,LOW);
+          SetMemory();
+        }
+      } else if (OpMode == 4) { // Manual shutdown
+        if (CurrentTime > TargetTime) { // Shutdown procedure complete
+          OpMode = 0;
+          StartTime = 0;
+          TargetTime = 0;
+          digitalWrite(BOTTOM_AUGER,LOW);
+          digitalWrite(COMBUSTION_BLOWER,LOW);
+          digitalWrite(IGNITOR,LOW);
+          SetMemory();
+        }
+      }
     } else {
-      timerAlarmDisable(timer);
-      digitalWrite(TOP_AUGER,LOW);
+      ToggleRunState(false);
+      SetMemory();
     }
     if (wifiCheckCounter >= 60) {
       bool PingTest = Ping.ping(wifiGateway.c_str(),2);
