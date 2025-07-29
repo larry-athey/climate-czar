@@ -114,7 +114,7 @@ float stoveTempF = 0.0;          // Stove body temperature in Fahrenheit
 float targetTempF = 0.0;         // Thermostat target temperature in Celcius
 float targetTempC = 0.0;         // Thermostat target temperature in Fahrenheit
 String DeviceName = "";          // Network host name and device name to be displayed in the web UI
-String Countdown = "00:00:00";   // Visual countdown timer for startup and shutdown
+String Countdown = "00:00";      // Visual countdown timer for startup and shutdown
 String Runtime = "00:00:00";     // Current stove runtime
 String Status = "";              // Status bar message displayed on the screen
 String Uptime = "00:00:00";      // Current system uptime
@@ -154,6 +154,7 @@ void setup() {
 
   // Get the last user settings from flash memory
   GetMemory();
+  if (OpMode == 5) OpMode = 0;
   if (wifiSSID == "none") {
     SetMemory();
   } else {
@@ -202,8 +203,7 @@ void setup() {
     canvas->fillScreen(RED);
     PopoverMessage(Status);
     Serial.println(F("Stove body temperature sensor failure"));
-    OpMode = 5;
-    delay(2000);
+    //OpMode = 5;
   };
 
   // Power failure recovery routine
@@ -369,13 +369,107 @@ void PopoverMessage(String Msg) { // Display popover message to the user
   canvas->getTextBounds(Msg,0,0,&nX,&nY,&nWidth,&nHeight);
   TextX = round(nWidth / 2);
   canvas->fillRoundRect(160 - TextX - 12,60,nWidth + 26,40,5,WHITE);
-  canvas->drawRoundRect(160 - TextX - 12,60,nWidth + 26,40,5,BLACK);
+  canvas->drawRoundRect(160 - TextX - 12,60,nWidth + 26,40,5,DARKGREY);
   canvas->setCursor(160 - TextX,85);
   canvas->print(Msg);
   canvas->flush();
+  delay(3000);
+}
+//------------------------------------------------------------------------------------------------
+void gpioPlot(byte Status, int X, int Y) {
+  canvas->setCursor(X,Y);
+  if (Status == 0) {
+    canvas->setTextColor(RED);
+    canvas->print("Off");
+  } else {
+    canvas->setTextColor(GREEN);
+    canvas->print("On");
+  }
 }
 //------------------------------------------------------------------------------------------------
 void ScreenUpdate() { // Update the LCD screen
+  int16_t nX = 0, nY = 0, TextX;
+  uint16_t nWidth = 0, nHeight = 0;
+
+  canvas->fillScreen(BLACK);
+  canvas->setFont(&FreeSans9pt7b);
+
+  canvas->setCursor(5,18);
+  canvas->setTextColor(LIGHTGREY);
+  canvas->print("Uptime:");
+  canvas->setCursor(85,18);
+  canvas->setTextColor(WHITE);
+  canvas->print(Uptime);
+
+  canvas->setCursor(5,42);
+  canvas->setTextColor(LIGHTGREY);
+  canvas->print("Runtime:");
+  canvas->setCursor(85,42);
+  canvas->setTextColor(YELLOW);
+  canvas->print(Runtime);
+
+  canvas->setCursor(5,66);
+  canvas->setTextColor(LIGHTGREY);
+  canvas->print("Countdown:");
+  canvas->setCursor(111,66);
+  canvas->setTextColor(BLUE);
+  canvas->print(Countdown);
+
+  canvas->setCursor(5,90);
+  canvas->setTextColor(LIGHTGREY);
+  canvas->print("Stove Temp:");
+  canvas->setCursor(112,90);
+  canvas->setTextColor(MAGENTA);
+  canvas->print("90.0F");
+
+  canvas->setCursor(5,114);
+  canvas->setTextColor(LIGHTGREY);
+  canvas->print("Room Temp:");
+  canvas->setCursor(112,114);
+  canvas->setTextColor(CYAN);
+  canvas->print("72.0F");
+
+  canvas->setCursor(215,18);
+  canvas->setTextColor(LIGHTGREY);
+  canvas->print("^ Auger:");
+  if (HighBurn) {
+    gpioPlot(1,288,18);
+  } else {
+    gpioPlot(0,288,18);
+  }
+
+  canvas->setCursor(214,42);
+  canvas->setTextColor(LIGHTGREY);
+  canvas->print("v Auger:");
+  gpioPlot(digitalRead(BOTTOM_AUGER),288,42);
+
+  canvas->setCursor(188,66);
+  canvas->setTextColor(LIGHTGREY);
+  canvas->print("Cm Blower:");
+  gpioPlot(digitalRead(COMBUSTION_BLOWER),288,66);
+
+  canvas->setCursor(188,90);
+  canvas->setTextColor(LIGHTGREY);
+  canvas->print("Rm Blower:");
+  gpioPlot(digitalRead(ROOM_BLOWER),288,90);
+
+  canvas->setCursor(225,114);
+  canvas->setTextColor(LIGHTGREY);
+  canvas->print("Ignitor:");
+  gpioPlot(digitalRead(IGNITOR),288,114);
+
+  if (OpMode == 5) {
+    canvas->fillRoundRect(0,130,320,40,5,RED);
+    canvas->drawRoundRect(0,130,320,40,5,WHITE);
+  } else {
+    canvas->fillRoundRect(0,130,320,40,5,DARKGREY);
+    canvas->drawRoundRect(0,130,320,40,5,LIGHTGREY);
+  }
+  canvas->setTextColor(WHITE);
+  canvas->getTextBounds(Status,0,0,&nX,&nY,&nWidth,&nHeight);
+  TextX = round(nWidth / 2);
+  canvas->setCursor(160 - TextX,155);
+  canvas->print(Status);
 
   canvas->flush();
 }
@@ -387,11 +481,11 @@ void ToggleRunState(bool Running) { // Start or stop the pellet stove
     digitalWrite(BOTTOM_AUGER,HIGH);
     digitalWrite(COMBUSTION_BLOWER,HIGH);
     digitalWrite(IGNITOR,HIGH);
-    OpMode = 2;
+    OpMode = 1;
     HighBurn = true;
     FEED_TIME = feedRateHigh * 1000;
     timerAlarmEnable(timer);
-    Status = "Pellet stove starting up";
+    Status = "Pellet stove is starting up";
   } else {
     TargetTime = millis() + ((StartupTimer * 1000) * 2);
     OpMode = 4;
@@ -399,7 +493,7 @@ void ToggleRunState(bool Running) { // Start or stop the pellet stove
     FEED_TIME = feedRateLow * 1000;
     timerAlarmDisable(timer);
     digitalWrite(TOP_AUGER,LOW);
-    Status = "Pellet stove shutting down";
+    Status = "Pellet stove is shutting down";
   }
   SetMemory();
 }
@@ -445,6 +539,8 @@ void loop() {
         } else if (OpMode == 2) { // Shut down
           ToggleRunState(false);
         }
+        ScreenUpdate();
+        return;
       }
     }
   }
@@ -499,10 +595,11 @@ void loop() {
     GetStoveTemp();
     GetRoomTemp();
     if (OpMode < 5) {
-      if (OpMode != 2) Runtime = formatMillis(CurrentTime - StartTime);
+      if ((OpMode > 0) && (OpMode < 5)) Runtime = formatMillis(CurrentTime - StartTime);
       if (OpMode == 1) { // Starting up
         // All temperature checks are performed in Fahrenheit due to its greater level of granularity
         Countdown = formatMillis(TargetTime - CurrentTime);
+        Countdown.remove(0,3);
         if (stoveTempF >= minTempF) { // Startup successful, stove body up to temperature
           OpMode = 2;
           TargetTime = 0;
@@ -538,24 +635,28 @@ void loop() {
         }
       } else if (OpMode == 3) { // Stove body temperature failure (either under minimum or over maximum)
         Countdown = formatMillis(TargetTime - CurrentTime);
+        Countdown.remove(0,3);
         if (CurrentTime > TargetTime) { // Shutdown procedure complete
           OpMode = 0;
           StartTime = 0;
           TargetTime = 0;
           digitalWrite(BOTTOM_AUGER,LOW);
           digitalWrite(COMBUSTION_BLOWER,LOW);
+          digitalWrite(ROOM_BLOWER,LOW);
           digitalWrite(IGNITOR,LOW);
           SetMemory();
           Status = "Temp failure shutdown complete";
         }
       } else if (OpMode == 4) { // Manual shutdown
         Countdown = formatMillis(TargetTime - CurrentTime);
+        Countdown.remove(0,3);
         if (CurrentTime > TargetTime) { // Shutdown procedure complete
           OpMode = 0;
           StartTime = 0;
           TargetTime = 0;
           digitalWrite(BOTTOM_AUGER,LOW);
           digitalWrite(COMBUSTION_BLOWER,LOW);
+          digitalWrite(ROOM_BLOWER,LOW);
           digitalWrite(IGNITOR,LOW);
           SetMemory();
           Status = "Manual shutdown complete";
@@ -564,6 +665,7 @@ void loop() {
     } else {
       ToggleRunState(false);
       OpMode = 5;
+      Status = "Fault detected, reboot needed!";
       SetMemory();
     }
     if (wifiCheckCounter >= 60) {

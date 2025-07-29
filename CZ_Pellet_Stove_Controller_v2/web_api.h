@@ -5,7 +5,24 @@
 //------------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------------------------
-
+inline String resetController() {
+  OpMode = 0;
+  StartTime = 0;
+  TargetTime = 0;
+  HighBurn = false;
+  FEED_TIME = feedRateLow * 1000;
+  timerAlarmDisable(timer);
+  digitalWrite(TOP_AUGER,LOW);  
+  digitalWrite(BOTTOM_AUGER,LOW);
+  digitalWrite(COMBUSTION_BLOWER,LOW);
+  digitalWrite(ROOM_BLOWER,LOW);
+  digitalWrite(IGNITOR,LOW);
+  SetMemory();
+  Countdown = "00:00";
+  Runtime = "00:00:00";
+  Status = "Remote controller reset";
+  return jsonSuccess;
+}
 //------------------------------------------------------------------------------------------------
 inline String handleWebRequest(String Msg) {
   String Result = jsonFailure;
@@ -52,6 +69,8 @@ inline String handleWebRequest(String Msg) {
     if (partCount == 1) Result = Countdown;
   } else if (parts[0] == "reboot") {
     if (partCount == 1) Result = "Rebooting...";
+  } else if (parts[0] == "reset") {
+    if (partCount == 1) Result = resetController();
   } else if (parts[0] == "runtime") {
     if (partCount == 1) Result = Runtime;
   } else if (parts[0] == "uptime") {
