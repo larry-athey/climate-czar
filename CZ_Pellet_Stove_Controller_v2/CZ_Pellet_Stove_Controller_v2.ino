@@ -615,6 +615,7 @@ void loop() {
           HighBurn = false;
           FEED_TIME = feedRateLow * 1000;
           digitalWrite(IGNITOR,LOW);
+          digitalWrite(ROOM_BLOWER,HIGH);
           Status = "Stove is now up to temperature";
         } else {
           if (CurrentTime > TargetTime) { // Startup failed, timer expired before the stove body reached minimum temperature
