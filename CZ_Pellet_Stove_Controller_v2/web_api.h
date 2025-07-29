@@ -57,6 +57,7 @@ inline String handleWebRequest(String Msg) {
     startIndex = endIndex + 1;
   }
 
+  // Some home automation systems add two forward slashes at the beginning, why?
   if (parts[0].length() == 0) {
     for (int i = 0; i < partCount; i ++) {
       parts[i] = parts[i + 1];
@@ -76,8 +77,7 @@ inline String handleWebRequest(String Msg) {
   } else if (parts[0] == "uptime") {
     if (partCount == 1) Result = Uptime;
   } else {
-    // Return the web UI home page
-    Result = HomePage();
+    Result = HomePage(); // Web user request, not an API call, send the home page
   }
 
   return Result;
