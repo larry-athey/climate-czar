@@ -3,7 +3,9 @@
 //
 // Inline functions used for modular unit organization
 //------------------------------------------------------------------------------------------------
+inline String getForm(byte ID) {
 
+}
 //------------------------------------------------------------------------------------------------
 inline String resetController() {
   OpMode = 0;
@@ -68,6 +70,8 @@ inline String handleWebRequest(String Msg) {
   // parts[1..(partCount-1)] : Any additional parameters for the request type 
   if (parts[0] == "countdown") {
     if (partCount == 1) Result = Countdown;
+  } else if (parts[0] == "form") {
+    if (partCount == 2) Result = getForm(parts[1].toInt());
   } else if (parts[0] == "reboot") {
     if (partCount == 1) Result = "Rebooting...";
   } else if (parts[0] == "reset") {
