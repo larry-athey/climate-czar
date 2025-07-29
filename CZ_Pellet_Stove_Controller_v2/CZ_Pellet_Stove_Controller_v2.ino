@@ -611,6 +611,7 @@ void loop() {
         Countdown.remove(0,3);
         if (stoveTempF >= minTempF) { // Startup successful, stove body up to temperature
           OpMode = 2;
+          SetMemory();
           TargetTime = 0;
           HighBurn = false;
           FEED_TIME = feedRateLow * 1000;
@@ -658,6 +659,7 @@ void loop() {
           digitalWrite(COMBUSTION_BLOWER,LOW);
           digitalWrite(ROOM_BLOWER,LOW);
           SetMemory();
+          Countdown = "00:00";
           Status = "Temp failure shutdown complete";
         }
       } else if (OpMode == 4) { // Manual shutdown
@@ -671,6 +673,7 @@ void loop() {
           digitalWrite(COMBUSTION_BLOWER,LOW);
           digitalWrite(ROOM_BLOWER,LOW);
           SetMemory();
+          Countdown = "00:00";
           Status = "Manual shutdown complete";
         }
       }
