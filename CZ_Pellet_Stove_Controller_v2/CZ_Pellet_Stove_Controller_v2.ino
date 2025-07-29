@@ -201,7 +201,6 @@ void setup() {
     Status = "Stove body temp sensor failure";
     canvas->fillScreen(RED);
     PopoverMessage(Status);
-    canvas->flush();
     Serial.println(F("Stove body temperature sensor failure"));
     OpMode = 5;
     delay(2000);
