@@ -20,7 +20,7 @@ inline String resetController() {
   SetMemory();
   Countdown = "00:00";
   Runtime = "00:00:00";
-  Status = "Remote controller reset";
+  Status = "Stove controller reset by API";
   return jsonSuccess;
 }
 //------------------------------------------------------------------------------------------------
