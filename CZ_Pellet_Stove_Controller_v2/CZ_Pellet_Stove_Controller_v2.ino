@@ -212,6 +212,9 @@ void setup() {
     Status = "Stove is restarting";
   } else if ((OpMode == 3) || (OpMode == 4)) {
     ToggleRunState(false);
+    digitalWrite(BOTTOM_AUGER,HIGH);
+    digitalWrite(COMBUSTION_BLOWER,HIGH);
+    digitalWrite(ROOM_BLOWER,HIGH);
     Status = "Stove shutdown process resumed";
   } else {
     Status = "Stove is not running";
@@ -520,10 +523,14 @@ void loop() {
       if (OpMode == 2) {
         HighBurn = true;
         FEED_TIME = feedRateHigh * 1000;
+        PopoverMessage("High burn mode activated");
+        Status = "High burn mode activated";
       }
     } else {
       HighBurn = false;
       FEED_TIME = feedRateLow * 1000;
+      PopoverMessage("Idle burn mode activated");
+      Status = "Idle burn mode activated";
     }
   }
 
@@ -549,10 +556,12 @@ void loop() {
     if (HighBurn) {
       HighBurn = false;
       FEED_TIME = feedRateLow * 1000;
+      PopoverMessage("Idle burn mode activated");
       Status = "Idle burn mode activated";
     } else {
       HighBurn = true;
       FEED_TIME = feedRateHigh * 1000;
+      PopoverMessage("High burn mode activated");
       Status = "High burn mode activated";
     }
   }
@@ -610,6 +619,8 @@ void loop() {
         } else {
           if (CurrentTime > TargetTime) { // Startup failed, timer expired before the stove body reached minimum temperature
             ToggleRunState(false);
+            digitalWrite(IGNITOR,LOW);
+            digitalWrite(ROOM_BLOWER,HIGH);
             OpMode = 3;
             SetMemory();
             Status = "Startup temperature failure";
@@ -643,7 +654,6 @@ void loop() {
           digitalWrite(BOTTOM_AUGER,LOW);
           digitalWrite(COMBUSTION_BLOWER,LOW);
           digitalWrite(ROOM_BLOWER,LOW);
-          digitalWrite(IGNITOR,LOW);
           SetMemory();
           Status = "Temp failure shutdown complete";
         }
@@ -657,7 +667,6 @@ void loop() {
           digitalWrite(BOTTOM_AUGER,LOW);
           digitalWrite(COMBUSTION_BLOWER,LOW);
           digitalWrite(ROOM_BLOWER,LOW);
-          digitalWrite(IGNITOR,LOW);
           SetMemory();
           Status = "Manual shutdown complete";
         }
