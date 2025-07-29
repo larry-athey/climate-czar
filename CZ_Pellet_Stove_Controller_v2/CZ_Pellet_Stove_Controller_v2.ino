@@ -631,10 +631,12 @@ void loop() {
           if (roomTempF < targetTempF) {
             HighBurn = true;
             FEED_TIME = feedRateHigh * 1000;
+            PopoverMessage("High burn mode activated");
             Status = "High burn mode activated";
           } else if (roomTempF > targetTempF) {
             HighBurn = false;
             FEED_TIME = feedRateLow * 1000;
+            PopoverMessage("Idle burn mode activated");
             Status = "Idle burn mode activated";
           }
         }
