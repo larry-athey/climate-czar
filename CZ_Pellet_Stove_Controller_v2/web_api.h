@@ -28,6 +28,25 @@ inline String resetController() { // Emergency stove controller reset
   return jsonSuccess;
 }
 //------------------------------------------------------------------------------------------------
+inline String setBurnMode(byte Mode) {
+  if ((OpMode == 1) || (OpMode == 2)) {
+    if (Mode == 1) {
+      HighBurn = true;
+      FEED_TIME = feedRateHigh * 1000;
+      PopoverMessage("High burn mode activated");
+      //Status = "High burn mode activated";
+    } else {
+      HighBurn = false;
+      FEED_TIME = feedRateLow * 1000;
+      PopoverMessage("Idle burn mode activated");
+      //Status = "Idle burn mode activated";
+    }
+    return jsonSuccess;
+  } else {
+    return jsonFailure;
+  }
+}
+//------------------------------------------------------------------------------------------------
 inline String setTempMode(String Mode) {
   if (Mode == "c") {
     TemperatureMode = 1; 
@@ -100,11 +119,13 @@ inline String handleWebRequest(String Msg) { // The web API request handler
   if (parts[0] == "bottom-auger") {
     if (partCount == 2) Result = "/bottom-auger/0-or-1";
   } else if (parts[0] == "burn-mode") {
-    if (partCount == 2) Result = "/burn-mode/0-or-1";
+    if (partCount == 2) Result = setBurnMode(parts[1].toInt());
   } else if (parts[0] == "combustion") {
     if (partCount == 2) Result = "/combustion/0-or-1";
   } else if (parts[0] == "countdown") {
     if (partCount == 1) Result = Countdown;
+  } else if (parts[0] == "csv-stats") {
+    if (partCount == 1) Result = "/csv-stats";
   } else if (parts[0] == "cz-stats") {
     if (partCount == 1) Result = "/cz-stats";
   } else if (parts[0] == "feed-high") {
@@ -142,9 +163,9 @@ inline String handleWebRequest(String Msg) { // The web API request handler
   } else if (parts[0] == "temp-mode") {
     if (partCount == 2) Result = setTempMode(parts[1]);
   } else if (parts[0] == "therm-temp") {
-    if (partCount == 2) Result = "/therm-temp/temp-c-or-f"
+    if (partCount == 2) Result = "/therm-temp/temp-c-or-f";
   } else if (parts[0] == "thermostat") {
-    if (partCount == 2) Result = "/thermostat/0-or-1"
+    if (partCount == 2) Result = "/thermostat/0-or-1";
   } else if (parts[0] == "top-auger") {
     if (partCount == 2) Result = "/top-auger/0-or-1";
   } else if (parts[0] == "uptime") {
