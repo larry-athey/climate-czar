@@ -379,14 +379,23 @@ void PopoverMessage(String Msg) { // Display popover message to the user
   delay(2000);
 }
 //------------------------------------------------------------------------------------------------
-void gpioPlot(byte Status, int X, int Y) {
+void gpioPlot(byte Mode, byte Status, int X, int Y) {
   canvas->setCursor(X,Y);
   if (Status == 0) {
-    canvas->setTextColor(RED);
-    canvas->print("Off");
+    if (Mode == 0) {
+      canvas->setTextColor(RED);
+      canvas->print("Off");
+    } else {
+      canvas->setTextColor(YELLOW);
+      canvas->print("Lo");
+    }
   } else {
     canvas->setTextColor(GREEN);
-    canvas->print("On");
+    if (Mode == 0) {
+      canvas->print("On");
+    } else {
+      canvas->print("Hi");
+    }
   }
 }
 //------------------------------------------------------------------------------------------------
@@ -435,31 +444,35 @@ void ScreenUpdate() { // Update the LCD screen
   canvas->setCursor(215,18);
   canvas->setTextColor(LIGHTGREY);
   canvas->print("^ Auger:");
-  if (HighBurn) {
-    gpioPlot(1,288,18);
+  if ((OpMode == 1) || (OpMode == 2)) {
+    if (HighBurn) {
+      gpioPlot(1,1,288,18);
+    } else {
+      gpioPlot(1,0,288,18);
+    }
   } else {
-    gpioPlot(0,288,18);
+    gpioPlot(0,0,288,18);
   }
 
   canvas->setCursor(214,42);
   canvas->setTextColor(LIGHTGREY);
   canvas->print("v Auger:");
-  gpioPlot(digitalRead(BOTTOM_AUGER),288,42);
+  gpioPlot(0,digitalRead(BOTTOM_AUGER),288,42);
 
   canvas->setCursor(188,66);
   canvas->setTextColor(LIGHTGREY);
   canvas->print("Cm Blower:");
-  gpioPlot(digitalRead(COMBUSTION_BLOWER),288,66);
+  gpioPlot(0,digitalRead(COMBUSTION_BLOWER),288,66);
 
   canvas->setCursor(188,90);
   canvas->setTextColor(LIGHTGREY);
   canvas->print("Rm Blower:");
-  gpioPlot(digitalRead(ROOM_BLOWER),288,90);
+  gpioPlot(0,digitalRead(ROOM_BLOWER),288,90);
 
   canvas->setCursor(225,114);
   canvas->setTextColor(LIGHTGREY);
   canvas->print("Ignitor:");
-  gpioPlot(digitalRead(IGNITOR),288,114);
+  gpioPlot(0,digitalRead(IGNITOR),288,114);
 
   if (OpMode == 5) {
     canvas->fillRoundRect(0,130,320,40,5,RED);
@@ -526,13 +539,11 @@ void loop() {
         HighBurn = true;
         FEED_TIME = feedRateHigh * 1000;
         PopoverMessage("High burn mode activated");
-        Status = "High burn mode activated";
       }
     } else {
       HighBurn = false;
       FEED_TIME = feedRateLow * 1000;
       PopoverMessage("Idle burn mode activated");
-      Status = "Idle burn mode activated";
     }
   }
 
@@ -559,12 +570,10 @@ void loop() {
       HighBurn = false;
       FEED_TIME = feedRateLow * 1000;
       PopoverMessage("Idle burn mode activated");
-      Status = "Idle burn mode activated";
     } else {
       HighBurn = true;
       FEED_TIME = feedRateHigh * 1000;
       PopoverMessage("High burn mode activated");
-      Status = "High burn mode activated";
     }
   }
 
@@ -636,12 +645,10 @@ void loop() {
             HighBurn = true;
             FEED_TIME = feedRateHigh * 1000;
             PopoverMessage("High burn mode activated");
-            Status = "High burn mode activated";
           } else if (roomTempF > targetTempF) {
             HighBurn = false;
             FEED_TIME = feedRateLow * 1000;
             PopoverMessage("Idle burn mode activated");
-            Status = "Idle burn mode activated";
           }
         }
         if ((stoveTempF <= minTempF) || (stoveTempF >= maxTempF)) { // Stove body temperature failure during a normal run
