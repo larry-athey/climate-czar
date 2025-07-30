@@ -3,11 +3,13 @@
 //
 // Inline functions used for modular unit organization
 //------------------------------------------------------------------------------------------------
-inline String getForm(byte ID) {
+inline String getForm(byte ID) { // Used by the web UI to load configuration settings forms
+  String Content = "";
+  Content = get_Form(ID);
 
 }
 //------------------------------------------------------------------------------------------------
-inline String resetController() {
+inline String resetController() { // Emergency stove controller reset
   OpMode = 0;
   StartTime = 0;
   TargetTime = 0;
@@ -26,7 +28,7 @@ inline String resetController() {
   return jsonSuccess;
 }
 //------------------------------------------------------------------------------------------------
-inline String handleWebRequest(String Msg) {
+inline String handleWebRequest(String Msg) { // The web API request handler
   String Result = jsonFailure;
 
   Msg.trim();
@@ -68,16 +70,30 @@ inline String handleWebRequest(String Msg) {
 
   // parts[0] : The request type identifier
   // parts[1..(partCount-1)] : Any additional parameters for the request type 
-  if (parts[0] == "countdown") {
+  if (parts[0] == "bottom-auger") {
+    if (partCount == 2) Result = "/bottom-auger/0-or-1";
+  } else if (parts[0] == "combustion") {
+    if (partCount == 2) Result = "/combustion/0-or-1";
+  } else if (parts[0] == "countdown") {
     if (partCount == 1) Result = Countdown;
   } else if (parts[0] == "form") {
     if (partCount == 2) Result = getForm(parts[1].toInt());
+  } else if (parts[0] == "ignitor") {
+    if (partCount == 2) Result = "/ignitor/0-or-1";
   } else if (parts[0] == "reboot") {
     if (partCount == 1) Result = "Rebooting...";
   } else if (parts[0] == "reset") {
     if (partCount == 1) Result = resetController();
+  } else if (parts[0] == "room-blower") {
+    if (partCount == 2) Result = "/room-blower/0-or-1";
   } else if (parts[0] == "runtime") {
     if (partCount == 1) Result = Runtime;
+  } else if (parts[0] == "shutdown") {
+    if (partCount == 1) Result = "/shutdown";
+  } else if (parts[0] == "startup") {
+    if (partCount == 1) Result = "/startup";
+  } else if (parts[0] == "top-auger") {
+    if (partCount == 2) Result = "/top-auger/0-or-1";
   } else if (parts[0] == "uptime") {
     if (partCount == 1) Result = Uptime;
   } else {
