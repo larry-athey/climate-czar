@@ -28,6 +28,24 @@ inline String resetController() { // Emergency stove controller reset
   return jsonSuccess;
 }
 //------------------------------------------------------------------------------------------------
+inline String stoveShutdown() {
+  if ((OpMode == 1) || (OpMode == 2)) {
+    ToggleRunState(false);
+    return jsonSuccess;
+  } else {
+    return jsonFailure;
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline String stoveStartup() {
+  if ((OpMode == 0) || (OpMode == 4)) {
+    ToggleRunState(true);
+    return jsonSuccess;
+  } else {
+    return jsonFailure;
+  }
+}
+//------------------------------------------------------------------------------------------------
 inline String handleWebRequest(String Msg) { // The web API request handler
   String Result = jsonFailure;
 
@@ -89,9 +107,9 @@ inline String handleWebRequest(String Msg) { // The web API request handler
   } else if (parts[0] == "runtime") {
     if (partCount == 1) Result = Runtime;
   } else if (parts[0] == "shutdown") {
-    if (partCount == 1) Result = "/shutdown";
+    if (partCount == 1) Result = stoveShutdown();
   } else if (parts[0] == "startup") {
-    if (partCount == 1) Result = "/startup";
+    if (partCount == 1) Result = stoveStartup();
   } else if (parts[0] == "top-auger") {
     if (partCount == 2) Result = "/top-auger/0-or-1";
   } else if (parts[0] == "uptime") {
