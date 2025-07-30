@@ -133,15 +133,15 @@ const uint32_t CYCLE_PERIOD = 15000;
 uint32_t FEED_TIME = feedRateLow * 1000;
 //------------------------------------------------------------------------------------------------
 void IRAM_ATTR onTimer() { // Interrupt driven top auger timer (15 second wide PWM)
-  cycleCount += 100;  // Increment by 100ms
+  cycleCount += 100; // Increment by 100ms
   
   if (cycleCount >= CYCLE_PERIOD) {
     augerState = true;
     digitalWrite(TOP_AUGER,HIGH);  // Turn top auger ON
-    cycleCount = 0;  // Reset cycle
+    cycleCount = 0; // Reset cycle
   } else if (cycleCount >= FEED_TIME && augerState) {
     augerState = false;
-    digitalWrite(TOP_AUGER,LOW);   // Turn top auger OFF
+    digitalWrite(TOP_AUGER,LOW); // Turn top auger OFF
   }
 }
 //------------------------------------------------------------------------------------------------
@@ -376,7 +376,7 @@ void PopoverMessage(String Msg) { // Display popover message to the user
   canvas->setCursor(160 - TextX,85);
   canvas->print(Msg);
   canvas->flush();
-  delay(3000);
+  delay(2000);
 }
 //------------------------------------------------------------------------------------------------
 void gpioPlot(byte Status, int X, int Y) {
@@ -481,8 +481,10 @@ void ToggleRunState(bool Running) { // Start or stop the pellet stove
   if (Running) {
     TargetTime = millis() + (StartupTimer * 1000);
     StartTime = millis();
+    digitalWrite(TOP_AUGER,LOW);
     digitalWrite(BOTTOM_AUGER,HIGH);
     digitalWrite(COMBUSTION_BLOWER,HIGH);
+    digitalWrite(ROOM_BLOWER,LOW);
     digitalWrite(IGNITOR,HIGH);
     OpMode = 1;
     HighBurn = true;
@@ -535,15 +537,15 @@ void loop() {
   }
 
   // Check for ESP32 button presses
-  if ((digitalRead(START_BTN) == 0) && ((OpMode == 0) || (OpMode == 2))) { // Toggle the stove run state
+  if ((digitalRead(START_BTN) == 0) && ((OpMode == 0) || (OpMode == 1) || (OpMode == 2) || (OpMode == 4))) { // Toggle the stove run state
     byte HoldCount = 0;
     while (digitalRead(START_BTN) == 0) {
       delay(1000);
       HoldCount ++;
       if (HoldCount == 5) { // 5 second hold detected
-        if (OpMode == 0) { // Start up
+        if ((OpMode == 0) || (OpMode == 4)) { // Start up if not running or shutting down
           ToggleRunState(true);
-        } else if (OpMode == 2) { // Shut down
+        } else if ((OpMode == 1) || (OpMode == 2)) { // Shut down if starting up or running
           ToggleRunState(false);
         }
         ScreenUpdate();
