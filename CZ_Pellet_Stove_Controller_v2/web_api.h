@@ -28,6 +28,15 @@ inline String resetController() { // Emergency stove controller reset
   return jsonSuccess;
 }
 //------------------------------------------------------------------------------------------------
+inline String setTempMode(String Mode) {
+  if (Mode == "c") {
+    TemperatureMode = 1; 
+  } else {
+    TemperatureMode = 0; 
+  }
+  return jsonSuccess;
+}
+//------------------------------------------------------------------------------------------------
 inline String stoveShutdown() {
   if ((OpMode == 1) || (OpMode == 2)) {
     ToggleRunState(false);
@@ -90,30 +99,58 @@ inline String handleWebRequest(String Msg) { // The web API request handler
   // parts[1..(partCount-1)] : Any additional parameters for the request type 
   if (parts[0] == "bottom-auger") {
     if (partCount == 2) Result = "/bottom-auger/0-or-1";
+  } else if (parts[0] == "burn-mode") {
+    if (partCount == 2) Result = "/burn-mode/0-or-1";
   } else if (parts[0] == "combustion") {
     if (partCount == 2) Result = "/combustion/0-or-1";
   } else if (parts[0] == "countdown") {
     if (partCount == 1) Result = Countdown;
+  } else if (parts[0] == "cz-stats") {
+    if (partCount == 1) Result = "/cz-stats";
+  } else if (parts[0] == "feed-high") {
+    if (partCount == 2) Result = "/feed-high/seconds";
+  } else if (parts[0] == "feed-low") {
+    if (partCount == 2) Result = "/feed-low/seconds";
   } else if (parts[0] == "form") {
     if (partCount == 2) Result = getForm(parts[1].toInt());
   } else if (parts[0] == "ignitor") {
     if (partCount == 2) Result = "/ignitor/0-or-1";
+  } else if (parts[0] == "max-temp") {
+    if (partCount == 2) Result = "/max-temp/temp-c-or-f";
+  } else if (parts[0] == "min-temp") {
+    if (partCount == 2) Result = "/min-temp/temp-c-or-f";
+  } else if (parts[0] == "op-mode") {
+    if (partCount == 1) Result = "/op-mode";
   } else if (parts[0] == "reboot") {
     if (partCount == 1) Result = "Rebooting...";
   } else if (parts[0] == "reset") {
     if (partCount == 1) Result = resetController();
   } else if (parts[0] == "room-blower") {
     if (partCount == 2) Result = "/room-blower/0-or-1";
+  } else if (parts[0] == "room-temp") {
+    if (partCount == 1) Result = "/room-temp";
   } else if (parts[0] == "runtime") {
     if (partCount == 1) Result = Runtime;
   } else if (parts[0] == "shutdown") {
     if (partCount == 1) Result = stoveShutdown();
   } else if (parts[0] == "startup") {
     if (partCount == 1) Result = stoveStartup();
+  } else if (parts[0] == "startup-timer") {
+    if (partCount == 2) Result = "/startup-timer/seconds";
+  } else if (parts[0] == "stove-temp") {
+    if (partCount == 1) Result = "/stove-temp";
+  } else if (parts[0] == "temp-mode") {
+    if (partCount == 2) Result = setTempMode(parts[1]);
+  } else if (parts[0] == "therm-temp") {
+    if (partCount == 2) Result = "/therm-temp/temp-c-or-f"
+  } else if (parts[0] == "thermostat") {
+    if (partCount == 2) Result = "/thermostat/0-or-1"
   } else if (parts[0] == "top-auger") {
     if (partCount == 2) Result = "/top-auger/0-or-1";
   } else if (parts[0] == "uptime") {
     if (partCount == 1) Result = Uptime;
+  } else if (parts[0] == "wifi-stats") {
+    if (partCount == 1) Result = "/wifi-stats";
   } else {
     Result = HomePage(); // Web user request, not an API call, send the home page
   }
