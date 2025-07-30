@@ -3,13 +3,35 @@
 //
 // Inline functions used for modular unit organization
 //------------------------------------------------------------------------------------------------
-inline String getForm(byte ID) { // Used by the web UI to load configuration settings forms
-  String Content = "";
-  Content = get_Form(ID);
+inline String csvStats() {
 
 }
 //------------------------------------------------------------------------------------------------
-inline String resetController() { // Emergency stove controller reset
+inline String czStats() {
+
+}
+//------------------------------------------------------------------------------------------------
+inline String getRoomTemp() {
+  if (TemperatureMode == 0) {
+    return String(roomTempF);
+  } else {
+    return String(roomTempC);
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline String getStoveTemp() {
+  if (TemperatureMode == 0) {
+    return String(stoveTempF);
+  } else {
+    return String(stoveTempC);
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline String getWifiStats() {
+  return "WiFi Channel: " + String(WiFi.channel()) + "\n" + "WiFi Signal: " + String(WiFi.RSSI());
+}
+//------------------------------------------------------------------------------------------------
+inline String resetController() {
   OpMode = 0;
   StartTime = 0;
   TargetTime = 0;
@@ -28,18 +50,26 @@ inline String resetController() { // Emergency stove controller reset
   return jsonSuccess;
 }
 //------------------------------------------------------------------------------------------------
+inline String setBottomAuger(byte Mode) {
+  if (OpMode == 0) {
+    if (Mode > 1) Mode = 1;
+    digitalWrite(BOTTOM_AUGER,Mode);
+    return jsonSuccess;
+  } else {
+    return jsonFailure;
+  }
+}
+//------------------------------------------------------------------------------------------------
 inline String setBurnMode(byte Mode) {
   if ((OpMode == 1) || (OpMode == 2)) {
     if (Mode == 1) {
       HighBurn = true;
       FEED_TIME = feedRateHigh * 1000;
       PopoverMessage("High burn mode activated");
-      //Status = "High burn mode activated";
     } else {
       HighBurn = false;
       FEED_TIME = feedRateLow * 1000;
       PopoverMessage("Idle burn mode activated");
-      //Status = "Idle burn mode activated";
     }
     return jsonSuccess;
   } else {
@@ -47,13 +77,113 @@ inline String setBurnMode(byte Mode) {
   }
 }
 //------------------------------------------------------------------------------------------------
-inline String setTempMode(String Mode) {
-  if (Mode == "c") {
-    TemperatureMode = 1; 
+inline String setCombustionBlower(byte Mode) {
+  if (OpMode == 0) {
+    if (Mode > 1) Mode = 1;
+    digitalWrite(COMBUSTION_BLOWER,Mode);
+    return jsonSuccess;
   } else {
-    TemperatureMode = 0; 
+    return jsonFailure;
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline String setFeedHigh(float Time) {
+  feedRateHigh = roundToOneDecimal(Time);
+  if (HighBurn) FEED_TIME = feedRateHigh * 1000;
+  return jsonSuccess;
+}
+//------------------------------------------------------------------------------------------------
+inline String setFeedLow(float Time) {
+  feedRateLow = roundToOneDecimal(Time);
+  if (! HighBurn) FEED_TIME = feedRateLow * 1000;
+  return jsonSuccess;
+}
+//------------------------------------------------------------------------------------------------
+inline String setIgnitor(byte Mode) {
+  if (OpMode == 0) {
+    if (Mode > 1) Mode = 1;
+    digitalWrite(IGNITOR,Mode);
+    return jsonSuccess;
+  } else {
+    return jsonFailure;
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline String setMaxTemp(float Temp) {
+  if (TemperatureMode == 0) {
+    maxTempF = roundToOneDecimal(Temp);
+    maxTempC = FtoC(Temp);
+  } else {
+    maxTempC = roundToOneDecimal(Temp);
+    maxTempF = CtoF(Temp);
   }
   return jsonSuccess;
+}
+//------------------------------------------------------------------------------------------------
+inline String setMinTemp(float Temp) {
+  if (TemperatureMode == 0) {
+    minTempF = roundToOneDecimal(Temp);
+    minTempC = FtoC(Temp);
+  } else {
+    minTempC = roundToOneDecimal(Temp);
+    minTempF = CtoF(Temp);
+  }
+  return jsonSuccess;
+}
+//------------------------------------------------------------------------------------------------
+inline String setRoomBlower(byte Mode) {
+  if (OpMode == 0) {
+    if (Mode > 1) Mode = 1;
+    digitalWrite(ROOM_BLOWER,Mode);
+    return jsonSuccess;
+  } else {
+    return jsonFailure;
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline String setStartupTimer(int Time) {
+  StartupTimer = Time;
+  SetMemory();
+  return jsonSuccess;
+}
+//------------------------------------------------------------------------------------------------
+inline String setTempMode(String Mode) {
+  if (Mode == "c") {
+    TemperatureMode = 1;
+  } else {
+    TemperatureMode = 0;
+  }
+  return jsonSuccess;
+}
+//------------------------------------------------------------------------------------------------
+inline String setThermTemp(float Temp) {
+  if (TemperatureMode == 0) {
+    targetTempF = roundToOneDecimal(Temp);
+    targetTempC = FtoC(Temp);
+  } else {
+    targetTempC = roundToOneDecimal(Temp);
+    targetTempF = CtoF(Temp);
+  }
+  return jsonSuccess;
+}
+//------------------------------------------------------------------------------------------------
+inline String setThermostat(byte Mode) {
+  if (Mode == 0) {
+    UseThermostat = 0;
+  } else {
+    UseThermostat = 1;
+  }
+  return jsonSuccess;
+}
+//------------------------------------------------------------------------------------------------
+inline String setTopAuger(byte Mode) {
+  if (OpMode == 0) {
+    if (Mode > 1) Mode = 1;
+    digitalWrite(TOP_AUGER,Mode);
+    return jsonSuccess;
+  } else {
+    return jsonFailure;
+  }
 }
 //------------------------------------------------------------------------------------------------
 inline String stoveShutdown() {
@@ -117,61 +247,61 @@ inline String handleWebRequest(String Msg) { // The web API request handler
   // parts[0] : The request type identifier
   // parts[1..(partCount-1)] : Any additional parameters for the request type 
   if (parts[0] == "bottom-auger") {
-    if (partCount == 2) Result = "/bottom-auger/0-or-1";
+    if (partCount == 2) Result = setBottomAuger(parts[1].toInt());
   } else if (parts[0] == "burn-mode") {
     if (partCount == 2) Result = setBurnMode(parts[1].toInt());
   } else if (parts[0] == "combustion") {
-    if (partCount == 2) Result = "/combustion/0-or-1";
+    if (partCount == 2) Result = setCombustionBlower(parts[1].toInt());
   } else if (parts[0] == "countdown") {
     if (partCount == 1) Result = Countdown;
   } else if (parts[0] == "csv-stats") {
-    if (partCount == 1) Result = "/csv-stats";
+    if (partCount == 1) Result = csvStats();
   } else if (parts[0] == "cz-stats") {
-    if (partCount == 1) Result = "/cz-stats";
+    if (partCount == 1) Result = czStats();
   } else if (parts[0] == "feed-high") {
-    if (partCount == 2) Result = "/feed-high/seconds";
+    if (partCount == 2) Result = setFeedHigh(parts[1].toFloat());
   } else if (parts[0] == "feed-low") {
-    if (partCount == 2) Result = "/feed-low/seconds";
+    if (partCount == 2) Result = setFeedLow(parts[1].toFloat());
   } else if (parts[0] == "form") {
     if (partCount == 2) Result = getForm(parts[1].toInt());
   } else if (parts[0] == "ignitor") {
-    if (partCount == 2) Result = "/ignitor/0-or-1";
+    if (partCount == 2) Result = setIgnitor(parts[1].toInt());
   } else if (parts[0] == "max-temp") {
-    if (partCount == 2) Result = "/max-temp/temp-c-or-f";
+    if (partCount == 2) Result = setMaxTemp(parts[1].toFloat());
   } else if (parts[0] == "min-temp") {
-    if (partCount == 2) Result = "/min-temp/temp-c-or-f";
+    if (partCount == 2) Result = setMinTemp(parts[1].toFloat());
   } else if (parts[0] == "op-mode") {
-    if (partCount == 1) Result = "/op-mode";
+    if (partCount == 1) Result = String(OpMode);
   } else if (parts[0] == "reboot") {
     if (partCount == 1) Result = "Rebooting...";
   } else if (parts[0] == "reset") {
     if (partCount == 1) Result = resetController();
   } else if (parts[0] == "room-blower") {
-    if (partCount == 2) Result = "/room-blower/0-or-1";
+    if (partCount == 2) Result = setRoomBlower(parts[1].toInt());
   } else if (parts[0] == "room-temp") {
-    if (partCount == 1) Result = "/room-temp";
+    if (partCount == 1) Result = getRoomTemp();
   } else if (parts[0] == "runtime") {
     if (partCount == 1) Result = Runtime;
   } else if (parts[0] == "shutdown") {
-    if (partCount == 1) Result = stoveShutdown();
+    if (partCount >= 1) Result = stoveShutdown();
   } else if (parts[0] == "startup") {
-    if (partCount == 1) Result = stoveStartup();
+    if (partCount >= 1) Result = stoveStartup();
   } else if (parts[0] == "startup-timer") {
-    if (partCount == 2) Result = "/startup-timer/seconds";
+    if (partCount == 2) Result = setStartupTimer(parts[1].toInt());
   } else if (parts[0] == "stove-temp") {
-    if (partCount == 1) Result = "/stove-temp";
+    if (partCount == 1) Result = getStoveTemp();
   } else if (parts[0] == "temp-mode") {
     if (partCount == 2) Result = setTempMode(parts[1]);
   } else if (parts[0] == "therm-temp") {
-    if (partCount == 2) Result = "/therm-temp/temp-c-or-f";
+    if (partCount == 2) Result = setThermTemp(parts[1].toFloat());
   } else if (parts[0] == "thermostat") {
-    if (partCount == 2) Result = "/thermostat/0-or-1";
+    if (partCount == 2) Result = setThermostat(parts[1].toInt());
   } else if (parts[0] == "top-auger") {
-    if (partCount == 2) Result = "/top-auger/0-or-1";
+    if (partCount == 2) Result = setTopAuger(parts[1].toInt());
   } else if (parts[0] == "uptime") {
     if (partCount == 1) Result = Uptime;
   } else if (parts[0] == "wifi-stats") {
-    if (partCount == 1) Result = "/wifi-stats";
+    if (partCount == 1) Result = getWifiStats();
   } else {
     Result = HomePage(); // Web user request, not an API call, send the home page
   }

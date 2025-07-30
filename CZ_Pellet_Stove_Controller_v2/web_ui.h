@@ -60,7 +60,7 @@ inline String DrawCard(String Body,String AjaxID,String Query,bool DoAjax) { // 
   return Content;
 }
 //------------------------------------------------------------------------------------------------
-inline String get_Form(byte WhichOne) { // Dynamically creates the form for the specified setting
+inline String getForm(byte WhichOne) { // Dynamically creates the form for the specified setting
   String Content = "";
   String Label,Value,Step,Min,Max;
 /*
@@ -118,7 +118,7 @@ inline String InfoLine(String Title,String Data) { // Formats a line of text in 
 //------------------------------------------------------------------------------------------------
 inline String PageHeader() { // HTML page header with custom CSS configuration
   String Content = "";
-  //Content += "<!-- " + AppIcon + " -->";
+  // base64 favicon -> https://x.com/i/grok/share/eg810elzBoqsc5nda5SiUphls
   Content += "<!DOCTYPE html>\n";
   Content += "<html lang=\"en\">\n";
   Content += "<head>\n";
@@ -159,6 +159,8 @@ inline String PageFooter() { // HTML page footer with custom Javascript to handl
   Content += "    jQuery('#hiddenDiv').load('./toggle-run');\n";
   Content += "  };\n";
   Content += "};\n\n";
+
+  // New API modification -> https://x.com/i/grok/share/8SLhROENopXMvxnZCt6s6J7Lh
 
   Content += "jQuery(document).ready(function() {\n";
   Content += "  jQuery('#submit_button').on('click',function() {\n";
