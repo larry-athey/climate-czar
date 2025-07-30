@@ -564,16 +564,22 @@ void loop() {
       }
     }
   }
-  if ((digitalRead(BURN_BTN) == 0) && (OpMode == 2)) { // Toggle the high burn mode
-    while (digitalRead(BURN_BTN) == 0) delay(10);
-    if (HighBurn) {
-      HighBurn = false;
-      FEED_TIME = feedRateLow * 1000;
-      PopoverMessage("Idle burn mode activated");
-    } else {
-      HighBurn = true;
-      FEED_TIME = feedRateHigh * 1000;
-      PopoverMessage("High burn mode activated");
+  if ((digitalRead(BURN_BTN) == 0) && ((OpMode == 1) || (OpMode == 2))) { // Toggle the high burn mode
+    byte HoldCount = 0;
+    while (digitalRead(BURN_BTN) == 0) {
+      delay(1000);
+      HoldCount ++;
+      if (HoldCount == 2) { // 2 second hold detected
+        if (HighBurn) {
+          HighBurn = false;
+          FEED_TIME = feedRateLow * 1000;
+          PopoverMessage("Idle burn mode activated");
+        } else {
+          HighBurn = true;
+          FEED_TIME = feedRateHigh * 1000;
+          PopoverMessage("High burn mode activated");
+        }
+      }
     }
   }
 
