@@ -511,6 +511,7 @@ void ToggleRunState(bool Running) { // Start or stop the pellet stove
     FEED_TIME = feedRateLow * 1000;
     timerAlarmDisable(timer);
     digitalWrite(TOP_AUGER,LOW);
+    digitalWrite(IGNITOR,LOW);
     Status = "Pellet stove is shutting down";
   }
   SetMemory();
@@ -532,7 +533,7 @@ void loop() {
   }
 
   // Check the external control GPIO pins
-  if (digitalRead(FAULT) == 0) OpMode = 5; // Forced fault detection by GPIO, must reboot the controller to clear the fault
+  if ((OpMode > 0) && (digitalRead(FAULT) == 0)) OpMode = 5; // Fault detection by GPIO, must reboot the controller to clear the fault
   if (! UseThermostat) {
     if (digitalRead(HIGH_BURN) == 0) { // Toggle the high burn mode if using an external thermostat
       if (OpMode == 2) {
@@ -694,9 +695,11 @@ void loop() {
       }
     } else {
       ToggleRunState(false);
+      digitalWrite(BOTTOM_AUGER,HIGH);
+      digitalWrite(COMBUSTION_BLOWER,HIGH);
+      digitalWrite(ROOM_BLOWER,HIGH);
       OpMode = 5;
       Status = "Fault detected, reboot needed!";
-      SetMemory();
     }
     if (wifiCheckCounter >= 60) {
       bool PingTest = Ping.ping(wifiGateway.c_str(),2);
