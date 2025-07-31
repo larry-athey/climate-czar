@@ -153,7 +153,7 @@ inline String PageHeader() { // HTML page header with custom CSS configuration
 //------------------------------------------------------------------------------------------------
 inline String PageFooter() { // HTML page footer with custom Javascript to handle settings
   String Content = "";
-  Content += "<div id=\"hiddenDiv\" style=\"display: none;\"></div>\n";
+  Content += "\n<div id=\"hiddenDiv\" style=\"display: none;\"></div>\n";
   Content += "\n<script type=\"text/javascript\">\n";
   Content += "function ToggleRun() {\n";
   Content += "  if (confirm('Are you sure you want to change the current run state?')) {\n";
@@ -210,7 +210,12 @@ inline String HomePage() {
   Content += CreateModal();
   Content += "<div class=\"container-fluid\" style=\"align: left;\">\n";
 
-  Content += "<img src=\"data:image/png;base64," + String(logo_base64) + "\">\n";
+  Content += "<div class=\"container mt-3\">\n";
+  Content +=   "<div class=\"d-flex align-items-center\">\n";
+  Content +=     "<img src=\"data:image/png;base64," + String(logo_base64) + "\" class=\"logo-img img-fluid me-2\" style=\"max-width: 64px;\">\n";
+  Content +=     "<span class=\"fs-4 fw-bold\">CZ Pellet Stove Controller</span>\n";
+  Content +=   "</div>\n";
+  Content += "</div>\n";
 
   Content += "</div>\n";
   Content += PageFooter();
