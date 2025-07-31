@@ -165,10 +165,13 @@ inline String PageFooter() { // HTML page footer with custom Javascript to handl
   Content += "jQuery(document).ready(function() {\n";
   Content += "  jQuery('#submit_button').on('click',function() {\n";
   Content += "    var formData = jQuery('#modalForm').serialize();\n";
+  Content += "    var dataParts = formData.split('=');\n";
+  Content += "    var key = dataParts[0];\n";
+  Content += "    var value = dataParts[1];\n";
+  Content += "    var apiUrl = './' + key + '/' + value;\n";
   Content += "    jQuery.ajax({\n";
   Content += "      type: 'GET',\n";
-  Content += "      url: './',\n";
-  Content += "      data: formData,\n";
+  Content += "      url: apiUrl,\n";
   Content += "      success: function(response) {\n";
   Content += "        jQuery('#form-content').html('<p>Form submitted successfully</p>');\n";
   Content += "        jQuery('#dynamicModal').modal('hide');\n";
