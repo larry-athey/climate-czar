@@ -3,6 +3,8 @@
 //
 // Inline functions used for modular unit organization
 //------------------------------------------------------------------------------------------------
+#include "image.h" // Base 64 encoded app icon
+//------------------------------------------------------------------------------------------------
 inline String AjaxRefreshJS(String AjaxID,String Query,String RefreshMS) { // Refreshes data in a card on a random timed basis
   String Content = "";
   Content += "\n<script type=\"text/javascript\">\n";
@@ -118,7 +120,6 @@ inline String InfoLine(String Title,String Data) { // Formats a line of text in 
 //------------------------------------------------------------------------------------------------
 inline String PageHeader() { // HTML page header with custom CSS configuration
   String Content = "";
-  // base64 favicon -> https://x.com/i/grok/share/eg810elzBoqsc5nda5SiUphls
   Content += "<!DOCTYPE html>\n";
   Content += "<html lang=\"en\">\n";
   Content += "<head>\n";
@@ -128,7 +129,7 @@ inline String PageHeader() { // HTML page header with custom CSS configuration
   Content +=   "<link rel=\"stylesheet\" href=\"https://unpkg.com/bootstrap-darkmode@0.7.0/dist/darktheme.css\">\n";
   Content +=   "<script src=\"https://code.iconify.design/2/2.0.3/iconify.min.js\"></script>\n";
   Content +=   "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js\"></script>\n";
-  Content +=   "<link rel=\"icon\" href=\"https://panhandleponics.com/wp-content/uploads/2024/12/boilermaker.png?v=1.1\">\n";
+  Content +=   "<link rel=\"icon\" href=\"data:image/png;base64," + String(logo_base64) + "\">\n";
   Content +=   "\n<style type=\"text/css\">\n";
   Content +=   "  @-webkit-keyframes blinker {\n";
   Content +=   "    from {opacity: 1.0;}\n";
@@ -159,8 +160,6 @@ inline String PageFooter() { // HTML page footer with custom Javascript to handl
   Content += "    jQuery('#hiddenDiv').load('./toggle-run');\n";
   Content += "  };\n";
   Content += "};\n\n";
-
-  // New API modification -> https://x.com/i/grok/share/8SLhROENopXMvxnZCt6s6J7Lh
 
   Content += "jQuery(document).ready(function() {\n";
   Content += "  jQuery('#submit_button').on('click',function() {\n";
@@ -211,6 +210,7 @@ inline String HomePage() {
   Content += CreateModal();
   Content += "<div class=\"container-fluid\" style=\"align: left;\">\n";
 
+  Content += "<img src=\"data:image/png;base64," + String(logo_base64) + "\">\n";
 
   Content += "</div>\n";
   Content += PageFooter();
@@ -218,3 +218,5 @@ inline String HomePage() {
   return Content;
 }
 //------------------------------------------------------------------------------------------------
+// base64 favicon -> https://x.com/i/grok/share/eg810elzBoqsc5nda5SiUphls
+// New API modification -> https://x.com/i/grok/share/8SLhROENopXMvxnZCt6s6J7Lh
