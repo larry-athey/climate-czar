@@ -224,4 +224,4 @@ inline String HomePage() {
 }
 //------------------------------------------------------------------------------------------------
 // base64 favicon -> https://x.com/i/grok/share/eg810elzBoqsc5nda5SiUphls
-// New API modification -> https://x.com/i/grok/share/8SLhROENopXMvxnZCt6s6J7Lh
+// API modification -> https://x.com/i/grok/share/8SLhROENopXMvxnZCt6s6J7Lh
