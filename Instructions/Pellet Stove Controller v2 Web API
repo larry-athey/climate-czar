@@ -1,15 +1,13 @@
 # Pellet Stove Controller v2 Web API
 
-As of the 100% rewrite of the Climate Czar Combo Hub source code, a completely new web API comes with it. The Combo Hub now features a master/slave topology and the first part of the GET request is the ID number of the hub that you want to talk to. Climate Czar Server always talks directly to the master hub, which then relays API calls to slave units over LoRa WAN instead of TCP/IP.
+As of the 100% rewrite of the Climate Czar Pellet Stove Controller source code, a completely new web API comes with it. This version of the controller now uses the same 100% GET web API that is featured in the new version of the Climate Czar Combo Hub.
 
 Example Climate Czar Server web API calls:
 
-`curl -s -m 5 --http0.9 http://master-ip-address/0/humidity` (get humidity from the master hub)<br>
-`curl -s -m 5 --http0.9 http://master-ip-address/2/humidity` (get humidity from the first slave hub)<br>
-`curl -s -m 5 --http0.9 http://master-ip-address/3/humidity` (get humidity from the second slave hub)<br>
+`curl -s -m 5 --http0.9 http://controller-ip-address/startup` (start up the pellet stove)<br>
+`curl -s -m 5 --http0.9 http://controller-ip-address/temp-mode/f` (set the temperature mode to Fahrenheit)<br>
+`curl -s -m 5 --http0.9 http://controller-ip-address/thermostat/70.5` (set the thermostat to 70.5F)<br>
 
 `-s` tells curl run silently and not output download progress<br>
 `-m 5` tells curl to time out the connection attempt after 5 seconds<br>
 `--http0.9` tells curl to use a pre version 1.0 HTTP call for compatibility safety<br>
-
-The Climate Czar Combo Hub can also communicate with your own custom LoRa WAN powered sensors. Many people have created their own Arduino/ESP32 powered devices to read things like soil temperature/moisture/pH, dissolved oxygen in aquaponics, pH probes, etc and added LoRa WAN radios to them such as the RYLR998. This web API allows you to make web calls to the hub with your own custom request message to your device and will return its response as a web request.
