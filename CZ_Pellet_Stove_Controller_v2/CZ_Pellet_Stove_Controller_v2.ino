@@ -351,7 +351,7 @@ void SetMemory() { // Update flash memory with the current configuration setting
 //------------------------------------------------------------------------------------------------
 void GetStoveTemp() { // Gets the stove body temperature
   stoveTempC = mlx.readObjectTempC();
-  stoveTempF = 90.0; //mlx.readObjectTempF();
+  stoveTempF = 89.0; //mlx.readObjectTempF();
 }
 //------------------------------------------------------------------------------------------------
 void GetRoomTemp () { // Gets the room temperature if using the built-in thermostat
