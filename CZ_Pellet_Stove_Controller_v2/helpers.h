@@ -64,7 +64,7 @@ inline String sanitizeHostname(String hostname) { // Sanitizes host names of inv
       if (c == '-' && lastWasPeriod) {
         continue; // Skip invalid hyphen
       }
-      sanitized[j++] = tolower(c); // Convert to lowercase
+      sanitized[j++] = c;
       lastWasPeriod = (c == '.');
     }
   }

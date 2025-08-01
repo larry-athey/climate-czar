@@ -33,6 +33,7 @@ inline String getWifiStats() {
 //------------------------------------------------------------------------------------------------
 inline String resetController() {
   OpMode = 0;
+  SetMemory();
   StartTime = 0;
   TargetTime = 0;
   HighBurn = false;
@@ -43,7 +44,6 @@ inline String resetController() {
   digitalWrite(COMBUSTION_BLOWER,LOW);
   digitalWrite(ROOM_BLOWER,LOW);
   digitalWrite(IGNITOR,LOW);
-  SetMemory();
   Countdown = "00:00";
   Runtime = "00:00:00";
   Status = "Stove controller reset by API";
@@ -90,12 +90,14 @@ inline String setCombustionBlower(byte Mode) {
 inline String setFeedHigh(float Time) {
   feedRateHigh = roundToOneDecimal(Time);
   if (HighBurn) FEED_TIME = feedRateHigh * 1000;
+  SetMemory();
   return jsonSuccess;
 }
 //------------------------------------------------------------------------------------------------
 inline String setFeedLow(float Time) {
   feedRateLow = roundToOneDecimal(Time);
   if (! HighBurn) FEED_TIME = feedRateLow * 1000;
+  SetMemory();
   return jsonSuccess;
 }
 //------------------------------------------------------------------------------------------------
@@ -117,6 +119,7 @@ inline String setMaxTemp(float Temp) {
     maxTempC = roundToOneDecimal(Temp);
     maxTempF = CtoF(Temp);
   }
+  SetMemory();
   return jsonSuccess;
 }
 //------------------------------------------------------------------------------------------------
@@ -128,6 +131,7 @@ inline String setMinTemp(float Temp) {
     minTempC = roundToOneDecimal(Temp);
     minTempF = CtoF(Temp);
   }
+  SetMemory();
   return jsonSuccess;
 }
 //------------------------------------------------------------------------------------------------
@@ -153,6 +157,7 @@ inline String setTempMode(String Mode) {
   } else {
     TemperatureMode = 0;
   }
+  SetMemory();
   return jsonSuccess;
 }
 //------------------------------------------------------------------------------------------------
@@ -164,6 +169,7 @@ inline String setThermTemp(float Temp) {
     targetTempC = roundToOneDecimal(Temp);
     targetTempF = CtoF(Temp);
   }
+  SetMemory();
   return jsonSuccess;
 }
 //------------------------------------------------------------------------------------------------
@@ -173,6 +179,7 @@ inline String setThermostat(byte Mode) {
   } else {
     UseThermostat = 1;
   }
+  SetMemory();
   return jsonSuccess;
 }
 //------------------------------------------------------------------------------------------------
@@ -198,6 +205,18 @@ inline String stoveShutdown() {
 inline String stoveStartup() {
   if ((OpMode == 0) || (OpMode == 4)) {
     ToggleRunState(true);
+    return jsonSuccess;
+  } else {
+    return jsonFailure;
+  }
+}
+//------------------------------------------------------------------------------------------------
+inline String toggleRun() {
+  if ((OpMode == 0) || (OpMode == 4)) {
+    ToggleRunState(true);
+    return jsonSuccess;
+  } else if ((OpMode == 1) || (OpMode == 2)) {
+    ToggleRunState(false);
     return jsonSuccess;
   } else {
     return jsonFailure;
@@ -245,8 +264,12 @@ inline String handleWebRequest(String Msg) { // The web API request handler
   }
 
   // parts[0] : The request type identifier
-  // parts[1..(partCount-1)] : Any additional parameters for the request type 
-  if (parts[0] == "bottom-auger") {
+  // parts[1..(partCount-1)] : Any additional parameters for the request type
+  if (parts[0] == "ajax-livedata") {
+    if (partCount == 1) Result = LiveData();
+  } else if (parts[0] == "ajax-settings") {
+    if (partCount == 1) Result = SettingsData();
+  } else if (parts[0] == "bottom-auger") {
     if (partCount == 2) Result = setBottomAuger(parts[1].toInt());
   } else if (parts[0] == "burn-mode") {
     if (partCount == 2) Result = setBurnMode(parts[1].toInt());
@@ -283,9 +306,9 @@ inline String handleWebRequest(String Msg) { // The web API request handler
   } else if (parts[0] == "runtime") {
     if (partCount == 1) Result = Runtime;
   } else if (parts[0] == "shutdown") {
-    if (partCount >= 1) Result = stoveShutdown();
+    if (partCount == 1) Result = stoveShutdown();
   } else if (parts[0] == "startup") {
-    if (partCount >= 1) Result = stoveStartup();
+    if (partCount == 1) Result = stoveStartup();
   } else if (parts[0] == "startup-timer") {
     if (partCount == 2) Result = setStartupTimer(parts[1].toInt());
   } else if (parts[0] == "stove-temp") {
@@ -296,6 +319,8 @@ inline String handleWebRequest(String Msg) { // The web API request handler
     if (partCount == 2) Result = setThermTemp(parts[1].toFloat());
   } else if (parts[0] == "thermostat") {
     if (partCount == 2) Result = setThermostat(parts[1].toInt());
+  } else if (parts[0] == "toggle-run") {
+    if (partCount == 1) Result = toggleRun();
   } else if (parts[0] == "top-auger") {
     if (partCount == 2) Result = setTopAuger(parts[1].toInt());
   } else if (parts[0] == "uptime") {
