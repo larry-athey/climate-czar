@@ -90,9 +90,12 @@ Adafruit_MLX90614 mlx = Adafruit_MLX90614();
 Preferences preferences;
 hw_timer_t *timer = NULL;
 //------------------------------------------------------------------------------------------------
+bool FaultDetected = false;      // True if the GPIO fault pin is currently pulled low
+bool gpioToggle = false;         // True if the GPIO pin set the last high burn mode
 bool HighBurn = false;           // True if high burn mode is active
 bool UpToTemp = false;           // True if the run startup has reached operating temperature
 bool UseThermostat = true;       // Use the internal thermostat routines Y/N
+byte FaultCounter = 0;           // Counts seconds that the GPIO fault pin is pulled low
 byte TemperatureMode = 0;        // 0=Fahrenheit, 1=Celcius
 byte OpMode = 0;                 // 0=Off, 1=Startup, 2=Running, 3=TempFail, 4=Shutdown, 5=Fault
 byte wifiCheckCounter = 0;       // Used to check the WiFi connection once per minute
@@ -510,6 +513,7 @@ void ToggleRunState(bool Running) { // Start or stop the pellet stove
     digitalWrite(IGNITOR,HIGH);
     OpMode = 1;
     HighBurn = true;
+    gpioToggle = false;
     FEED_TIME = feedRateHigh * 1000;
     timerAlarmEnable(timer);
     Status = "Pellet stove is starting up";
@@ -517,6 +521,7 @@ void ToggleRunState(bool Running) { // Start or stop the pellet stove
     TargetTime = millis() + ((StartupTimer * 1000) * 2);
     OpMode = 4;
     HighBurn = false;
+    gpioToggle = false;
     FEED_TIME = feedRateLow * 1000;
     timerAlarmDisable(timer);
     digitalWrite(TOP_AUGER,LOW);
@@ -542,18 +547,26 @@ void loop() {
   }
 
   // Check the external control GPIO pins
-  if ((OpMode > 0) && (digitalRead(FAULT) == 0)) OpMode = 5; // Fault detection by GPIO, must reboot the controller to clear the fault
+  if ((OpMode > 0) && (digitalRead(FAULT) == 0)) { // Fault detection by GPIO, starts a 60 second timer
+    FaultDetected = true;
+  } else {
+    FaultDetected = false;
+  }
   if ((! UseThermostat) && (OpMode == 2)) {
     if (digitalRead(HIGH_BURN) == 0) { // Toggle the high burn mode if using an external thermostat
       if (OpMode == 2) {
         if (! HighBurn) PopoverMessage("High burn mode activated");
         HighBurn = true;
+        gpioToggle = true;
         FEED_TIME = feedRateHigh * 1000;
       }
     } else {
-      if (HighBurn) PopoverMessage("Idle burn mode activated");
-      HighBurn = false;
-      FEED_TIME = feedRateLow * 1000;
+      if (gpioToggle) { // The GPIO pin only sets idle burn mode if the GPIO pin was the last to set high burn mode
+        if (HighBurn) PopoverMessage("Idle burn mode activated");
+        HighBurn = false;
+        gpioToggle = false;
+        FEED_TIME = feedRateLow * 1000;
+      }
     }
   }
 
@@ -586,6 +599,7 @@ void loop() {
           PopoverMessage("Idle burn mode activated");
         } else {
           HighBurn = true;
+          gpioToggle = false;
           FEED_TIME = feedRateHigh * 1000;
           PopoverMessage("High burn mode activated");
         }
@@ -629,7 +643,13 @@ void loop() {
   // Execute the 1-second non-blocking timer routines
   if (CurrentTime - LoopCounter >= 1000) {
     GetStoveTemp();
-    GetRoomTemp();
+    if (UseThermostat) GetRoomTemp();
+    if (FaultDetected) {
+      FaultCounter ++;
+    } else {
+      FaultCounter = 0;
+    }
+    if (FaultCounter == 60) OpMode = 5; // 60 second fault detected, shut down the stove
     if (OpMode < 5) {
       if ((OpMode > 0) && (OpMode < 5)) Runtime = formatMillis(CurrentTime - StartTime);
       if (OpMode == 1) { // Starting up
@@ -658,13 +678,14 @@ void loop() {
       } else if (OpMode == 2) { // Stove body is up to temp and running
         if (UseThermostat) {
           if (roomTempF < targetTempF) {
+            if (! HighBurn) PopoverMessage("High burn mode activated");
             HighBurn = true;
+            gpioToggle = false;
             FEED_TIME = feedRateHigh * 1000;
-            PopoverMessage("High burn mode activated");
           } else if (roomTempF > targetTempF) {
+            if (HighBurn) PopoverMessage("Idle burn mode activated");
             HighBurn = false;
             FEED_TIME = feedRateLow * 1000;
-            PopoverMessage("Idle burn mode activated");
           }
         }
         if ((stoveTempF <= minTempF) || (stoveTempF >= maxTempF)) { // Stove body temperature failure during a normal run

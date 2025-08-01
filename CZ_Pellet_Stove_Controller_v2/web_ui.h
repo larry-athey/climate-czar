@@ -92,10 +92,10 @@ inline String getForm(byte WhichOne) { // Dynamically creates the form for the s
     Name = "max-temp";
     if (TemperatureMode == 0) {
       Label = "120 to 350";
-      Step = ".1"; Min = "120"; Max = "350"; Value = String(maxTempF,1);
+      Step = ".1"; Min = "120"; Max = "500"; Value = String(maxTempF,1);
     } else {
       Label = "49 to 177";
-      Step = ".1"; Min = "49"; Max = "177"; Value = String(maxTempC,1);
+      Step = ".1"; Min = "49"; Max = "260"; Value = String(maxTempC,1);
     }
   } else if (WhichOne == 5) {
     Name = "startup-timer";
@@ -144,6 +144,30 @@ inline String getForm(byte WhichOne) { // Dynamically creates the form for the s
   }
   Content += "</form>";
   return Content;
+}
+//------------------------------------------------------------------------------------------------
+inline String getOpMode() {
+  String Temp = "";
+
+  if (OpMode == 0) {
+    Temp = "<span class=\"text-secondary\">Inactive</span>";
+  } else if (OpMode == 1) {
+    Temp = "<span class=\"text-warning blink\">Starting Up</span>";
+  } else if (OpMode == 2) {
+    if (HighBurn) {
+      Temp = "<span class=\"text-success blink\">Running (high burn)</span>";
+    } else {
+      Temp = "<span class=\"text-success\">Running (idle)</span>";
+    }
+  } else if (OpMode == 3) {
+    Temp = "<span class=\"text-danger blink\">Temperature Failure</span>";
+  } else if (OpMode == 4) {
+    Temp = "<span class=\"text-warning blink\">Shutting Down</span>";
+  } else if (OpMode == 5) {
+    Temp = "<span class=\"text-danger blink\">Critical Fault</span>";
+  }
+
+  return Temp;
 }
 //------------------------------------------------------------------------------------------------
 inline String InfoLine(String Title,String Data) { // Formats a line of text in a card
@@ -243,35 +267,17 @@ inline String StaticData() {
 //------------------------------------------------------------------------------------------------
 inline String LiveData() {
   String Content = "";
-  String Temp = "";
 
-  if (OpMode == 0) {
-    Temp = "<span class=\"text-secondary\">Inactive</span>";
-  } else if (OpMode == 1) {
-    Temp = "<span class=\"text-warning blink\">Starting Up</span>";
-  } else if (OpMode == 2) {
-    if (HighBurn) {
-      Temp = "<span class=\"text-success blink\">Running (high burn)</span>";
-    } else {
-      Temp = "<span class=\"text-success\">Running (idle)</span>";
-    }
-  } else if (OpMode == 3) {
-    Temp = "<span class=\"text-danger blink\">Temperature Failure</span>";
-  } else if (OpMode == 4) {
-    Temp = "<span class=\"text-warning blink\">Shutting Down</span>";
-  } else if (OpMode == 5) {
-    Temp = "<span class=\"text-danger blink\">Critical Fault</span>";
-  }
-  Content += InfoLine("Run State",Temp) + "\n";
+  Content += InfoLine("Run State",getOpMode()) + "\n";
   Content += InfoLine("Uptime",Uptime) + "\n";
   Content += InfoLine("Runtime",Runtime) + "\n";
   Content += InfoLine("Countdown",Countdown) + "\n";
   if (TemperatureMode == 0) {
     Content += InfoLine("Stove Temperature",String(stoveTempF,1) + "F") + "\n";
-    Content += InfoLine("Room Temperature",String(roomTempF,1) + "F") + "\n";
+    if (UseThermostat) Content += InfoLine("Room Temperature",String(roomTempF,1) + "F") + "\n";
   } else {
     Content += InfoLine("Stove Temp",String(stoveTempC,1) + "C") + "\n";
-    Content += InfoLine("Room Temp",String(roomTempC,1) + "C") + "\n";
+    if (UseThermostat) Content += InfoLine("Room Temp",String(roomTempC,1) + "C") + "\n";
   }
 
   return Content;
@@ -334,25 +340,25 @@ inline String HomePage() {
   String Content = "";
   Content += PageHeader();
   Content += CreateModal();
-  Content += "<div class=\"container-fluid\" style=\"align: left;\">\n";
+  Content += "<div class=\"container-fluid\" style=\"align: left;>\n";
 
   Content += "<div class=\"container mt-3\">\n";
   Content +=   "<div class=\"d-flex align-items-center\">\n";
-  Content +=     "<img src=\"https://panhandleponics.com/wp-content/uploads/2025/07/cz_pellet_stove.png\" class=\"logo-img img-fluid me-2\" style=\"max-width: 64px; margin-bottom: 5px;\">\n";
+  Content +=     "<img src=\"https://panhandleponics.com/wp-content/uploads/2025/07/cz_pellet_stove.png\" class=\"logo-img img-fluid me-2\" style=\"max-width: 64px; margin-bottom: 0.5em; margin-top: 0.5em;\">\n";
   Content +=     "<span class=\"fs-4 fw-bold\">CZ Pellet Stove Controller</span>\n";
   Content +=   "</div>\n";
   Content += "</div>\n\n";
 
-  Content += "<div class=\"row\"><!-- Static Data -->\n";
-  Content +=   DrawCard(StaticData(),"TopCard","",false) + "\n";
-  Content += "</div><!-- Static End -->\n\n";
+  Content += "<div class=\"row\" style=\"margin-left: 0.25em; margin-right: 0.25em;\"><!-- Static Data -->\n";
+  Content +=   DrawCard(StaticData(),"TopCard","",false);
+  Content += "</div><!-- Static Data End -->\n\n";
 
-  Content += "<div class=\"row\"><!-- Live Data -->\n";
-  Content +=   DrawCard(LiveData(),"LiveData","ajax-livedata",true) + "\n";
-  Content += "</div><!-- Live End -->\n\n";
+  Content += "<div class=\"row\" style=\"margin-left: 0.25em; margin-right: 0.25em;\"><!-- Live Data -->\n";
+  Content +=   DrawCard(LiveData(),"LiveData","ajax-livedata",true);
+  Content += "</div><!-- Live Data End -->\n\n";
 
-  Content += "<div class=\"row\"><!-- Settings Data -->\n";
-  Content +=   DrawCard(SettingsData(),"SettingsData","ajax-settings",true) + "\n";
+  Content += "<div class=\"row\" style=\"margin-left: 0.25em; margin-right: 0.25em;\"><!-- Settings Data -->\n";
+  Content +=   DrawCard(SettingsData(),"SettingsData","ajax-settings",true);
   Content += "</div><!-- Settings End -->\n\n";
 
   Content += "</div>\n";

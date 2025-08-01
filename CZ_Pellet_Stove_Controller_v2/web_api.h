@@ -8,7 +8,11 @@ inline String csvStats() {
 }
 //------------------------------------------------------------------------------------------------
 inline String czStats() {
-
+  String Content = "";
+  Content += "<div class=\"container\" style=\"font-size: 0.93em;\">\n";
+  Content += LiveData();
+  Content += "<div>\n";
+  return Content;
 }
 //------------------------------------------------------------------------------------------------
 inline String getRoomTemp() {
@@ -37,6 +41,7 @@ inline String resetController() {
   StartTime = 0;
   TargetTime = 0;
   HighBurn = false;
+  gpioToggle = false;
   FEED_TIME = feedRateLow * 1000;
   timerAlarmDisable(timer);
   digitalWrite(TOP_AUGER,LOW);  
@@ -64,6 +69,7 @@ inline String setBurnMode(byte Mode) {
   if ((OpMode == 1) || (OpMode == 2)) {
     if (Mode == 1) {
       HighBurn = true;
+      gpioToggle = false;
       FEED_TIME = feedRateHigh * 1000;
       PopoverMessage("High burn mode activated");
     } else {
