@@ -79,30 +79,38 @@ inline String getForm(byte WhichOne) { // Dynamically creates the form for the s
       Label = "0 to 38";
       Step = ".1"; Min = "0"; Max = "38"; Value = String(targetTempC,1);
     }
-  }
-  /* else if (WhichOne == 1) {
-    Label = "0.0 to 260.0 (C)";
-    Step = ".1"; Min = "0"; Max = "260"; Value = String(TargetTemp,1);
-  } else if (WhichOne == 2) {
-    Label = "10% to 100%";
-    Step = "1"; Min = "10"; Max = "100"; Value = String(StartupPercent);
   } else if (WhichOne == 3) {
-    Label = "10% to 100%";
-    Step = "1"; Min = "10"; Max = "100"; Value = String(FallBackPercent);
+    Name = "min-temp";
+    if (TemperatureMode == 0) {
+      Label = "90 to 120";
+      Step = ".1"; Min = "90"; Max = "120"; Value = String(minTempF,1);
+    } else {
+      Label = "32 to 49";
+      Step = ".1"; Min = "32"; Max = "49"; Value = String(minTempC,1);
+    }
   } else if (WhichOne == 4) {
-    Label = "1% to 100%";
-    Step = "1"; Min = "1"; Max = "100"; Value = String(AdjustRate);
+    Name = "max-temp";
+    if (TemperatureMode == 0) {
+      Label = "120 to 350";
+      Step = ".1"; Min = "120"; Max = "350"; Value = String(maxTempF,1);
+    } else {
+      Label = "49 to 177";
+      Step = ".1"; Min = "49"; Max = "177"; Value = String(maxTempC,1);
+    }
   } else if (WhichOne == 5) {
-    Label = "0.1 to 5.0 (C)";
-    Step = ".1"; Min = ".1"; Max = "5"; Value = String(Deviation,1);
+    Name = "startup-timer";
+    Label = "300 to 3000";
+    Step = "1"; Min = "300"; Max = "3000"; Value = String(StartupTimer);
   } else if (WhichOne == 6) {
-    Label = "1 to 1000";
-    Step = "1"; Min = "1"; Max = "1000"; Value = String(ChangeWait);
+    Name = "feed-low";
+    Label = "1 to 10";
+    Step = ".1"; Min = "1"; Max = "10"; Value = String(feedRateLow,1);
   } else if (WhichOne == 7) {
-    Label = "1 to 1000";
-    Step = "1"; Min = "1"; Max = "1000"; Value = String(RestPeriod);
+    Name = "feed-high";
+    Label = "1 to 10";
+    Step = ".1"; Min = "1"; Max = "10"; Value = String(feedRateHigh,1);
   }
-*/
+
   Content += "<form id=\"modalForm\" onsubmit=\"return false;\">";
   Content += "<label for=\"" + Name + "\" class=\"form-label\">" + Label + "</label>";
   if (WhichOne == 0) {
@@ -154,7 +162,6 @@ inline String PageHeader() { // HTML page header with custom CSS configuration
   Content +=   "<script src=\"https://code.iconify.design/2/2.0.3/iconify.min.js\"></script>\n";
   Content +=   "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js\"></script>\n";
   Content +=   "<link rel=\"icon\" href=\"https://panhandleponics.com/wp-content/uploads/2025/07/cz_pellet_stove.png?v=1.1\">\n";
-  //Content +=   "<link rel=\"icon\" href=\"data:image/png;base64," + String(logo_base64) + "\">\n";
   Content +=   "\n<style type=\"text/css\">\n";
   Content +=   "  @-webkit-keyframes blinker {\n";
   Content +=   "    from {opacity: 1.0;}\n";
@@ -302,23 +309,23 @@ inline String SettingsData() {
   } else {
     Temp = String(minTempC,1) + "C";
   }
-  Content += InfoLine("Stove Min Temperature",CreateLink(Temp,"Stove Min Temperature","3")) + "\n";
+  Content += InfoLine("Stove Min Temperature",CreateLink(Temp,"Stove Minimum Temperature","3")) + "\n";
 
   if (TemperatureMode == 0) {
     Temp = String(maxTempF,1) + "F";
   } else {
     Temp = String(maxTempC,1) + "C";
   }
-  Content += InfoLine("Stove Max Temperature",CreateLink(Temp,"Stove Max Temperature","4")) + "\n";
+  Content += InfoLine("Stove Max Temperature",CreateLink(Temp,"Stove Maximum Temperature","4")) + "\n";
 
   Temp = String(StartupTimer) + " seconds";
-  Content += InfoLine("Startup Time Limit",CreateLink(Temp,"Startup Time Limit","5")) + "\n";
+  Content += InfoLine("Startup Time Limit",CreateLink(Temp,"Startup Time Limit (secs)","5")) + "\n";
 
   Temp = String(feedRateLow,1) + " seconds";
-  Content += InfoLine("Idle Burn Feed Time",CreateLink(Temp,"Idle Feed Time (seconds)","6")) + "\n";
+  Content += InfoLine("Idle Burn Feed Time",CreateLink(Temp,"Idle Feed Time (secs)","6")) + "\n";
 
   Temp = String(feedRateHigh,1) + " seconds";
-  Content += InfoLine("High Burn Feed Time",CreateLink(Temp,"Idle Feed Time (seconds)","7")) + "\n";
+  Content += InfoLine("High Burn Feed Time",CreateLink(Temp,"Idle Feed Time (secs)","7")) + "\n";
 
   return Content;
 }
