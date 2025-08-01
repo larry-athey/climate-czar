@@ -93,7 +93,6 @@ hw_timer_t *timer = NULL;
 bool FaultDetected = false;      // True if the GPIO fault pin is currently pulled low
 bool gpioToggle = false;         // True if the GPIO pin set the last high burn mode
 bool HighBurn = false;           // True if high burn mode is active
-bool UpToTemp = false;           // True if the run startup has reached operating temperature
 bool UseThermostat = true;       // Use the internal thermostat routines Y/N
 byte FaultCounter = 0;           // Counts seconds that the GPIO fault pin is pulled low
 byte TemperatureMode = 0;        // 0=Fahrenheit, 1=Celcius
