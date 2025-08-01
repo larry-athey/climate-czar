@@ -136,10 +136,9 @@ uint32_t FEED_TIME = feedRateLow * 1000;
 //------------------------------------------------------------------------------------------------
 void IRAM_ATTR onTimer() { // Interrupt driven top auger timer (15 second wide PWM)
   cycleCount += 100; // Increment by 100ms
-  
   if (cycleCount >= CYCLE_PERIOD) {
     augerState = true;
-    digitalWrite(TOP_AUGER,HIGH);  // Turn top auger ON
+    digitalWrite(TOP_AUGER,HIGH); // Turn top auger ON
     cycleCount = 0; // Reset cycle
   } else if (cycleCount >= FEED_TIME && augerState) {
     augerState = false;
@@ -648,7 +647,7 @@ void loop() {
     } else {
       FaultCounter = 0;
     }
-    if (FaultCounter == 60) OpMode = 5; // 60 second fault detected, shut down the stove
+    if (FaultCounter == 60) OpMode = 5; // 60 second fault detected, shut down the stove, reboot to clear
     if (OpMode < 5) {
       if ((OpMode > 0) && (OpMode < 5)) Runtime = formatMillis(CurrentTime - StartTime);
       if (OpMode == 1) { // Starting up
