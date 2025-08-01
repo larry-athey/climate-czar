@@ -3,10 +3,6 @@
 //
 // Inline functions used for modular unit organization
 //------------------------------------------------------------------------------------------------
-inline String csvStats() {
-
-}
-//------------------------------------------------------------------------------------------------
 inline String czStats() {
   String Content = "";
   Content += "<div class=\"container\" style=\"font-size: 0.93em;\">\n";
@@ -33,6 +29,28 @@ inline String getStoveTemp() {
 //------------------------------------------------------------------------------------------------
 inline String getWifiStats() {
   return "WiFi Channel: " + String(WiFi.channel()) + "\n" + "WiFi Signal: " + String(WiFi.RSSI());
+}
+//------------------------------------------------------------------------------------------------
+inline String jsonStats() {
+  String Content = "";
+  Content += "{\"op_mode\":\"" + String(OpMode) + "\",";
+  //Content += "\"var\":\"" + String(var) + "\",";
+  Content += "\"uptime\":\"" + Uptime + "\",";
+  Content += "\"runtime\":\"" + Runtime + "\",";
+  Content += "\"countdown\":\"" + Countdown + "\",";
+  Content += "\"stove_temp_c\":\"" + String(stoveTempC,1) + "\",";
+  Content += "\"stove_temp_f\":\"" + String(stoveTempF,1) + "\",";
+  if (UseThermostat) {
+    Content += "\"room_temp_c\":\"" + String(roomTempC,1) + "\",";
+    Content += "\"room_temp_f\":\"" + String(roomTempF,1) + "\",";
+  }
+  if (HighBurn) {
+    Content += "\"high_burn\":\"true\",";
+  } else {
+    Content += "\"high_burn\":\"false\",";
+  }
+  Content += "\"status\":\"" + Status + "\"}\n";
+  return Content;
 }
 //------------------------------------------------------------------------------------------------
 inline String resetController() {
@@ -283,8 +301,6 @@ inline String handleWebRequest(String Msg) { // The web API request handler
     if (partCount == 2) Result = setCombustionBlower(parts[1].toInt());
   } else if (parts[0] == "countdown") {
     if (partCount == 1) Result = Countdown;
-  } else if (parts[0] == "csv-stats") {
-    if (partCount == 1) Result = csvStats();
   } else if (parts[0] == "cz-stats") {
     if (partCount == 1) Result = czStats();
   } else if (parts[0] == "feed-high") {
@@ -295,6 +311,8 @@ inline String handleWebRequest(String Msg) { // The web API request handler
     if (partCount == 2) Result = getForm(parts[1].toInt());
   } else if (parts[0] == "ignitor") {
     if (partCount == 2) Result = setIgnitor(parts[1].toInt());
+  } else if (parts[0] == "json-stats") {
+    if (partCount == 1) Result = jsonStats();
   } else if (parts[0] == "max-temp") {
     if (partCount == 2) Result = setMaxTemp(parts[1].toFloat());
   } else if (parts[0] == "min-temp") {
