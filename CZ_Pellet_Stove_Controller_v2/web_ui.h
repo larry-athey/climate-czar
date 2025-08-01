@@ -3,8 +3,6 @@
 //
 // Inline functions used for modular unit organization
 //------------------------------------------------------------------------------------------------
-#include "image.h" // Base 64 encoded app icon
-//------------------------------------------------------------------------------------------------
 inline String AjaxRefreshJS(String AjaxID,String Query,String RefreshMS) { // Refreshes data in a card on a random timed basis
   String Content = "";
   Content += "\n<script type=\"text/javascript\">\n";
@@ -70,8 +68,17 @@ inline String getForm(byte WhichOne) { // Dynamically creates the form for the s
     Label = "Select Mode";
     Name = "temp-mode";
   } else if (WhichOne == 1) {
-    Label = "Select";
+    Label = "Use internal thermostat?";
     Name = "thermostat";
+  } else if (WhichOne == 2) {
+    Name = "room-temp";
+    if (TemperatureMode == 0) {
+      Label = "32 to 100";
+      Step = ".1"; Min = "32"; Max = "100"; Value = String(targetTempF,1);
+    } else {
+      Label = "0 to 38";
+      Step = ".1"; Min = "0"; Max = "38"; Value = String(targetTempC,1);
+    }
   }
   /* else if (WhichOne == 1) {
     Label = "0.0 to 260.0 (C)";
@@ -97,7 +104,7 @@ inline String getForm(byte WhichOne) { // Dynamically creates the form for the s
   }
 */
   Content += "<form id=\"modalForm\" onsubmit=\"return false;\">";
-  Content +=   "<label for=\"" + Name + "\" class=\"form-label\">" + Label + "</label>";
+  Content += "<label for=\"" + Name + "\" class=\"form-label\">" + Label + "</label>";
   if (WhichOne == 0) {
     String S0,S1;
     if (TemperatureMode == 0) {
@@ -124,13 +131,10 @@ inline String getForm(byte WhichOne) { // Dynamically creates the form for the s
     Content += "<option " + S0 + " value=\"0\">No</option>";
     Content += "<option " + S1 + " value=\"1\">Yes</option>";
     Content += "</select>";
-  }
-/*
   } else {
-    Content +=   "<input type=\"number\" step=\"" + Step + "\" min=\"" + Min + "\" max=\"" + Max + "\" class=\"form-control\" id=\"data_" + String(WhichOne) + "\" name=\"data_" + String(WhichOne) + "\" value=\"" + Value + "\">";
+    Content += "<input type=\"number\" step=\"" + Step + "\" min=\"" + Min + "\" max=\"" + Max + "\" class=\"form-control\" id=\"" + Name + "\" name=\"" + Name + "\" value=\"" + Value + "\">";
   }
   Content += "</form>";
-*/
   return Content;
 }
 //------------------------------------------------------------------------------------------------
@@ -149,7 +153,8 @@ inline String PageHeader() { // HTML page header with custom CSS configuration
   Content +=   "<link rel=\"stylesheet\" href=\"https://unpkg.com/bootstrap-darkmode@0.7.0/dist/darktheme.css\">\n";
   Content +=   "<script src=\"https://code.iconify.design/2/2.0.3/iconify.min.js\"></script>\n";
   Content +=   "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js\"></script>\n";
-  Content +=   "<link rel=\"icon\" href=\"data:image/png;base64," + String(logo_base64) + "\">\n";
+  Content +=   "<link rel=\"icon\" href=\"https://panhandleponics.com/wp-content/uploads/2025/07/cz_pellet_stove.png?v=1.1\">\n";
+  //Content +=   "<link rel=\"icon\" href=\"data:image/png;base64," + String(logo_base64) + "\">\n";
   Content +=   "\n<style type=\"text/css\">\n";
   Content +=   "  @-webkit-keyframes blinker {\n";
   Content +=   "    from {opacity: 1.0;}\n";
@@ -273,29 +278,32 @@ inline String SettingsData() {
     Temp = "Fahrenheit";
   } else {
     Temp = "Celcius";
-  }/*
+  }
   Content += InfoLine("Temperature Mode",CreateLink(Temp,"Temperature Mode","0")) + "\n";
+
   if (UseThermostat) {
     Temp = "Yes";
   } else {
     Temp = "No";
   }
-  Content += InfoLine("Internal Thermostat",CreateLink(Temp,"Internal Thermostat","1")) + "\n";
-  /*
+  Content += InfoLine("Internal Thermostat",CreateLink(Temp,"Temperature Control","1")) + "\n";
+
   if (UseThermostat) {
     if (TemperatureMode == 0) {
       Temp = String(targetTempF,1) + "F";
     } else {
       Temp = String(targetTempC,1) + "C";
     }
-    Content += InfoLine("Room Temperature",CreateLink(Temp,"Room Temperature","2")) + "\n";
+    Content += InfoLine("Room Temperature",CreateLink(Temp,"Thermostat Target Temperature","2")) + "\n";
   }
+
   if (TemperatureMode == 0) {
     Temp = String(minTempF,1) + "F";
   } else {
     Temp = String(minTempC,1) + "C";
   }
   Content += InfoLine("Stove Min Temperature",CreateLink(Temp,"Stove Min Temperature","3")) + "\n";
+
   if (TemperatureMode == 0) {
     Temp = String(maxTempF,1) + "F";
   } else {
@@ -305,16 +313,17 @@ inline String SettingsData() {
 
   Temp = String(StartupTimer) + " seconds";
   Content += InfoLine("Startup Time Limit",CreateLink(Temp,"Startup Time Limit","5")) + "\n";
+
   Temp = String(feedRateLow,1) + " seconds";
   Content += InfoLine("Idle Burn Feed Time",CreateLink(Temp,"Idle Feed Time (seconds)","6")) + "\n";
+
   Temp = String(feedRateHigh,1) + " seconds";
   Content += InfoLine("High Burn Feed Time",CreateLink(Temp,"Idle Feed Time (seconds)","7")) + "\n";
-  */
+
   return Content;
 }
 //------------------------------------------------------------------------------------------------
 inline String HomePage() {
-  Serial.println(ESP.getFreeHeap());
   String Content = "";
   Content += PageHeader();
   Content += CreateModal();
@@ -322,7 +331,7 @@ inline String HomePage() {
 
   Content += "<div class=\"container mt-3\">\n";
   Content +=   "<div class=\"d-flex align-items-center\">\n";
-  Content +=     "<img src=\"data:image/png;base64," + String(logo_base64) + "\" class=\"logo-img img-fluid me-2\" style=\"max-width: 64px; margin-bottom: 5px;\">\n";
+  Content +=     "<img src=\"https://panhandleponics.com/wp-content/uploads/2025/07/cz_pellet_stove.png\" class=\"logo-img img-fluid me-2\" style=\"max-width: 64px; margin-bottom: 5px;\">\n";
   Content +=     "<span class=\"fs-4 fw-bold\">CZ Pellet Stove Controller</span>\n";
   Content +=   "</div>\n";
   Content += "</div>\n\n";
@@ -341,9 +350,7 @@ inline String HomePage() {
 
   Content += "</div>\n";
   Content += PageFooter();
-  Serial.println(ESP.getFreeHeap());
+
   return Content;
 }
 //------------------------------------------------------------------------------------------------
-// base64 favicon -> https://x.com/i/grok/share/eg810elzBoqsc5nda5SiUphls
-// API modification -> https://x.com/i/grok/share/8SLhROENopXMvxnZCt6s6J7Lh

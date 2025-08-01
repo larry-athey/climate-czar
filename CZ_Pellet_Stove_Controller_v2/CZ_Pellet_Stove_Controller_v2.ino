@@ -351,7 +351,7 @@ void SetMemory() { // Update flash memory with the current configuration setting
 //------------------------------------------------------------------------------------------------
 void GetStoveTemp() { // Gets the stove body temperature
   stoveTempC = mlx.readObjectTempC();
-  stoveTempF = mlx.readObjectTempF();
+  stoveTempF = 90.0; //mlx.readObjectTempF();
 }
 //------------------------------------------------------------------------------------------------
 void GetRoomTemp () { // Gets the room temperature if using the built-in thermostat
@@ -361,6 +361,7 @@ void GetRoomTemp () { // Gets the room temperature if using the built-in thermos
     roomTempC = Test;
     roomTempF = DT.getTempFByIndex(0);
   }
+  roomTempF = 72.0;
 }
 //------------------------------------------------------------------------------------------------
 void PopoverMessage(String Msg) { // Display popover message to the user
@@ -432,14 +433,22 @@ void ScreenUpdate() { // Update the LCD screen
   canvas->print("Stove Temp:");
   canvas->setCursor(112,90);
   canvas->setTextColor(MAGENTA);
-  canvas->print("90.0F");
+  if (TemperatureMode == 0) {
+    canvas->print(String(stoveTempF,1) + "F");
+  } else {
+    canvas->print(String(stoveTempC,1) + "C");
+  }
 
   canvas->setCursor(5,114);
   canvas->setTextColor(LIGHTGREY);
   canvas->print("Room Temp:");
   canvas->setCursor(112,114);
   canvas->setTextColor(CYAN);
-  canvas->print("72.0F");
+  if (TemperatureMode == 0) {
+    canvas->print(String(roomTempF,1) + "F");
+  } else {
+    canvas->print(String(roomTempC,1) + "C");
+  }
 
   canvas->setCursor(215,18);
   canvas->setTextColor(LIGHTGREY);
@@ -534,17 +543,17 @@ void loop() {
 
   // Check the external control GPIO pins
   if ((OpMode > 0) && (digitalRead(FAULT) == 0)) OpMode = 5; // Fault detection by GPIO, must reboot the controller to clear the fault
-  if (! UseThermostat) {
+  if ((! UseThermostat) && (OpMode == 2)) {
     if (digitalRead(HIGH_BURN) == 0) { // Toggle the high burn mode if using an external thermostat
       if (OpMode == 2) {
+        if (! HighBurn) PopoverMessage("High burn mode activated");
         HighBurn = true;
         FEED_TIME = feedRateHigh * 1000;
-        PopoverMessage("High burn mode activated");
       }
     } else {
+      if (HighBurn) PopoverMessage("Idle burn mode activated");
       HighBurn = false;
       FEED_TIME = feedRateLow * 1000;
-      PopoverMessage("Idle burn mode activated");
     }
   }
 
