@@ -71,7 +71,7 @@ inline String getForm(byte WhichOne) { // Dynamically creates the form for the s
     Label = "Use internal thermostat?";
     Name = "thermostat";
   } else if (WhichOne == 2) {
-    Name = "room-temp";
+    Name = "therm-temp";
     if (TemperatureMode == 0) {
       Label = "32 to 100";
       Step = ".1"; Min = "32"; Max = "100"; Value = String(targetTempF,1);
@@ -267,8 +267,8 @@ inline String LiveData() {
   Content += InfoLine("Runtime",Runtime) + "\n";
   Content += InfoLine("Countdown",Countdown) + "\n";
   if (TemperatureMode == 0) {
-    Content += InfoLine("Stove Temp",String(stoveTempF,1) + "F") + "\n";
-    Content += InfoLine("Room Temp",String(roomTempF,1) + "F") + "\n";
+    Content += InfoLine("Stove Temperature",String(stoveTempF,1) + "F") + "\n";
+    Content += InfoLine("Room Temperature",String(roomTempF,1) + "F") + "\n";
   } else {
     Content += InfoLine("Stove Temp",String(stoveTempC,1) + "C") + "\n";
     Content += InfoLine("Room Temp",String(roomTempC,1) + "C") + "\n";
@@ -301,7 +301,7 @@ inline String SettingsData() {
     } else {
       Temp = String(targetTempC,1) + "C";
     }
-    Content += InfoLine("Room Temperature",CreateLink(Temp,"Thermostat Target Temperature","2")) + "\n";
+    Content += InfoLine("Thermostat Temp",CreateLink(Temp,"Thermostat Target Temperature","2")) + "\n";
   }
 
   if (TemperatureMode == 0) {
