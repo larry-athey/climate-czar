@@ -361,7 +361,7 @@ inline String HomePage() {
   Content +=   DrawCard(SettingsData(),"SettingsData","ajax-settings",true);
   Content += "</div><!-- Settings End -->\n\n";
 
-  Content += "</div>\n";
+  Content += "</div><!-- -->\n";
   Content += PageFooter();
 
   return Content;
