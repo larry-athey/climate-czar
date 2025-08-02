@@ -84,7 +84,7 @@ inline String setBottomAuger(byte Mode) {
 }
 //------------------------------------------------------------------------------------------------
 inline String setBurnMode(byte Mode) {
-  if ((OpMode == 1) || (OpMode == 2)) {
+  if (OpMode == 2) {
     if (Mode == 1) {
       if (! HighBurn) PopoverMessage("High burn mode activated");
       HighBurn = true;
