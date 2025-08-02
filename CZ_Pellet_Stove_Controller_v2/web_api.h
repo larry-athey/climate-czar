@@ -7,7 +7,7 @@ inline String czStats() {
   String Content = "";
   Content += "<div class=\"container\" style=\"font-size: 0.93em;\">\n";
   Content += LiveData();
-  Content += "<div>\n";
+  Content += "</div>\n";
   return Content;
 }
 //------------------------------------------------------------------------------------------------
