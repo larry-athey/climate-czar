@@ -6,7 +6,7 @@
 inline String czStats() {
   String Content = "";
   Content += "<div class=\"container\" style=\"font-size: 0.93em;\">\n";
-  Content += LiveData();
+  Content += LiveData(1);
   Content += "</div>\n";
   return Content;
 }
@@ -290,7 +290,7 @@ inline String handleWebRequest(String Msg) { // The web API request handler
   // parts[0] : The request type identifier
   // parts[1..(partCount-1)] : Any additional parameters for the request type
   if (parts[0] == "ajax-livedata") {
-    if (partCount == 1) Result = LiveData();
+    if (partCount == 1) Result = LiveData(0);
   } else if (parts[0] == "ajax-settings") {
     if (partCount == 1) Result = SettingsData();
   } else if (parts[0] == "bottom-auger") {
