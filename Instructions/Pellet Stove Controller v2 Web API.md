@@ -6,7 +6,7 @@ Example Climate Czar Server web API calls:
 
 `curl -s -m 5 --http0.9 http://controller-ip-address/startup` (start up the pellet stove)<br>
 `curl -s -m 5 --http0.9 http://controller-ip-address/temp-mode/f` (set the temperature mode to Fahrenheit)<br>
-`curl -s -m 5 --http0.9 http://controller-ip-address/thermostat/70.5` (set the thermostat to 70.5F)<br>
+`curl -s -m 5 --http0.9 http://controller-ip-address/thermostat/70.5` (set the built-in thermostat to 70.5F)<br>
 
 `-s` tells curl run silently and not output download progress<br>
 `-m 5` tells curl to time out the connection attempt after 5 seconds<br>
