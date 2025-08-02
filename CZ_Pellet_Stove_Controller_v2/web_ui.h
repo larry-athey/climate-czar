@@ -170,8 +170,14 @@ inline String getOpMode() {
   return Temp;
 }
 //------------------------------------------------------------------------------------------------
-inline String InfoLine(String Title,String Data) { // Formats a line of text in a card
-  return "<div class=\"row\"><div class=\"col\" style=\"white-space: nowrap;\"><p class=\"fw-bolder text-warning mb-0\">" + Title + ":</p></div><div class=\"col\" style=\"text-align: right; white-space: nowrap;\"><p class=\"fw-bolder mb-0\">" + Data + "</p></div></div>";
+inline String InfoLine(String Title,String Data, byte Color) { // Formats a line of text in a card
+  String FG;
+  if (Color == 0) {
+    FG = "warning";
+  } else {
+    FG = "success";
+  }
+  return "<div class=\"row\"><div class=\"col\" style=\"white-space: nowrap;\"><p class=\"fw-bolder text-" + FG + " mb-0\">" + Title + ":</p></div><div class=\"col\" style=\"text-align: right; white-space: nowrap;\"><p class=\"fw-bolder mb-0\">" + Data + "</p></div></div>";
 }
 //------------------------------------------------------------------------------------------------
 inline String PageHeader() { // HTML page header with custom CSS configuration
@@ -260,25 +266,25 @@ inline String PageFooter() { // HTML page footer with custom Javascript to handl
 //------------------------------------------------------------------------------------------------
 inline String StaticData() {
   String Content = "";
-  Content += InfoLine("Device Name",DeviceName);
+  Content += InfoLine("Device Name",DeviceName,0);
   Content += "<button onClick=\"ToggleRun()\" class=\"btn btn-sm btn-warning fw-bolder\" type=\"button\" style=\"width: 100%; margin-top: .75em; margin-bottom: .5em;\">Start / Stop</button>";
 
   return Content;
 }
 //------------------------------------------------------------------------------------------------
-inline String LiveData() {
+inline String LiveData(byte Color) {
   String Content = "";
 
-  Content += InfoLine("Run State",getOpMode()) + "\n";
-  Content += InfoLine("Uptime",Uptime) + "\n";
-  Content += InfoLine("Runtime",Runtime) + "\n";
-  Content += InfoLine("Countdown",Countdown) + "\n";
+  Content += InfoLine("Run State",getOpMode(),Color) + "\n";
+  Content += InfoLine("Uptime",Uptime,Color) + "\n";
+  Content += InfoLine("Runtime",Runtime,Color) + "\n";
+  Content += InfoLine("Countdown",Countdown,Color) + "\n";
   if (TemperatureMode == 0) {
-    Content += InfoLine("Stove Temperature",String(stoveTempF,1) + "F") + "\n";
-    if (UseThermostat) Content += InfoLine("Room Temperature",String(roomTempF,1) + "F") + "\n";
+    Content += InfoLine("Stove Temperature",String(stoveTempF,1) + "F",Color) + "\n";
+    if (UseThermostat) Content += InfoLine("Room Temperature",String(roomTempF,1) + "F",Color) + "\n";
   } else {
-    Content += InfoLine("Stove Temp",String(stoveTempC,1) + "C") + "\n";
-    if (UseThermostat) Content += InfoLine("Room Temp",String(roomTempC,1) + "C") + "\n";
+    Content += InfoLine("Stove Temp",String(stoveTempC,1) + "C",Color) + "\n";
+    if (UseThermostat) Content += InfoLine("Room Temp",String(roomTempC,1) + "C",Color) + "\n";
   }
 
   return Content;
@@ -293,14 +299,14 @@ inline String SettingsData() {
   } else {
     Temp = "Celcius";
   }
-  Content += InfoLine("Temperature Mode",CreateLink(Temp,"Temperature Mode","0")) + "\n";
+  Content += InfoLine("Temperature Mode",CreateLink(Temp,"Temperature Mode","0"),0) + "\n";
 
   if (UseThermostat) {
     Temp = "Yes";
   } else {
     Temp = "No";
   }
-  Content += InfoLine("Internal Thermostat",CreateLink(Temp,"Temperature Control","1")) + "\n";
+  Content += InfoLine("Internal Thermostat",CreateLink(Temp,"Temperature Control","1"),0) + "\n";
 
   if (UseThermostat) {
     if (TemperatureMode == 0) {
@@ -308,7 +314,7 @@ inline String SettingsData() {
     } else {
       Temp = String(targetTempC,1) + "C";
     }
-    Content += InfoLine("Thermostat Temp",CreateLink(Temp,"Thermostat Target Temperature","2")) + "\n";
+    Content += InfoLine("Thermostat Temp",CreateLink(Temp,"Thermostat Target Temperature","2"),0) + "\n";
   }
 
   if (TemperatureMode == 0) {
@@ -316,23 +322,23 @@ inline String SettingsData() {
   } else {
     Temp = String(minTempC,1) + "C";
   }
-  Content += InfoLine("Stove Min Temperature",CreateLink(Temp,"Stove Minimum Temperature","3")) + "\n";
+  Content += InfoLine("Stove Min Temperature",CreateLink(Temp,"Stove Minimum Temperature","3"),0) + "\n";
 
   if (TemperatureMode == 0) {
     Temp = String(maxTempF,1) + "F";
   } else {
     Temp = String(maxTempC,1) + "C";
   }
-  Content += InfoLine("Stove Max Temperature",CreateLink(Temp,"Stove Maximum Temperature","4")) + "\n";
+  Content += InfoLine("Stove Max Temperature",CreateLink(Temp,"Stove Maximum Temperature","4"),0) + "\n";
 
   Temp = String(StartupTimer) + " seconds";
-  Content += InfoLine("Startup Time Limit",CreateLink(Temp,"Startup Time Limit (secs)","5")) + "\n";
+  Content += InfoLine("Startup Time Limit",CreateLink(Temp,"Startup Time Limit (secs)","5"),0) + "\n";
 
   Temp = String(feedRateLow,1) + " seconds";
-  Content += InfoLine("Idle Burn Feed Time",CreateLink(Temp,"Idle Feed Time (secs)","6")) + "\n";
+  Content += InfoLine("Idle Burn Feed Time",CreateLink(Temp,"Idle Feed Time (secs)","6"),0) + "\n";
 
   Temp = String(feedRateHigh,1) + " seconds";
-  Content += InfoLine("High Burn Feed Time",CreateLink(Temp,"Idle Feed Time (secs)","7")) + "\n";
+  Content += InfoLine("High Burn Feed Time",CreateLink(Temp,"Idle Feed Time (secs)","7"),0) + "\n";
 
   return Content;
 }
@@ -355,7 +361,7 @@ inline String HomePage() {
   Content += "</div><!-- Static Data End -->\n\n";
 
   Content += "<div class=\"row\" style=\"margin-left: 0.25em; margin-right: 0.25em;\"><!-- Live Data -->\n";
-  Content +=   DrawCard(LiveData(),"LiveData","ajax-livedata",true);
+  Content +=   DrawCard(LiveData(0),"LiveData","ajax-livedata",true);
   Content += "</div><!-- Live Data End -->\n\n";
 
   Content += "<div class=\"row\" style=\"margin-left: 0.25em; margin-right: 0.25em;\"><!-- Settings Data -->\n";
