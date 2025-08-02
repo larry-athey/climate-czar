@@ -446,11 +446,14 @@ String GetDS18B20(String Address, String Format) { // Get DS18B20 sensor tempera
     DT.requestTemperatures();
     oneWire.reset_search();
     float Temp = DT.getTempC(Addr);
-    if (Temp == -127.0) Temp = 0.0;
-    if (Format =="c") {
-      return String(Temp,1);
+    if (Temp != -127.0) {
+      if (Format =="c") {
+        return String(Temp,1);
+      } else {
+        return String(Temp * 9 / 5 + 32,1);
+      }
     } else {
-      return String(Temp * 9 / 5 + 32,1);
+      return "nan";
     }
   }
 }
