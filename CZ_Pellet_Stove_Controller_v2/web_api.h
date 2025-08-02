@@ -86,14 +86,14 @@ inline String setBottomAuger(byte Mode) {
 inline String setBurnMode(byte Mode) {
   if ((OpMode == 1) || (OpMode == 2)) {
     if (Mode == 1) {
+      if (! HighBurn) PopoverMessage("High burn mode activated");
       HighBurn = true;
       gpioToggle = false;
       FEED_TIME = feedRateHigh * 1000;
-      PopoverMessage("High burn mode activated");
     } else {
+      if (HighBurn) PopoverMessage("Idle burn mode activated");
       HighBurn = false;
       FEED_TIME = feedRateLow * 1000;
-      PopoverMessage("Idle burn mode activated");
     }
     return jsonSuccess;
   } else {
