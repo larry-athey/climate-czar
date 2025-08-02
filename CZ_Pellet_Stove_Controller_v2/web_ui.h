@@ -37,7 +37,7 @@ inline String CreateModal() { // Bootstrap modal used as a popover container for
   Content +=         "<div id=\"form-content\">Loading...</div>";
   Content +=       "</div>";
   Content +=       "<div class=\"modal-footer\" style=\"vertical-align: bottom;\">";
-  Content +=         "<button type=\"button\" class=\"btn btn-sm btn-warning\" id=\"submit_button\"> Save </button>";
+  Content +=         "<button type=\"button\" class=\"btn btn-sm btn-warning fw-bolder\" id=\"submit_button\"> Save </button>";
   Content +=       "</div>";
   Content +=     "</div>";
   Content +=   "</div>";
@@ -91,10 +91,10 @@ inline String getForm(byte WhichOne) { // Dynamically creates the form for the s
   } else if (WhichOne == 4) {
     Name = "max-temp";
     if (TemperatureMode == 0) {
-      Label = "120 to 350";
+      Label = "120 to 500";
       Step = ".1"; Min = "120"; Max = "500"; Value = String(maxTempF,1);
     } else {
-      Label = "49 to 177";
+      Label = "49 to 260";
       Step = ".1"; Min = "49"; Max = "260"; Value = String(maxTempC,1);
     }
   } else if (WhichOne == 5) {
