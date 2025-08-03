@@ -14,6 +14,8 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/stove-temp** - Returns the current stove body temperature.
+
 **/temp-mode/c** or **/temp-mode/f** - Sets the controller temperature mode to Celcius or Fahrenheit.
 
 **/therm-temp/??.?** - Sets the target temperature of the internal thermostat (C or F depending on **temp-mode**).
