@@ -14,7 +14,7 @@ Example Climate Czar Server web API calls:
 
 ---
 
-**/therm-temp/??.?** - Sets the target temperature of the internal thermostat.
+**/therm-temp/??.?** - Sets the target temperature of the internal thermostat (C or F depending on **temp-mode**).
 
 **/thermostat/0** or **/thermostat/1** - Enables or disables the internal DS18B20 based thermostat.
 
