@@ -72,7 +72,8 @@ inline void get_DeviceName() { // Get the controller device/host name
 inline void get_ipMode() { // Get the network IP address mode (DHCP or Static IP)
   Serial.print(F("Enter 0 for DHCP or 1 for Static IP: "));
   wifiMode = ReadInput().toInt();
-  if (wifiMode == 1) {
+  if (wifiMode > 0) {
+    wifiMode = 1;
     Serial.print(F("\n\nEnter Static IP Address: "));
     wifiIP = ReadInput();
     if (! isValidIP(wifiIP)) wifiIP = "0.0.0.0";
