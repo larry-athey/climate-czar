@@ -14,6 +14,8 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/reboot** - Reboots the controller, the previous run state is resumed.
+
 **/reset** - Performs a reset of the controller startup/shutdown state, does not affect settings saved in flash memory.
 
 **/room-blower/0** or **/room-blower/1** - Turns the room blower on or off, while the controller is not performing an active run.
