@@ -14,6 +14,8 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/bottom-auger/0** or **/bottom-auger/1** - Turns the bottom auger motor on or off, while the controller is not performing an active run.
+
 **/burn-mode/0** or **/burn-mode/1** - Sets the stove burn mode during an active run (0=idle, 1=high).
 
 **/combustion/0** or **/combustion/1** - Turns the combustion blower on or off, while the controller is not performing an active run.
