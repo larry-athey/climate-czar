@@ -14,6 +14,10 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/uptime** - Returns the current room temperature detected by the internal thermostat.
+
+**/uptime** - Returns the current stove runtime.
+
 **/shutdown** - Shut down the stove or cancel a start up. Shutdown time is 2x the startup time.
 
 **/startup** - Start up the stove or cancel a shut-down, so long as the stove isn't in a thermal failure or fault state.
