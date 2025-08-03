@@ -14,6 +14,8 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/burn-mode/0** or **/burn-mode/1** - Sets the stove burn mode during an active run (0=idle, 1=high).
+
 **/combustion/0** or **/combustion/1** - Turns the combustion blower on or off, while the controller is not performing an active run.
 
 **/cz-stats** - Returns an HTML block with Bootstrap classes for use with Climate Czar Server in a Raw Text Output Device.
