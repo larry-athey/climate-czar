@@ -679,7 +679,7 @@ void loop() {
             HighBurn = true;
             gpioToggle = false;
             FEED_TIME = feedRateHigh * 1000;
-          } else if (roomTempF > targetTempF) {
+          } else if (roomTempF > targetTempF + 0.5) {
             if (HighBurn) PopoverMessage("Idle burn mode activated");
             HighBurn = false;
             FEED_TIME = feedRateLow * 1000;
