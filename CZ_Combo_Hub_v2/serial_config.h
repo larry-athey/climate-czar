@@ -148,9 +148,9 @@ inline void get_enableWifi() { // Get the WiFi on/off switch setting
 }
 //-----------------------------------------------------------------------------------------------
 inline void get_ipMode() { // Get the network IP address mode (DHCP or Static IP)
-  Serial.print(F("Enter 1 for DHCP or 0 for Static IP: "));
-  Net_useDHCP = ReadInput().toInt();
-  if (Net_useDHCP == 0) {
+  Serial.print(F("Enter 0 for DHCP or 1 for Static IP: "));
+  int Input = ReadInput().toInt();
+  if (Input > 0) {
     Net_useDHCP = 0;
     Serial.print(F("\n\nEnter Static IP Address: "));
     Net_IP = ReadInput();
