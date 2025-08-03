@@ -14,6 +14,8 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/top-auger/0** or **/top-auger/1** - Turns the top auger motor on or off, while the controller is not performing an active run.
+
 **/uptime** - Returns the current device uptime.
 
 **/wifi-stats** - Returns the current WiFi stats of the controller, returns the channel number and signal level.
