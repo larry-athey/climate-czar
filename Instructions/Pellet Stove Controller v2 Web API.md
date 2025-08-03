@@ -18,9 +18,9 @@ Example Climate Czar Server web API calls:
 
 **/room-blower/0** or **/room-blower/1** - Turns the room blower on or off, while the controller is not performing an active run.
 
-**/uptime** - Returns the current room temperature detected by the internal thermostat.
+**/room-temp** - Returns the current room temperature detected by the internal thermostat.
 
-**/uptime** - Returns the current stove runtime.
+**/runtime** - Returns the current stove runtime.
 
 **/shutdown** - Shut down the stove or cancel a start up. Shutdown time is 2x the startup time.
 
