@@ -14,7 +14,11 @@ Example Climate Czar Server web API calls:
 
 ---
 
-**/op-mode** - Returns the current operation state. 0=Off, 1=Startup, 2=Running, 3=TempFail, 4=Shutdown, 5=Fault
+**/max-temp/??.?** - Sets the stove maximum operating temperature (C or F depending on **temp-mode**).
+
+**/min-temp/??.?** - Sets the stove minimum operating temperature (C or F depending on **temp-mode**).
+
+**/op-mode** - Returns the current operation mode. 0=Off, 1=Startup, 2=Running, 3=TempFail, 4=Shutdown, 5=Fault
 
 **/reboot** - Reboots the controller, the previous run state is resumed.
 
