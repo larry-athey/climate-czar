@@ -2,7 +2,7 @@
 
 As of the 100% rewrite of the Climate Czar Pellet Stove Controller source code, a completely new web API comes with it. This version of the controller now uses the same 100% GET web API that is featured in the new version of the Climate Czar Combo Hub.
 
-Example Climate Czar Server web API calls:
+Example CZ Pellet Stove Controller web API calls:
 
 `curl -s -m 5 --http0.9 http://controller-ip-address/startup` (start up the pellet stove)<br>
 `curl -s -m 5 --http0.9 http://controller-ip-address/temp-mode/f` (set the temperature mode to Fahrenheit)<br>
