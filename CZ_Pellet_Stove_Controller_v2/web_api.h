@@ -12,10 +12,14 @@ inline String czStats() {
 }
 //------------------------------------------------------------------------------------------------
 inline String getRoomTemp() {
-  if (TemperatureMode == 0) {
-    return String(roomTempF);
+  if (UseThermostat) {
+    if (TemperatureMode == 0) {
+      return String(roomTempF);
+    } else {
+      return String(roomTempC);
+    }
   } else {
-    return String(roomTempC);
+    return jsonFailure;
   }
 }
 //------------------------------------------------------------------------------------------------
