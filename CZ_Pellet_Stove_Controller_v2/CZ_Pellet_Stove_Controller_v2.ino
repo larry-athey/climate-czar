@@ -72,11 +72,11 @@
 #define SCREEN_POWER_ON 15       // Screen power on/off pin
 #define START_BTN 0              // Stove start/stop button (press and hold for 5 seconds)
 #define BURN_BTN 14              // High burn mode toggle button
-#define TOP_AUGER 44             // Output to the top auger SSR
-#define BOTTOM_AUGER 18          // Output to the bottom auger SSR
+#define TOP_AUGER 16             // Output to the top auger SSR 
+#define BOTTOM_AUGER 21          // Output to the bottom auger SSR
 #define COMBUSTION_BLOWER 17     // Output to the combustion blower SSR
-#define ROOM_BLOWER 21           // Output to the room air blower SSR
-#define IGNITOR 16               // Output to the ignitor SSR
+#define ROOM_BLOWER 18           // Output to the room air blower SSR
+#define IGNITOR 44               // Output to the ignitor SSR
 #define HIGH_BURN 1              // Optional external high burn mode toggle pin (ground to activate)
 #define FAULT 2                  // Optional vacuum switch fault detection pin (ground to activate)
 //------------------------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ void setup() {
   pinMode(HIGH_BURN,INPUT_PULLUP);
   pinMode(FAULT,INPUT_PULLUP);
   pinMode(TOP_AUGER,OUTPUT); digitalWrite(TOP_AUGER,LOW);
-  pinMode(BOTTOM_AUGER,OUTPUT); digitalWrite(TOP_AUGER,LOW);
+  pinMode(BOTTOM_AUGER,OUTPUT); digitalWrite(BOTTOM_AUGER,LOW);
   pinMode(COMBUSTION_BLOWER,OUTPUT); digitalWrite(COMBUSTION_BLOWER,LOW);
   pinMode(ROOM_BLOWER,OUTPUT); digitalWrite(ROOM_BLOWER,LOW);
   pinMode(IGNITOR,OUTPUT); digitalWrite(IGNITOR,LOW);
@@ -511,6 +511,7 @@ void ToggleRunState(bool Running) { // Start or stop the pellet stove
     OpMode = 1;
     HighBurn = true;
     gpioToggle = false;
+    cycleCount = 0;
     FEED_TIME = feedRateHigh * 1000;
     timerAlarmEnable(timer);
     Status = "Pellet stove is starting up";
