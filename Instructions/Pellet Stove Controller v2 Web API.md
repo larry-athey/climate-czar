@@ -14,6 +14,8 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/thermostat/0** or **/thermostat/1** - Enables or disables the internal DS18B20 based thermostat.
+
 **/toggle-run** - Toggles the current run state, this is used by the web UI to start and stop the controller.
 
 **/top-auger/0** or **/top-auger/1** - Turns the top auger motor on or off, while the controller is not performing an active run.
