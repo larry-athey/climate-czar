@@ -14,6 +14,8 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/startup-timer/????** - Sets the number of seconds that the stove is allowed to reach its minimum operating temperature.
+
 **/stove-temp** - Returns the current stove body temperature.
 
 **/temp-mode/c** or **/temp-mode/f** - Sets the controller temperature mode to Celcius or Fahrenheit.
