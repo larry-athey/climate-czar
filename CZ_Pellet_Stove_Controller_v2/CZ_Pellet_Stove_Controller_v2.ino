@@ -204,7 +204,7 @@ void setup() {
     canvas->fillScreen(RED);
     PopoverMessage(Status);
     Serial.println(F("Stove body temperature sensor failure"));
-    //OpMode = 5;
+    OpMode = 5;
   };
 
   // Power failure recovery routine
@@ -352,7 +352,7 @@ void SetMemory() { // Update flash memory with the current configuration setting
 //------------------------------------------------------------------------------------------------
 void GetStoveTemp() { // Gets the stove body temperature
   stoveTempC = mlx.readObjectTempC();
-  stoveTempF = 89.0; //mlx.readObjectTempF();
+  stoveTempF = mlx.readObjectTempF();
 }
 //------------------------------------------------------------------------------------------------
 void GetRoomTemp () { // Gets the room temperature if using the built-in thermostat
@@ -362,7 +362,6 @@ void GetRoomTemp () { // Gets the room temperature if using the built-in thermos
     roomTempC = Test;
     roomTempF = DT.getTempFByIndex(0);
   }
-  roomTempF = 72.0;
 }
 //------------------------------------------------------------------------------------------------
 void PopoverMessage(String Msg) { // Display popover message to the user
@@ -572,9 +571,9 @@ void loop() {
   if ((digitalRead(START_BTN) == 0) && ((OpMode == 0) || (OpMode == 1) || (OpMode == 2) || (OpMode == 4))) { // Toggle the stove run state
     byte HoldCount = 0;
     while (digitalRead(START_BTN) == 0) {
-      delay(1000);
+      delay(100);
       HoldCount ++;
-      if (HoldCount == 5) { // 5 second hold detected
+      if (HoldCount == 50) { // 5 second hold detected
         if ((OpMode == 0) || (OpMode == 4)) { // Start up if not running or shutting down
           ToggleRunState(true);
         } else if ((OpMode == 1) || (OpMode == 2)) { // Shut down if starting up or running
@@ -588,18 +587,18 @@ void loop() {
   if ((digitalRead(BURN_BTN) == 0) && ((OpMode == 1) || (OpMode == 2))) { // Toggle the high burn mode
     byte HoldCount = 0;
     while (digitalRead(BURN_BTN) == 0) {
-      delay(1000);
+      delay(100);
       HoldCount ++;
-      if (HoldCount == 2) { // 2 second hold detected
+      if (HoldCount == 20) { // 2 second hold detected
         if (HighBurn) {
+          PopoverMessage("Idle burn mode activated");
           HighBurn = false;
           FEED_TIME = feedRateLow * 1000;
-          PopoverMessage("Idle burn mode activated");
         } else {
+          PopoverMessage("High burn mode activated");
           HighBurn = true;
           gpioToggle = false;
           FEED_TIME = feedRateHigh * 1000;
-          PopoverMessage("High burn mode activated");
         }
       }
     }
