@@ -14,6 +14,10 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/feed-high/??.?** - Sets the top auger feed time (in seconds) when the stove is in high burn mode.
+
+**/feed-low/??.?** - Sets the top auger feed time (in seconds) when the stove is in idle burn mode.
+
 **/ignitor/0** or **/ignitor/1** - Turns the ignitor on or off, while the controller is not performing an active run.
 
 **/json-stats** - Returns a JSON object containing the stove's current operational stats for use with third-party software.
