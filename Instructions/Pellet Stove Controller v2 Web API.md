@@ -14,6 +14,8 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/cz-stats** - Returns an HTML block with Bootstrap classes for use with Climate Czar Server in a Raw Text Output Device.
+
 **/feed-high/??.?** - Sets the top auger feed time (in seconds) when the stove is in high burn mode.
 
 **/feed-low/??.?** - Sets the top auger feed time (in seconds) when the stove is in idle burn mode.
