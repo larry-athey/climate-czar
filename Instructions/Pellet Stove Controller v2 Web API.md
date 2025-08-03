@@ -14,6 +14,10 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/shutdown** - Shut down the stove or cancel a start up. Shutdown time is 2x the startup time.
+
+**/startup** - Start up the stove or cancel a shut-down, so long as the stove isn't in a thernal failure or fault state.
+
 **/startup-timer/????** - Sets the number of seconds that the stove is allowed to reach its minimum operating temperature.
 
 **/stove-temp** - Returns the current stove body temperature.
