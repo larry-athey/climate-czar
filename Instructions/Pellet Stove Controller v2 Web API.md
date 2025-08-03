@@ -14,6 +14,8 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/therm-temp/??.?** - Sets the target temperature of the internal thermostat.
+
 **/thermostat/0** or **/thermostat/1** - Enables or disables the internal DS18B20 based thermostat.
 
 **/toggle-run** - Toggles the current run state, this is used by the web UI to start and stop the controller.
