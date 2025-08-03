@@ -14,4 +14,6 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/uptime** - Returns the current WiFi device uptime.
+
 **/wifi-stats** - Returns the current WiFi stats of the controller, returns the channel number and signal level.
