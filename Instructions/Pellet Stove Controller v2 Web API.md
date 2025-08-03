@@ -14,6 +14,8 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/json-stats** - Returns a JSON object containing the stove's current operational stats for use with third-party software.
+
 **/max-temp/??.?** - Sets the stove maximum operating temperature (C or F depending on **temp-mode**).
 
 **/min-temp/??.?** - Sets the stove minimum operating temperature (C or F depending on **temp-mode**).
