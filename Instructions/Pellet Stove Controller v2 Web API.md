@@ -14,6 +14,8 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/op-mode** - Returns the current operation state. 0=Off, 1=Startup, 2=Running, 3=TempFail, 4=Shutdown, 5=Fault
+
 **/reboot** - Reboots the controller, the previous run state is resumed.
 
 **/reset** - Performs a reset of the controller startup/shutdown state, does not affect settings saved in flash memory.
