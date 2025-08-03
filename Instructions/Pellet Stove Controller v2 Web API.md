@@ -14,6 +14,8 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/ignitor/0** or **/ignitor/1** - Turns the ignitor on or off, while the controller is not performing an active run.
+
 **/json-stats** - Returns a JSON object containing the stove's current operational stats for use with third-party software.
 
 **/max-temp/??.?** - Sets the stove maximum operating temperature (C or F depending on **temp-mode**).
