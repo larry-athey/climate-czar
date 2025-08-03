@@ -12,7 +12,7 @@ Example Climate Czar Server web API calls:
 `-m 5` tells curl to time out the connection attempt after 5 seconds<br>
 `--http0.9` tells curl to use a pre version 1.0 HTTP call for compatibility safety<br>
 
-You may notice that under heave API use, the uptime display on the screen appears to miss seconds. This is absolutely normal and doesn't affect the actual operation of the stove since the top auger timer is an interrupt driven low speed PWM. The screen update and API handler run in the same loop and heavy API use will cause lags in screen updates.
+You may notice that under heavy API use, the uptime display on the screen appears to skip seconds. This is absolutely normal and doesn't affect the actual operation of the stove since the top auger timer is an interrupt driven low speed PWM. The screen update and API handler run in the same loop and heavy API use will cause lags in screen updates.
 
 ---
 
