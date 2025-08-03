@@ -14,6 +14,8 @@ Example Climate Czar Server web API calls:
 
 ---
 
+**/toggle-run** - Toggles the current run state, this is used by the web UI to start and stop the controller.
+
 **/top-auger/0** or **/top-auger/1** - Turns the top auger motor on or off, while the controller is not performing an active run.
 
 **/uptime** - Returns the current device uptime.
