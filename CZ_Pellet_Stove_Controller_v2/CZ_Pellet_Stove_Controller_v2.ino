@@ -654,7 +654,7 @@ void loop() {
         // All temperature checks are performed in Fahrenheit due to its greater level of granularity
         Countdown = formatMillis(TargetTime - CurrentTime);
         Countdown.remove(0,3);
-        if (stoveTempF >= minTempF) { // Startup successful, stove body up to temperature
+        if (stoveTempF > minTempF) { // Startup successful, stove body up to temperature
           OpMode = 2;
           SetMemory();
           TargetTime = 0;
@@ -686,7 +686,7 @@ void loop() {
             FEED_TIME = feedRateLow * 1000;
           }
         }
-        if ((stoveTempF <= minTempF) || (stoveTempF >= maxTempF)) { // Stove body temperature failure during a normal run
+        if ((stoveTempF < minTempF) || (stoveTempF > maxTempF)) { // Stove body temperature failure during a normal run
           ToggleRunState(false);
           OpMode = 3;
           SetMemory();
