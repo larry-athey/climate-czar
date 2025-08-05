@@ -10,23 +10,17 @@ if (! UserLoggedIn($DBcnx)) {
 //---------------------------------------------------------------------------------------------------
 if (isset($_POST["LOGGED_IN_KEY"])) {
   if ($_POST["LOGGED_IN_KEY"] != LOGGED_IN_KEY) {
-    //echo("Invalid LOGGED_IN_KEY sent");
-    //header("Location: " . $_SERVER["HTTP_REFERER"]);
     mysqli_close($DBcnx);
     exit;
   }
 } elseif (isset($_GET["LOGGED_IN_KEY"])) {
   if ($_GET["LOGGED_IN_KEY"] != LOGGED_IN_KEY) {
-    //echo("Invalid LOGGED_IN_KEY sent");
-    //header("Location: " . $_SERVER["HTTP_REFERER"]);
     mysqli_close($DBcnx);
     exit;
   } else {
     $_POST["RETURN_PAGE"] = $_GET["RETURN_PAGE"];
   }
 } else {
-  //echo("No LOGGED_IN_KEY sent");
-  //header("Location: " . $_SERVER["HTTP_REFERER"]);
   mysqli_close($DBcnx);
   exit;
 }
@@ -44,30 +38,35 @@ if (isset($_GET["cz_delete_device"])) {
     $Result = mysqli_query($DBcnx,"DELETE FROM OutputSwitches WHERE ID=" . $_GET["cz_delete_device"]);
     $Result = mysqli_query($DBcnx,"DELETE FROM OutputHistory WHERE DeviceID=" . $_GET["cz_delete_device"]);
   }
-/***************************************************************************************************/
-} elseif (isset($_GET["cz_delete_group"])) {
+}
+//---------------------------------------------------------------------------------------------------
+elseif (isset($_GET["cz_delete_group"])) {
   if ($_GET["cz_delete_group"] > 1) {
     $Result = mysqli_query($DBcnx,"DELETE FROM DeviceGroups WHERE ID=" . $_GET["cz_delete_group"]);
   }
   if ($_GET["cz_delete_group"] == $_COOKIE["CZ_GROUP"]) setcookie("CZ_GROUP",1,0,"/");
-/***************************************************************************************************/
-} elseif (isset($_GET["cz_delete_script"])) {
+}
+//---------------------------------------------------------------------------------------------------
+elseif (isset($_GET["cz_delete_script"])) {
   unlink(APP_ROOT . "commands/" . $_GET["cz_delete_script"]);
-/***************************************************************************************************/
-} elseif (isset($_GET["cz_delete_user"])) {
+}
+//---------------------------------------------------------------------------------------------------
+elseif (isset($_GET["cz_delete_user"])) {
   if ($_GET["cz_delete_user"] > 1) {
     $Result = mysqli_query($DBcnx,"DELETE FROM Users WHERE ID=" . $_GET["cz_delete_user"]);
   }
-/***************************************************************************************************/
-} elseif (isset($_POST["cz_group_save"])) {
+}
+//---------------------------------------------------------------------------------------------------
+elseif (isset($_POST["cz_group_save"])) {
   $_POST["GroupName"] = mysqli_escape_string($DBcnx,$_POST["GroupName"]);
   if ($_POST["ID"] == 0) { // Create new group
     $Result = mysqli_query($DBcnx,"INSERT INTO DeviceGroups (Name,SecLevel) VALUES ('" . $_POST["GroupName"] . "','" . $_POST["SwitchSec"] . "')");
   } else { // Update existing group
     $Result = mysqli_query($DBcnx,"UPDATE DeviceGroups SET Name='" . $_POST["GroupName"] . "',SecLevel='" . $_POST["SwitchSec"] . "' WHERE ID=" . $_POST["ID"]);
   }
-/***************************************************************************************************/
-} elseif (isset($_POST["cz_input_sensor_save"])) {
+}
+//---------------------------------------------------------------------------------------------------
+elseif (isset($_POST["cz_input_sensor_save"])) {
   $Result = mysqli_query($DBcnx,"SELECT * FROM InputDevices WHERE ID=" . $_POST["ID"]);
   $Dev    = mysqli_fetch_assoc($Result);
 //echo("<pre>");
@@ -100,6 +99,7 @@ if (isset($_GET["cz_delete_device"])) {
   $ScheduleList = str_replace("\r","",trim($_POST["ScheduleList"]));
   $ReadCommand = trim($_POST["ReadCommand"]);
   $Notes = str_replace("\r","",trim($_POST["Notes"]));
+  $Notes = mysqli_escape_string($DBcnx,$Notes);
 //echo("</pre>");
 //exit;
   if ($_POST["ID"] == 0) { // Create new device
@@ -110,8 +110,9 @@ if (isset($_GET["cz_delete_device"])) {
     $Query = "UPDATE InputDevices SET DeviceName='$DeviceName',DeviceType='$DeviceType',Dashboard='$Dashboard',Position='$Position',SwitchSec='$SwitchSec',GroupID='$GroupID',ReadingSuffix='$ReadingSuffix',GraphColor='$GraphColor',BGlow='$BGlow',BGmid='$BGmid',BGhigh='$BGhigh',SensorList='$SensorList',SwitchList='$SwitchList',ScheduleList='$ScheduleList',ReadCommand='$ReadCommand',Notes='$Notes' WHERE ID=" . $_POST["ID"];
     $Result = mysqli_query($DBcnx,$Query);
   }
-/***************************************************************************************************/
-} elseif (isset($_POST["cz_output_switch_save"])) {
+}
+//---------------------------------------------------------------------------------------------------
+elseif (isset($_POST["cz_output_switch_save"])) {
   $Result = mysqli_query($DBcnx,"SELECT * FROM InputDevices WHERE ID=" . $_POST["InputID"]);
   $Dev    = mysqli_fetch_assoc($Result);
 //echo("<pre>");
@@ -143,6 +144,7 @@ if (isset($_GET["cz_delete_device"])) {
   $OnCommand = trim($_POST["OnCommand"]);
   $OffCommand = trim($_POST["OffCommand"]);
   $Notes = str_replace("\r","",trim($_POST["Notes"]));
+  $Notes = mysqli_escape_string($DBcnx,$Notes);
 //print_r($_POST);
 //echo("</pre>");
 //exit;
@@ -158,14 +160,14 @@ if (isset($_GET["cz_delete_device"])) {
 //exit;
     $Result = mysqli_query($DBcnx,$Query);
   }
-/***************************************************************************************************/
-} elseif (isset($_POST["cz_script_edit_save"])) {
+}
+//---------------------------------------------------------------------------------------------------
+elseif (isset($_POST["cz_script_edit_save"])) {
 //echo("<pre>");
 //print_r($_POST);
   $ScriptName = normalizeString(trim($_POST["ScriptName"]));
   $OldName    = trim($_POST["OldName"]);
   $Code       = trim($_POST["Code"]);
-  $Code       = stripslashes($Code);
   $Code       = str_replace("\r\n","\n",$Code);
   $LastChar   = strlen($Code) - 1;
   if ($Code[$LastChar] != "\n") $Code .= "\n";
@@ -181,8 +183,9 @@ if (isset($_GET["cz_delete_device"])) {
   file_put_contents(APP_ROOT . "commands/$ScriptName",$Code);
   shell_exec("chmod +x " . APP_ROOT . "commands/$ScriptName");
   $_POST["RETURN_PAGE"] = "index.php?page=list-scripts&ScriptName=$ScriptName";
-/***************************************************************************************************/
-} elseif (isset($_POST["cz_user_save"])) {
+}
+//---------------------------------------------------------------------------------------------------
+elseif (isset($_POST["cz_user_save"])) {
   if ($_POST["ID"] == 1) {
     $_POST["SwitchSec"] = "administrator";;
     $_POST["LockedOut"] = 0;
