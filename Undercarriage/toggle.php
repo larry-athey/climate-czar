@@ -32,7 +32,6 @@ if ($_GET["Type"] == 0) {
   $Result = mysqli_query($DBcnx,"INSERT INTO InputHistory (DeviceID,TimeStamp,Reading,RawText) VALUES (" . $_GET["ID"] . ",now(),'" . $_GET["Mode"] . "','')");
 }
 if ($_GET["Basic"] == 1) {
-//echo($_SERVER["HTTP_REFERER"]);
   header("Location: " . $_SERVER["HTTP_REFERER"]);
 } else {
   echo("<p class=\"text-primary-emphasis\" style=\"font-style: italic;font-size: 0.9em;\">Processing...</p>\n");
