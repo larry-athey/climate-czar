@@ -4,9 +4,10 @@ Universal remote climate monitoring and management system for greenhouses and in
 Live demo at https://greenhouse.panhandleponics.com/cz/?CZ_THEME=1
 
 You may also contact me directly at https://panhandleponics.com<br>
-Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandlePonics<br>
+Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandlePonics
 
-![image](https://github.com/user-attachments/assets/7b411953-9304-4b04-ab87-2358f437c058)
+---
+![image](https://github.com/user-attachments/assets/7b411953-9304-4b04-ab87-2358f437c058)<br>
 ---
 
 Climate Czar is a Linux based system that gathers readings from any type of sensor or switch that can be read from the command line, whether it is a local device connected to a GPIO bus or a network device. By the same token, the system will control output switches that can also be toggled from the command line. There are no brand/model hardware dependencies, you can even use it with your own custom IoT devices.
