@@ -1,4 +1,4 @@
-No, these aren't actually part of Climate Czar, these are just being hosted here for easy download by people who have asked me for them. These models are geared for 1/4 IBC flood and drain beds and shown in Rob Bob's video on Chop and Flip Aquaponics systems.
+No, these aren't actually part of Climate Czar, these are just being hosted here for easy download by people who have asked me for them. These models are geared for 1/4 IBC flood and drain beds and shown in Rob Bob's video on (Chop and Flip Aquaponics)[https://www.youtube.com/watch?v=b_VROMhAoSs] systems.
 
 Rob's design uses a 3/4" stand pipe which is what the **Stand-Pipe-Funnel.stl** model is meant to be attached to. I recommend gluing this to the top your stand pipe flush with the bottom of the funnel's bowl. This helps create a more reliable siphon lock so you don't end up with a siphon that won't start.
 
