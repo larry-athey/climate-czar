@@ -1,0 +1,1 @@
+These models are geared for 1/4 IBC flood and drain beds and shown in Rob Bob's video on Chop and Flip Aquaponics systems. His use a 3/4" stand pipe which is what the Stand-Pipe-Funnel.stl model is meant to be attached to.
