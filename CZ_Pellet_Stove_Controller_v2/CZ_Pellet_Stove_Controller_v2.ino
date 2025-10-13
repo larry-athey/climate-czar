@@ -94,7 +94,7 @@ bool FaultDetected = false;      // True if the GPIO fault pin is currently pull
 bool gpioToggle = false;         // True if the GPIO pin set the last high burn mode
 bool HighBurn = false;           // True if high burn mode is active
 bool UseThermostat = true;       // Use the internal thermostat routines Y/N
-byte FailCounter = 0;            // Counts the stove body temperature reading failures (15 is a true failure)
+byte FailCounter = 0;            // Counts the stove body temperature reading exceptions (30 is a official failure)
 byte FaultCounter = 0;           // Counts seconds that the GPIO fault pin is pulled low
 byte TemperatureMode = 0;        // 0=Fahrenheit, 1=Celcius
 byte OpMode = 0;                 // 0=Off, 1=Startup, 2=Running, 3=TempFail, 4=Shutdown, 5=Fault
@@ -689,7 +689,7 @@ void loop() {
         }
         if ((stoveTempF < minTempF) || (stoveTempF > maxTempF)) { // Check for stove body temperature failure during a normal run
           FailCounter ++;
-          if (FailCounter == 15) { // 15 consecutive seconds of under/over temperature readings decides an official failure
+          if (FailCounter == 30) { // 30 consecutive seconds of under/over temperature readings decides an official failure
             ToggleRunState(false);
             OpMode = 3;
             SetMemory();
