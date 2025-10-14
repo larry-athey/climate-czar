@@ -2,7 +2,7 @@
 Universal remote climate monitoring and management system for greenhouses and indoor grow operations. No hardware brand dependencies, if you can read or control a sensor or smart switch from the command line, then it's compatible with Climate Czar.
 
 Live demo at https://greenhouse.panhandleponics.com/cz/?CZ_THEME=1<br>
-Buy a pre-built server at https://3dgtower.com
+Buy a pre-built Climate Czar server at https://3dgtower.com
 
 You may also contact me directly at https://panhandleponics.com<br>
 Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandlePonics
