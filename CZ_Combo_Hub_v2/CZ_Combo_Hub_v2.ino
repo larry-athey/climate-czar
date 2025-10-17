@@ -166,10 +166,13 @@ void setup() {
   digitalWrite(LED,LOW);
 
   // Initialize MCP23017
-  mcp.begin_I2C(MCP_ADDR);
-  for (int i = 0; i <= 15; i ++) {
-    mcp.pinMode(i,OUTPUT);
-    mcp.digitalWrite(i,LOW);
+  if (mcp.begin_I2C(MCP_ADDR)) {
+    for (int i = 0; i <= 15; i ++) {
+      mcp.pinMode(i,OUTPUT);
+      mcp.digitalWrite(i,LOW);
+    }
+  } else {
+    if (Serial) Serial.println(F("MCP23017 init failed!"));
   }
 
   // Initialize the DHT22
