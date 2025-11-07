@@ -589,7 +589,7 @@ void handleClient(Client& client) {
 }
 //------------------------------------------------------------------------------------------------
 void loop() {
-  long CurrentTime = millis();
+  unsigned long CurrentTime = millis();
   Uptime = formatMillis(CurrentTime);
   if (CurrentTime > 4200000000) {
     // Reboot the system if we're reaching the maximum long integer value of CurrentTime (49 days)
