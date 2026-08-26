@@ -7,6 +7,8 @@ Buy a pre-built Climate Czar server at https://3dgtower.com
 You may also contact me directly at https://panhandleponics.com<br>
 Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandlePonics
 
+_...No, I don't use AI to design and build my projects, I actually still know how to use my brain..._
+
 ---
 ![image](https://github.com/user-attachments/assets/7b411953-9304-4b04-ab87-2358f437c058)<br>
 ---
