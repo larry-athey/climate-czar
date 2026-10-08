@@ -69,7 +69,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH,SCREEN_HEIGHT,&Wire,-1);
 #define SDA_PIN 21
 #define SCL_PIN 22
 // MCP23017 I2C address
-#define MCP_ADDR 0x20
+#define MCP_ADDR 0x27
 Adafruit_MCP23X17 mcp;
 // DS18B20 (1-Wire)
 #define ONE_WIRE_BUS 4
