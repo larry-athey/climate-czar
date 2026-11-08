@@ -52,7 +52,9 @@
 #include "OneWire.h"             // OneWire Network communications library
 #include "DallasTemperature.h"   // Dallas Semiconductor DS18B20 temperature sensor library
 #include "UIPEthernet.h"         // Ethernet interface library compatible with W5500 modules
-#include "WiFi.h"                // WiFi interface library
+#include "WiFi.h"                // ESP32 high-level WiFi connectivity library
+#include "esp_wifi.h"            // ESP32 low-level WiFi connectivity library
+#include "esp_bt.h"              // ESP32 low-level Bluetooth library (only because I'm disabling the BT controller)
 #include "ESP32Ping.h"           // ICMP (ping) library from https://github.com/marian-craciunescu/ESP32Ping
 //------------------------------------------------------------------------------------------------
 // Flash memory initialization
@@ -324,6 +326,20 @@ bool StartNetwork() {
   }
 
   if (Net_useWifi == 1) {
+    esp_bt_controller_disable();
+    WiFi.disconnect(true);
+  
+    WiFi.mode(WIFI_STA);
+    WiFi.setSleep(false);
+    esp_wifi_set_ps(WIFI_PS_NONE);
+    WiFi.setAutoReconnect(true);
+    WiFi.persistent(true);
+
+    uint8_t protocol = WIFI_PROTOCOL_11B | WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11N;
+    esp_wifi_set_protocol(WIFI_IF_STA,protocol);
+    esp_wifi_set_bandwidth(WIFI_IF_STA,WIFI_BW_HT20);
+    esp_wifi_set_max_tx_power(84);
+
     WiFi.begin(Net_wifiSSID,Net_wifiPW);
     long startTime = millis();
     if (Serial) Serial.print("\nConnecting to " + Net_wifiSSID + ":");
