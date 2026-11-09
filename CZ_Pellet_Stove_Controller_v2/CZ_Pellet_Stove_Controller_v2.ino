@@ -55,7 +55,9 @@
 // the pellet stove controller. Complicating this is intentional so a person can't accidentally
 // cause a burn-back situation and ignite the pellets in the hopper.
 //------------------------------------------------------------------------------------------------
-#include "WiFi.h"                // WiFi network connectivity library
+#include "WiFi.h"                // ESP32 high-level WiFi connectivity library
+#include "esp_wifi.h"            // ESP32 low-level WiFi connectivity library
+#include "esp_bt.h"              // ESP32 low-level Bluetooth library (only because I'm disabling the BT controller)
 #include "ESP32Ping.h"           // ICMP (ping) library from https://github.com/marian-craciunescu/ESP32Ping
 #include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.6.0
 #include "FreeSans9pt7b.h"       // https://github.com/moononournation/ArduinoFreeFontFile.git 
@@ -233,7 +235,18 @@ void setup() {
 void ConnectWiFi() { // Connect to WiFi network, must be WPA2-PSK, not WPA3
   byte x = 0;
   if (Server) Server.end();
+  esp_bt_controller_disable();
   WiFi.mode(WIFI_STA);
+  WiFi.setSleep(false);
+  esp_wifi_set_ps(WIFI_PS_NONE);
+  WiFi.setAutoReconnect(true);
+  WiFi.persistent(true);
+
+  uint8_t protocol = WIFI_PROTOCOL_11B | WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11N;
+  esp_wifi_set_protocol(WIFI_IF_STA,protocol);
+  esp_wifi_set_bandwidth(WIFI_IF_STA,WIFI_BW_HT20);
+  esp_wifi_set_max_tx_power(84);
+
   if (wifiMode == 1) {
     bool Passed = true;
     int segCount = 0;
@@ -739,7 +752,9 @@ void loop() {
       bool PingTest = Ping.ping(wifiGateway.c_str(),2);
       if ((WiFi.status() != WL_CONNECTED) || (! PingTest)) { // Reconnect WiFi if we got dropped
         WiFi.disconnect();
+        delay(250);
         if ((wifiSSID != "none") && (wifiPassword != "")) {
+          WiFi.mode(WIFI_OFF);
           delay(500);
           ConnectWiFi();
         }
