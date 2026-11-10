@@ -58,7 +58,6 @@
 #include "WiFi.h"                // ESP32 high-level WiFi connectivity library
 #include "esp_wifi.h"            // ESP32 low-level WiFi connectivity library
 #include "esp_bt.h"              // ESP32 low-level Bluetooth library (only because I'm disabling the BT controller)
-#include "ESP32Ping.h"           // ICMP (ping) library from https://github.com/marian-craciunescu/ESP32Ping
 #include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.6.0
 #include "FreeSans9pt7b.h"       // https://github.com/moononournation/ArduinoFreeFontFile.git 
 #include "Preferences.h"         // ESP32 Flash memory read/write library
@@ -242,10 +241,10 @@ void ConnectWiFi() { // Connect to WiFi network, must be WPA2-PSK, not WPA3
   WiFi.setAutoReconnect(true);
   WiFi.persistent(true);
 
-  uint8_t protocol = WIFI_PROTOCOL_11B | WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11N;
+  uint8_t protocol = WIFI_PROTOCOL_11B | WIFI_PROTOCOL_11G; // | WIFI_PROTOCOL_11N; // N channel is pretty much worthless in this project
   esp_wifi_set_protocol(WIFI_IF_STA,protocol);
   esp_wifi_set_bandwidth(WIFI_IF_STA,WIFI_BW_HT20);
-  //esp_wifi_set_max_tx_power(84);
+  esp_wifi_set_max_tx_power(84);
 
   if (wifiMode == 1) {
     bool Passed = true;
@@ -749,8 +748,8 @@ void loop() {
       Status = "Fault detected, reboot needed!";
     }
     if (wifiCheckCounter >= 60) {
-      bool PingTest = Ping.ping(wifiGateway.c_str(),2);
-      if ((WiFi.status() != WL_CONNECTED) || (! PingTest)) { // Reconnect WiFi if we got dropped
+      if (WiFi.status() != WL_CONNECTED) { // Reconnect WiFi if we got dropped
+        if ((Serial) && (WiFi.status() != WL_CONNECTED)) Serial.println("\nWiFi.status() != WL_CONNCTED");
         WiFi.disconnect();
         delay(250);
         if ((wifiSSID != "none") && (wifiPassword != "")) {
