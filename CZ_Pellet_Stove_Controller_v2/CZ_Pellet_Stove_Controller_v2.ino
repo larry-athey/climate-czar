@@ -245,7 +245,7 @@ void ConnectWiFi() { // Connect to WiFi network, must be WPA2-PSK, not WPA3
   uint8_t protocol = WIFI_PROTOCOL_11B | WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11N;
   esp_wifi_set_protocol(WIFI_IF_STA,protocol);
   esp_wifi_set_bandwidth(WIFI_IF_STA,WIFI_BW_HT20);
-  esp_wifi_set_max_tx_power(84);
+  //esp_wifi_set_max_tx_power(84);
 
   if (wifiMode == 1) {
     bool Passed = true;
